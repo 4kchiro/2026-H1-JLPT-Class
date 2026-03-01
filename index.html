@@ -375,7 +375,7 @@
     <div class="question" id="noun-question"></div>
     <div class="sa-input-row">
       <input type="text" id="noun-answer" placeholder="정답 입력">
-      <button onclick="checkNounAnswer()">제출</button>
+      <button onclick="submitNoun()">제출</button>
     </div>
     <div class="result" id="noun-result"></div>
     <div class="noun-desc" id="noun-description" style="display:none;"></div>
@@ -405,7 +405,7 @@
     <div class="question" id="verb-question"></div>
     <div class="sa-input-row">
       <input type="text" id="verb-answer" placeholder="정답 입력">
-      <button onclick="checkVerbAnswer()">제출</button>
+      <button onclick="submitVerb()">제출</button>
     </div>
     <div class="result" id="verb-result"></div>
     <div class="noun-desc" id="verb-description" style="display:none;"></div>
@@ -445,7 +445,7 @@
     <div class="question" id="sa-question"></div>
     <div class="sa-input-row">
       <input type="text" id="sa-answer" placeholder="정답 입력">
-      <button onclick="checkSAAnswer()">제출</button>
+      <button onclick="submitSA()">제출</button>
     </div>
     <div class="result" id="sa-result"></div>
     <div class="description" id="sa-description" style="display:none;"></div>
@@ -653,7 +653,8 @@ function nextNounQuestion() {
   nounCurrent = dataset[Math.floor(Math.random() * dataset.length)];
   qEl.textContent = nounCurrent[0];
   answerInput.value = '';
-  answerInput.disabled = false;
+  answerInput.readOnly = false;
+  answerInput.style.color = '';
   resEl.textContent = '';
   resEl.className = 'result';
   descEl.style.display = 'none';
@@ -685,12 +686,18 @@ function checkNounAnswer() {
 
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctDisplay}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
-  document.getElementById('noun-answer').disabled = true;
+  document.getElementById('noun-answer').readOnly = true;
+  document.getElementById('noun-answer').style.color = '#aaa';
 
   // 단어 정보 공개
   descEl.innerHTML = buildWordDesc(nounCurrent);
   descEl.style.display = 'block';
   nextBtn.style.display = 'inline-block';
+}
+
+function submitNoun() {
+  if (!nounAnswered) checkNounAnswer();
+  else nextNounQuestion();
 }
 
 function buildWordDesc(item) {
@@ -738,7 +745,8 @@ function nextVerbQuestion() {
   verbCurrent = dataset[Math.floor(Math.random() * dataset.length)];
   qEl.textContent = verbCurrent[0];
   answerInput.value = '';
-  answerInput.disabled = false;
+  answerInput.readOnly = false;
+  answerInput.style.color = '';
   resEl.textContent = '';
   resEl.className = 'result';
   descEl.style.display = 'none';
@@ -769,11 +777,17 @@ function checkVerbAnswer() {
 
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctDisplay}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
-  document.getElementById('verb-answer').disabled = true;
+  document.getElementById('verb-answer').readOnly = true;
+  document.getElementById('verb-answer').style.color = '#aaa';
 
   descEl.innerHTML = buildWordDesc(verbCurrent);
   descEl.style.display = 'block';
   nextBtn.style.display = 'inline-block';
+}
+
+function submitVerb() {
+  if (!verbAnswered) checkVerbAnswer();
+  else nextVerbQuestion();
 }
 
 /* ═══ 한자 MODE SWITCH ═══ */
@@ -868,12 +882,13 @@ function nextSAQuestion() {
   current = dataset[Math.floor(Math.random() * dataset.length)];
   document.getElementById('sa-question').textContent = current[0];
   document.getElementById('sa-answer').value = '';
+  document.getElementById('sa-answer').readOnly = false;
+  document.getElementById('sa-answer').style.color = '';
   document.getElementById('sa-result').textContent = '';
   document.getElementById('sa-result').className = 'result';
   document.getElementById('sa-description').textContent = '';
   document.getElementById('sa-description').style.display = 'none';
   document.getElementById('sa-next-btn').style.display = 'none';
-  document.getElementById('sa-answer').disabled = false;
   document.getElementById('sa-answer').focus();
 }
 
@@ -882,10 +897,16 @@ function checkSAAnswer() {
   kanjianswered = true;
   const input = document.getElementById('sa-answer').value.trim();
   const isCorrect = input === current[1] || (current[2] && input === current[2]);
-  document.getElementById('sa-answer').disabled = true;
+  document.getElementById('sa-answer').readOnly = true;
+  document.getElementById('sa-answer').style.color = '#aaa';
   showResult(document.getElementById('sa-result'), isCorrect, current[1]);
   showDescription(document.getElementById('sa-description'), current[6]);
   document.getElementById('sa-next-btn').style.display = 'inline-block';
+}
+
+function submitSA() {
+  if (!kanjianswered) checkSAAnswer();
+  else nextSAQuestion();
 }
 
 /* ═══ KEYBOARD ═══ */
@@ -902,10 +923,7 @@ document.addEventListener('keydown', (e) => {
       if (kanjianswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextMCQuestion();
     }
     if (isSA) {
-      if (e.key === 'Enter') {
-        if (!kanjianswered) checkSAAnswer();
-        else nextSAQuestion();
-      }
+      if (e.key === 'Enter') submitSA();
       if (kanjianswered && e.key === 'ArrowRight') nextSAQuestion();
     }
     return;
@@ -913,19 +931,13 @@ document.addEventListener('keydown', (e) => {
 
   // ── 명사 문제 ──
   if (document.getElementById('noun').classList.contains('active')) {
-    if (e.key === 'Enter') {
-      if (!nounAnswered) checkNounAnswer();
-      else nextNounQuestion();
-    }
+    if (e.key === 'Enter') submitNoun();
     if (nounAnswered && e.key === 'ArrowRight') nextNounQuestion();
   }
 
   // ── 동사 문제 ──
   if (document.getElementById('verb').classList.contains('active')) {
-    if (e.key === 'Enter') {
-      if (!verbAnswered) checkVerbAnswer();
-      else nextVerbQuestion();
-    }
+    if (e.key === 'Enter') submitVerb();
     if (verbAnswered && e.key === 'ArrowRight') nextVerbQuestion();
   }
 });

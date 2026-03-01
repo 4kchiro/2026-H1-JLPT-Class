@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>일본어 학습</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: #1a1a2e;
+      padding: 0 16px;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: transparent;
+      color: #aab4c8;
+      border: none;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-family: inherit;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+    nav button:hover { color: #fff; }
+    nav button.nav-active {
+      color: #fff;
+      border-bottom-color: #4f8ef7;
+      font-weight: 700;
+    }
+
+    /* ── PAGE ── */
+    .page { display: none; padding: 28px 20px 60px; text-align: center; max-width: 680px; margin: 0 auto; }
+    .page.active { display: block; }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.06);
+      margin-bottom: 18px;
+    }
+
+    /* ── SWITCH ROW (객관식/주관식) ── */
+    .mode-switch {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .mode-switch button {
+      padding: 9px 26px;
+      font-size: 15px;
+      font-family: inherit;
+      border-radius: 999px;
+      border: 2px solid #ccd3df;
+      cursor: pointer;
+      background: #f0f2f5;
+      color: #555;
+      font-weight: 500;
+      transition: all .18s;
+    }
+    .mode-switch button.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* ── LEVEL SWITCH ── */
+    .level-section {
+      margin-bottom: 20px;
+    }
+    .level-section h3 {
+      font-size: 13px;
+      color: #888;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+      font-weight: 500;
+    }
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 48px);
+      gap: 8px;
+      justify-content: center;
+    }
+    .level-grid button {
+      width: 48px;
+      height: 48px;
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 700;
+      border-radius: 10px;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #777;
+      cursor: pointer;
+      transition: all .18s;
+    }
+    .level-grid button.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+    }
+    .level-grid button.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .level-grid button:hover:not(.active):not(.disabled) {
+      border-color: #4f8ef7;
+      color: #4f8ef7;
+    }
+
+    /* ── QUESTION ── */
+    .question {
+      font-size: 52px;
+      font-weight: 700;
+      margin: 8px 0 22px;
+      letter-spacing: .05em;
+      color: #1a1a2e;
+    }
+    .question-label {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    /* ── MC OPTIONS ── */
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .options button {
+      padding: 14px 10px;
+      font-size: 20px;
+      font-family: inherit;
+      font-weight: 700;
+      border-radius: 12px;
+      border: 2px solid #dde3ef;
+      background: #f8f9fc;
+      color: #333;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .options button:hover:not(:disabled) {
+      border-color: #4f8ef7;
+      background: #eef3fe;
+    }
+    .options button.correct {
+      background: #e6f9ee;
+      border-color: #28a745;
+      color: #28a745;
+    }
+    .options button.wrong {
+      background: #fdeaea;
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+
+    /* ── SA INPUT ── */
+    .sa-input-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .sa-input-row input {
+      padding: 11px 16px;
+      font-size: 18px;
+      font-family: inherit;
+      border: 2px solid #dde3ef;
+      border-radius: 10px;
+      outline: none;
+      width: 160px;
+      text-align: center;
+      transition: border-color .15s;
+    }
+    .sa-input-row input:focus { border-color: #4f8ef7; }
+    .sa-input-row button {
+      padding: 11px 20px;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .sa-input-row button:hover { background: #3a7de4; }
+
+    /* ── RESULT ── */
+    .result {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 6px 0 10px;
+      min-height: 28px;
+    }
+    .result.correct { color: #28a745; }
+    .result.wrong { color: #dc3545; }
+
+    /* ── DESCRIPTION ── */
+    .description {
+      white-space: pre-wrap;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.8;
+      text-align: center;
+      background: #f8f9fc;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      min-height: 0;
+    }
+
+    /* ── NEXT BTN ── */
+    .next-btn {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 32px;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .next-btn:hover { background: #2d2d50; }
+
+    /* ── NO DATA NOTICE ── */
+    .no-data-notice {
+      font-size: 15px;
+      color: #999;
+      padding: 20px 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      padding: 24px 16px;
+      margin-top: 20px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* ── ABOUT / MAIN ── */
+    #main h1, #about h2 { color: #1a1a2e; }
+    #main p, #about p { color: #555; line-height: 1.8; text-align: left; }
+    #about a { color: #4f8ef7; }
+  </style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <button class="nav-active" onclick="showPage('main')">메인 페이지</button>
+  <button onclick="showPage('quiz')">한자 문제</button>
+  <button onclick="showPage('about')">About</button>
+</nav>
+
+<!-- ════════════ 메인 페이지 ════════════ -->
+<div id="main" class="page active">
+  <div class="card" style="text-align:left;">
+    <h1 style="margin-top:0;">일본어 학습</h1>
+    <p>메인 페이지 내용은 추후 입력 예정입니다.</p>
+  </div>
+</div>
+
+<!-- ════════════ 한자 문제 ════════════ -->
+<div id="quiz" class="page">
+
+  <!-- 객관식 / 주관식 -->
+  <div class="mode-switch">
+    <button id="btn-mc" class="active" onclick="switchKanjiMode('mc')">객관식</button>
+    <button id="btn-sa" onclick="switchKanjiMode('sa')">주관식</button>
+  </div>
+
+  <!-- 단계 선택 -->
+  <div class="card level-section">
+    <h3>단계 선택 (복수 선택 가능)</h3>
+    <div class="level-grid" id="level-grid">
+      <!-- JS로 생성 -->
+    </div>
+  </div>
+
+  <!-- 객관식 컨테이너 -->
+  <div id="mc-container" class="card">
+    <div class="question-label">다음 한자의 음을 고르세요</div>
+    <div class="question" id="mc-question"></div>
+    <div class="options" id="mc-options"></div>
+    <div class="result" id="mc-result"></div>
+    <div class="description" id="mc-description" style="display:none;"></div>
+    <button class="next-btn" id="mc-next-btn" onclick="nextMCQuestion()">다음 문제 ▶</button>
+  </div>
+
+  <!-- 주관식 컨테이너 -->
+  <div id="sa-container" class="card" style="display:none;">
+    <div class="question-label">다음 한자의 음을 입력하세요</div>
+    <div class="question" id="sa-question"></div>
+    <div class="sa-input-row">
+      <input type="text" id="sa-answer" placeholder="정답 입력">
+      <button onclick="checkSAAnswer()">제출</button>
+    </div>
+    <div class="result" id="sa-result"></div>
+    <div class="description" id="sa-description" style="display:none;"></div>
+    <button class="next-btn" id="sa-next-btn" onclick="nextSAQuestion()">다음 문제 ▶</button>
+  </div>
+
+</div>
+
+<!-- ════════════ About ════════════ -->
+<div id="about" class="page">
+  <div class="card" style="text-align:left;">
+    <h2 style="margin-top:0;">About</h2>
+    <p>About 내용은 추후 입력 예정입니다.</p>
+  </div>
+</div>
+
+<footer>© 2025 일본어 학습 퀴즈 | 제작: austock21</footer>
+
+<script>
+/* ═══════════════════════════════════════
+   DATA FORMAT:
+   [한자, 음독(정답), 두음법칙대체(없으면 ""), 오답1, 오답2, 오답3, 예문, 단계(1~12)]
+   예) ["火", "화", "", "히", "수", "금", "화재 [火災]\n화산 [火山]\n방화 [防火]", 1]
+═══════════════════════════════════════ */
+
+const kanjidataset = [
+  // ── 1단계 ──
+  // 火(화): 혼동 오답 — 과(果), 하(下), 가(可)
+  ["火", "화", "", "과", "하", "가", "화재 [火災]\n화산 [火山]\n방화 [防火]\n화력 [火力]", 1],
+  // 水(수): 혼동 오답 — 수(守)와 발음 같은 글자 제외, 주(主), 사(事), 구(口)
+  ["水", "수", "", "주", "사", "구", "수영 [水泳]\n수분 [水分]\n홍수 [洪水]\n수도 [水道]", 1],
+  // 山(산): 혼동 오답 — 잔(残→ざん), 단(断), 찬(賛)
+  ["山", "산", "", "잔", "단", "찬", "화산 [火山]\n등산 [登山]\n산맥 [山脈]\n산림 [山林]", 1],
+
+  // ── 2단계 ──
+  // 日(일): 혼동 오답 — 이(以), 입(入), 질(質)
+  ["日", "일", "", "이", "입", "질", "매일 [毎日]\n일출 [日出]\n일기 [日記]\n공휴일 [公休日]", 2],
+  // 月(월): 혼동 오답 — 열(列), 결(結), 설(説)
+  ["月", "월", "", "열", "결", "설", "월급 [月給]\n월말 [月末]\n월요일 [月曜日]\n만월 [満月]", 2],
+  // 人(인): 혼동 오답 — 임(任), 인(引)과 구분, 신(身), 진(陣)
+  ["人", "인", "", "신", "진", "임", "인간 [人間]\n인기 [人気]\n인류 [人類]\n개인 [個人]", 2],
+
+  // ── 3단계 ──
+  // 力(력/역): 두음법칙 대체 '역' 허용, 혼동 오답 — 격(格), 적(的), 석(席)
+  ["力", "력", "역", "격", "적", "석", "능력 [能力]\n체력 [体力]\n노력 [努力]\n실력 [実力]", 3],
+  // 心(심): 혼동 오답 — 침(沈), 심(深)은 같으므로 제외, 금(今), 임(任)
+  ["心", "심", "", "침", "금", "임", "안심 [安心]\n심리 [心理]\n열심 [熱心]\n심장 [心臓]", 3],
+  // 食(식): 혼동 오답 — 직(直), 색(索), 측(測)
+  ["食", "식", "", "직", "색", "측", "식사 [食事]\n식품 [食品]\n음식 [飲食]\n식욕 [食欲]", 3],
+
+  // ── 4단계 ──
+  // 言(언): 혼동 오답 — 원(元), 온(温), 연(延)
+  ["言", "언", "", "원", "온", "연", "언어 [言語]\n발언 [発言]\n선언 [宣言]\n언론 [言論]", 4],
+  // 気(기): 혼동 오답 — 귀(貴), 기(記)와 구분위해 계(系), 의(意)
+  ["気", "기", "", "귀", "계", "의", "기분 [気分]\n기운 [気運]\n천기 [天気]\n인기 [人気]", 4],
+  // 国(국): 혼동 오답 — 곡(曲), 혹(或), 옥(玉)
+  ["国", "국", "", "곡", "혹", "옥", "국가 [国家]\n외국 [外国]\n국민 [国民]\n한국 [韓国]", 4],
+
+  // ── 5단계 ──
+  // 学(학): 혼동 오답 — 각(覚), 착(着), 략(略)
+  ["学", "학", "", "각", "착", "략", "학교 [学校]\n학생 [学生]\n학습 [学習]\n유학 [留学]", 5],
+  // 生(생): 혼동 오답 — 성(成), 정(正), 청(清)
+  ["生", "생", "", "성", "정", "청", "학생 [学生]\n생활 [生活]\n생명 [生命]\n출생 [出生]", 5],
+  // 時(시): 혼동 오답 — 지(知), 치(置), 사(事)
+  ["時", "시", "", "지", "치", "사", "시간 [時間]\n시대 [時代]\n동시 [同時]\n시각 [時刻]", 5],
+
+  // ── 6단계 ──
+  // 会(회): 혼동 오답 — 외(外), 괴(怪), 배(倍)
+  ["会", "회", "", "외", "괴", "배", "회사 [会社]\n회의 [会議]\n기회 [機会]\n사회 [社会]", 6],
+  // 長(장): 혼동 오답 — 장(状)과 구분위해 조(調), 상(常), 창(創)
+  ["長", "장", "", "조", "상", "창", "성장 [成長]\n장관 [長官]\n사장 [社長]\n장기 [長期]", 6],
+  // 道(도): 혼동 오답 — 두(頭), 독(読), 동(動)
+  ["道", "도", "", "두", "독", "동", "보도 [報道]\n도로 [道路]\n검도 [剣道]\n수도 [水道]", 6],
+
+  // ── 7단계 ──
+  // 体(체): 혼동 오답 — 대(代), 태(態), 제(除)
+  ["体", "체", "", "대", "태", "제", "신체 [身体]\n체력 [体力]\n체중 [体重]\n전체 [全体]", 7],
+  // 名(명): 혼동 오답 — 녕(寧), 령(令), 병(兵)
+  ["名", "명", "", "녕", "령", "병", "명성 [名声]\n유명 [有名]\n명예 [名誉]\n지명 [地名]", 7],
+  // 数(수): 혼동 오답 — 숙(熟), 속(速), 측(測)
+  ["数", "수", "", "숙", "속", "측", "다수 [多数]\n수학 [数学]\n수량 [数量]\n인수 [人数]", 7],
+
+  // ── 8단계 ──
+  // 知(지): 혼동 오답 — 치(置), 직(直), 기(記)
+  ["知", "지", "", "치", "직", "기", "지식 [知識]\n인지 [認知]\n지혜 [知恵]\n통지 [通知]", 8],
+  // 思(사): 혼동 오답 — 사(士)와 구분위해 소(素), 시(示), 자(者)
+  ["思", "사", "", "소", "시", "자", "사상 [思想]\n사고 [思考]\n의사 [意思]\n사려 [思慮]", 8],
+  // 行(행): 혼동 오답 — 항(抗), 공(功), 강(降)
+  ["行", "행", "", "항", "공", "강", "행동 [行動]\n여행 [旅行]\n행진 [行進]\n실행 [実行]", 8],
+
+  // ── 9단계 ──
+  // 文(문): 혼동 오답 — 분(分), 본(本), 번(番)
+  ["文", "문", "", "분", "본", "번", "문화 [文化]\n문학 [文学]\n작문 [作文]\n문서 [文書]", 9],
+  // 語(어): 혼동 오답 — 오(誤), 여(余), 으(?)→ 아(我)
+  ["語", "어", "", "오", "여", "아", "언어 [言語]\n어학 [語学]\n외국어 [外国語]\n단어 [単語]", 9],
+  // 書(서): 혼동 오답 — 저(著), 처(処), 석(席)
+  ["書", "서", "", "저", "처", "석", "서류 [書類]\n독서 [読書]\n도서 [図書]\n서점 [書店]", 9],
+
+  // ── 10단계 ──
+  // 化(화): 혼동 오답 — 하(下), 가(価), 과(課)
+  ["化", "화", "", "하", "가", "과", "문화 [文化]\n변화 [変化]\n화학 [化学]\n화장 [化粧]", 10],
+  // 性(성): 혼동 오답 — 정(政), 청(清), 성(声)은 같으므로 제외→ 신(身)
+  ["性", "성", "", "정", "청", "신", "성격 [性格]\n이성 [理性]\n남성 [男性]\n가능성 [可能性]", 10],
+  // 感(감): 혼동 오답 — 한(漢), 함(含), 담(担)
+  ["感", "감", "", "한", "함", "담", "감각 [感覚]\n감정 [感情]\n감탄 [感嘆]\n호감 [好感]", 10],
+
+];
+
+/* ═══ STATE ═══ */
+let kanjianswered = false;
+let current = null;
+// 기본값: 데이터가 있는 단계 중 가장 낮은 번호 1개 선택
+const _firstLevel = Math.min(...kanjidataset.map(d => d[7]));
+let selectedLevels = new Set([_firstLevel]);
+
+
+/* ═══ NAV ═══ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('nav-active'));
+  const navMap = { main: 0, quiz: 1, about: 2 };
+  document.querySelectorAll('nav button')[navMap[id]].classList.add('nav-active');
+
+  if (id === 'quiz') {
+    const isMC = document.getElementById('btn-mc').classList.contains('active');
+    isMC ? nextMCQuestion() : nextSAQuestion();
+  }
+}
+
+/* ═══ LEVEL BUTTONS ═══ */
+function getLevelsWithData() {
+  const levelsWithData = new Set();
+  kanjidataset.forEach(item => levelsWithData.add(item[7]));
+  return levelsWithData;
+}
+
+function buildLevelGrid() {
+  const grid = document.getElementById('level-grid');
+  const levelsWithData = getLevelsWithData();
+  grid.innerHTML = '';
+  for (let i = 1; i <= 12; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.dataset.level = i;
+    const hasData = levelsWithData.has(i);
+    if (!hasData) {
+      btn.classList.add('disabled');
+      btn.disabled = true;
+    } else {
+      if (selectedLevels.has(i)) btn.classList.add('active');
+      btn.addEventListener('click', () => toggleLevel(i, btn));
+    }
+    grid.appendChild(btn);
+  }
+}
+
+function toggleLevel(level, btn) {
+  if (selectedLevels.has(level)) {
+    if (selectedLevels.size === 1) return; // 최소 1개 유지
+    selectedLevels.delete(level);
+    btn.classList.remove('active');
+  } else {
+    selectedLevels.add(level);
+    btn.classList.add('active');
+  }
+  // 단계 변경 시 새 문제 출력
+  const isMC = document.getElementById('btn-mc').classList.contains('active');
+  isMC ? nextMCQuestion() : nextSAQuestion();
+}
+
+function getFilteredDataset() {
+  return kanjidataset.filter(item => selectedLevels.has(item[7]));
+}
+
+/* ═══ MODE SWITCH ═══ */
+function switchKanjiMode(mode) {
+  document.getElementById('btn-mc').classList.remove('active');
+  document.getElementById('btn-sa').classList.remove('active');
+  document.getElementById('mc-container').style.display = 'none';
+  document.getElementById('sa-container').style.display = 'none';
+  if (mode === 'mc') {
+    document.getElementById('btn-mc').classList.add('active');
+    document.getElementById('mc-container').style.display = 'block';
+    nextMCQuestion();
+  } else {
+    document.getElementById('btn-sa').classList.add('active');
+    document.getElementById('sa-container').style.display = 'block';
+    nextSAQuestion();
+  }
+}
+
+/* ═══ HELPERS ═══ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showResult(resultEl, isCorrect, correctAns) {
+  resultEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctAns}`;
+  resultEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+}
+
+function showDescription(descEl, text) {
+  descEl.textContent = text;
+  descEl.style.display = 'block';
+}
+
+/* ═══ MC ═══ */
+function nextMCQuestion() {
+  kanjianswered = false;
+  const dataset = getFilteredDataset();
+  if (!dataset.length) {
+    document.getElementById('mc-question').textContent = '해당 단계의 데이터가 없습니다.';
+    document.getElementById('mc-options').innerHTML = '';
+    document.getElementById('mc-result').textContent = '';
+    document.getElementById('mc-result').className = 'result';
+    document.getElementById('mc-description').style.display = 'none';
+    document.getElementById('mc-next-btn').style.display = 'none';
+    return;
+  }
+
+  current = dataset[Math.floor(Math.random() * dataset.length)];
+  const choices = shuffle([current[1], current[3], current[4], current[5]]);
+
+  document.getElementById('mc-question').textContent = current[0];
+  document.getElementById('mc-result').textContent = '';
+  document.getElementById('mc-result').className = 'result';
+  document.getElementById('mc-description').textContent = '';
+  document.getElementById('mc-description').style.display = 'none';
+  document.getElementById('mc-next-btn').style.display = 'none';
+
+  document.getElementById('mc-options').innerHTML = choices.map((ch) =>
+    `<button onclick="checkMCAnswer(this, '${ch}')">${ch}</button>`
+  ).join('');
+}
+
+function checkMCAnswer(btn, choice) {
+  if (kanjianswered) return;
+  kanjianswered = true;
+  const isCorrect = choice === current[1];
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  // 오답인 경우 정답 버튼도 표시
+  if (!isCorrect) {
+    document.querySelectorAll('#mc-options button').forEach(b => {
+      if (b.textContent === current[1]) b.classList.add('correct');
+    });
+  }
+
+  document.querySelectorAll('#mc-options button').forEach(b => b.disabled = true);
+  showResult(document.getElementById('mc-result'), isCorrect, current[1]);
+  showDescription(document.getElementById('mc-description'), current[6]);
+  document.getElementById('mc-next-btn').style.display = 'inline-block';
+}
+
+/* ═══ SA ═══ */
+function nextSAQuestion() {
+  kanjianswered = false;
+  const dataset = getFilteredDataset();
+  if (!dataset.length) {
+    document.getElementById('sa-question').textContent = '해당 단계의 데이터가 없습니다.';
+    document.getElementById('sa-result').textContent = '';
+    document.getElementById('sa-result').className = 'result';
+    document.getElementById('sa-description').style.display = 'none';
+    document.getElementById('sa-next-btn').style.display = 'none';
+    return;
+  }
+
+  current = dataset[Math.floor(Math.random() * dataset.length)];
+  document.getElementById('sa-question').textContent = current[0];
+  document.getElementById('sa-answer').value = '';
+  document.getElementById('sa-result').textContent = '';
+  document.getElementById('sa-result').className = 'result';
+  document.getElementById('sa-description').textContent = '';
+  document.getElementById('sa-description').style.display = 'none';
+  document.getElementById('sa-next-btn').style.display = 'none';
+  document.getElementById('sa-answer').disabled = false;
+  document.getElementById('sa-answer').focus();
+}
+
+function checkSAAnswer() {
+  if (kanjianswered) return;
+  kanjianswered = true;
+  const input = document.getElementById('sa-answer').value.trim();
+  const isCorrect = input === current[1] || (current[2] && input === current[2]);
+  document.getElementById('sa-answer').disabled = true;
+  showResult(document.getElementById('sa-result'), isCorrect, current[1]);
+  showDescription(document.getElementById('sa-description'), current[6]);
+  document.getElementById('sa-next-btn').style.display = 'inline-block';
+}
+
+/* ═══ KEYBOARD ═══ */
+document.addEventListener('keydown', (e) => {
+  const isQuiz = document.getElementById('quiz').classList.contains('active');
+  if (!isQuiz) return;
+
+  const isMC = document.getElementById('mc-container').style.display !== 'none';
+  const isSA = document.getElementById('sa-container').style.display !== 'none';
+
+  if (isMC) {
+    if (!kanjianswered && ['1','2','3','4'].includes(e.key)) {
+      const buttons = document.querySelectorAll('#mc-options button');
+      if (buttons[+e.key - 1]) buttons[+e.key - 1].click();
+    }
+    if (kanjianswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextMCQuestion();
+  }
+
+  if (isSA) {
+    if (e.key === 'Enter') {
+      if (!kanjianswered) checkSAAnswer();
+      else nextSAQuestion();
+    }
+    if (kanjianswered && e.key === 'ArrowRight') nextSAQuestion();
+  }
+});
+
+/* ═══ INIT ═══ */
+buildLevelGrid();
+</script>
+</body>
+</html>

@@ -16,7 +16,7 @@
     }
 
     /* ── NAV ── */
-    nav {
+    #main-nav {
       background: #1a1a2e;
       padding: 0 16px;
       display: flex;
@@ -24,7 +24,7 @@
       gap: 4px;
       flex-wrap: wrap;
     }
-    nav button {
+    #main-nav > button {
       background: transparent;
       color: #aab4c8;
       border: none;
@@ -32,15 +32,43 @@
       font-size: 15px;
       font-family: inherit;
       cursor: pointer;
+      border-top: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+    #main-nav > button:hover { color: #fff; }
+    #main-nav > button.nav-active {
+      color: #fff;
+      border-top-color: #4f8ef7;
+      font-weight: 700;
+    }
+
+    /* ── SUB NAV ── */
+    #sub-nav {
+      background: #2e2e5a;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      padding: 0 16px;
+    }
+    #sub-nav button {
+      background: transparent;
+      color: #b0b8d0;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
       border-bottom: 3px solid transparent;
       transition: color .2s, border-color .2s;
     }
-    nav button:hover { color: #fff; }
-    nav button.nav-active {
+    #sub-nav button:hover { color: #fff; }
+    #sub-nav button.subnav-active {
       color: #fff;
       border-bottom-color: #4f8ef7;
       font-weight: 700;
     }
+    .subnav-group { display: contents; }
 
     /* ── PAGE ── */
     .page { display: none; padding: 28px 20px 60px; text-align: center; max-width: 680px; margin: 0 auto; }
@@ -329,16 +357,33 @@
 <body>
 
 <nav id="main-nav">
-  <button class="nav-active" onclick="showPage('main')">메인 페이지</button>
-  <button onclick="showPage('noun')">명사 문제</button>
-  <button onclick="showPage('verb')">동사 문제</button>
-  <button onclick="showPage('quiz')">한자 문제</button>
-  <button onclick="showPage('wordlist')">단어 보기</button>
-  <button onclick="showPage('about')">About</button>
+  <button class="nav-active" onclick="showTop('main')">메인</button>
+  <button onclick="showTop('word')">단어 문제</button>
+  <button onclick="showTop('wordlist')">단어 보기</button>
+  <button onclick="showTop('conj')">동사 변형</button>
 </nav>
+<div id="sub-nav">
+  <span class="subnav-group" id="subnav-main">
+    <button class="subnav-active" onclick="showSub('main','home')">Main</button>
+    <button onclick="showSub('main','about')">About</button>
+  </span>
+  <span class="subnav-group" id="subnav-word" style="display:none;">
+    <button onclick="showSub('word','noun')">명사</button>
+    <button onclick="showSub('word','verb')">동사</button>
+    <button onclick="showSub('word','quiz')">한자</button>
+  </span>
+  <span class="subnav-group" id="subnav-wordlist" style="display:none;">
+    <button onclick="showSub('wordlist','noun')">명사</button>
+    <button onclick="showSub('wordlist','verb')">동사</button>
+    <button onclick="showSub('wordlist','kanji')">한자</button>
+  </span>
+  <span class="subnav-group" id="subnav-conj" style="display:none;">
+    <button class="subnav-active" onclick="showSub('conj','conj')">준비 중</button>
+  </span>
+</div>
 
-<!-- ════════════ 메인 페이지 ════════════ -->
-<div id="main" class="page active">
+<!-- ════════════ 메인·홈 ════════════ -->
+<div id="home" class="page active">
   <div class="card" style="text-align:left;">
     <h1 style="margin-top:0;">치로 일본어 JLPT N3 대비</h1>
     <p>
@@ -350,6 +395,25 @@
       <strong>2. 키보드 조작</strong><br>
       객관식 문제 : 숫자패드(1~4)로 선택, → 키로 다음 문제<br>
       주관식 문제 : Enter 키로 제출, Enter 키 혹은 → 키로 다음 문제
+    </p>
+  </div>
+</div>
+
+<!-- ════════════ About ════════════ -->
+<div id="about" class="page">
+  <div class="card" style="text-align:left;">
+    <h2 style="margin-top:0;">About</h2>
+    <p>
+      <strong>1. 문의사항</strong><br>
+      오류 및 건의사항은 치로에게 연락 주세요.
+    </p>
+    <p>
+      <strong>2. 이용안내</strong><br>
+      링크를 함부로 업로드하거나 허가없이 타인에게 공유하지 말아주시기 바랍니다.
+    </p>
+    <p>
+      <strong>제작</strong><br>
+      치로 일본어
     </p>
   </div>
 </div>
@@ -457,13 +521,6 @@
 <!-- ════════════ 단어 보기 ════════════ -->
 <div id="wordlist" class="page">
 
-  <!-- 카테고리 선택 (1택) -->
-  <div class="mode-switch" id="wl-cat-switch">
-    <button id="wl-btn-noun" class="active" onclick="selectWLCat('noun')">명사</button>
-    <button id="wl-btn-verb" onclick="selectWLCat('verb')">동사</button>
-    <button id="wl-btn-kanji" onclick="selectWLCat('kanji')">한자</button>
-  </div>
-
   <!-- 단계 선택 -->
   <div class="card level-section">
     <h3>단계 선택 (복수 선택 가능)</h3>
@@ -475,22 +532,11 @@
 
 </div>
 
-<!-- ════════════ About ════════════ -->
-<div id="about" class="page">
+<!-- ════════════ 동사 변형 (준비 중) ════════════ -->
+<div id="conj" class="page">
   <div class="card" style="text-align:left;">
-    <h2 style="margin-top:0;">About</h2>
-    <p>
-      <strong>1. 문의사항</strong><br>
-      오류 및 건의사항은 치로에게 연락 주세요.
-    </p>
-    <p>
-      <strong>2. 이용안내</strong><br>
-      링크를 함부로 업로드하거나 허가없이 타인에게 공유하지 말아주시기 바랍니다.
-    </p>
-    <p>
-      <strong>제작</strong><br>
-      치로 일본어
-    </p>
+    <h2 style="margin-top:0;">동사 변형 퀴즈</h2>
+    <p>준비 중입니다.</p>
   </div>
 </div>
 
@@ -519,20 +565,53 @@ const _firstVerbLevel = Math.min(...verbdataset.map(d => d[3]));
 let verbSelectedLevels = new Set([_firstVerbLevel]);
 
 /* ═══ NAV ═══ */
-const NAV_PAGES = ['main', 'noun', 'verb', 'quiz', 'wordlist', 'about'];
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('nav button').forEach((b, i) => {
-    b.classList.toggle('nav-active', NAV_PAGES[i] === id);
+let currentTop = 'main'; // 'main' | 'word' | 'wordlist'
+
+// 상위탭 전환 - 해당 그룹의 첫 번째 하위탭으로 이동
+function showTop(top) {
+  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj' };
+  showSub(top, defaults[top]);
+}
+
+// 하위탭 전환
+function showSub(top, sub) {
+  currentTop = top;
+
+  // 상위탭 active
+  document.querySelectorAll('#main-nav > button').forEach((b, i) => {
+    const tops = ['main', 'word', 'wordlist', 'conj'];
+    b.classList.toggle('nav-active', tops[i] === top);
   });
-  if (id === 'quiz') {
+
+  // 하위탭 그룹 표시/숨김
+  ['main', 'word', 'wordlist', 'conj'].forEach(g => {
+    document.getElementById('subnav-' + g).style.display = g === top ? '' : 'none';
+  });
+
+  // 하위탭 버튼 active
+  document.querySelectorAll('#subnav-' + top + ' button').forEach(b => {
+    const fn = b.getAttribute('onclick');
+    b.classList.toggle('subnav-active', fn === `showSub('${top}','${sub}')`);
+  });
+
+  // 페이지 전환
+  _activatePage(sub);
+}
+
+function _activatePage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // 단어 보기는 'wordlist' id가 없고 noun/verb/kanji 페이지를 재활용
+  const pageId = (currentTop === 'wordlist' && ['noun','verb','kanji'].includes(id))
+    ? 'wordlist' : id;
+  document.getElementById(pageId).classList.add('active');
+
+  if (pageId === 'quiz') {
     const isMC = document.getElementById('btn-mc').classList.contains('active');
     isMC ? nextMCQuestion() : nextSAQuestion();
   }
-  if (id === 'noun') nextNounQuestion();
-  if (id === 'verb') nextVerbQuestion();
-  if (id === 'wordlist') renderWordList();
+  if (pageId === 'noun' && currentTop === 'word') nextNounQuestion();
+  if (pageId === 'verb' && currentTop === 'word') nextVerbQuestion();
+  if (currentTop === 'wordlist') { selectWLCat(id); }
 }
 
 /* ═══ LEVEL GRID 공통 빌더 ═══ */
@@ -948,9 +1027,6 @@ let wlSelectedLevels = new Set([1]);
 
 function selectWLCat(cat) {
   wlCat = cat;
-  ['noun','verb','kanji'].forEach(c => {
-    document.getElementById(`wl-btn-${c}`).classList.toggle('active', c === cat);
-  });
   buildWLLevelGrid();
   renderWordList();
 }

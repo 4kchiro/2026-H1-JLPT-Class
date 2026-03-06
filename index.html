@@ -352,6 +352,291 @@
       text-align: center;
       white-space: pre-wrap;
     }
+    /* ── CONJ CATEGORY BOX ── */
+    #conj-type-box { overflow: visible; }
+    .conj-cat-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 0;
+      overflow: visible;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .conj-cat-wrap {
+      position: relative;
+      flex: 0 0 calc(33.33% - 6px);
+    }
+    .conj-cat-btn {
+      display: flex;
+      align-items: stretch;
+      border-radius: 999px;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #666;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background .18s, border-color .18s, color .18s;
+      padding: 0;
+      font-family: inherit;
+      width: 100%;
+    }
+    .conj-cat-btn.all-on  { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
+    .conj-cat-btn.some-on { background: #c2d8fd; border-color: #4f8ef7; color: #1a4a9a; }
+    .conj-cat-btn.open    { border-radius: 12px 12px 0 0; }
+
+    .conj-cat-label {
+      padding: 8px 8px 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      line-height: 1.3;
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .conj-cat-arrow {
+      padding: 6px 12px;
+      font-size: 18px;           /* 3번: 화살표 크게 */
+      border-left: 1.5px solid rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .conj-cat-btn.all-on  .conj-cat-arrow { border-left-color: rgba(255,255,255,0.3); }
+    .conj-cat-btn.some-on .conj-cat-arrow { border-left-color: rgba(79,142,247,0.35); }
+    .conj-cat-arrow:hover { background: rgba(0,0,0,0.07); }
+
+    /* 상세 패널: absolute, 가로로 적당히 넓게 */
+    .conj-cat-detail {
+      display: none;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #f0f2f5;
+      border-radius: 0 8px 8px 8px;
+      border: 2px solid #ccd3df;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 20;
+      width: max-content;
+      max-width: 260px;
+    }
+    .conj-cat-detail.open { display: flex; }
+    .conj-type-btn {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-family: inherit;
+      border-radius: 999px;
+      border: 2px solid #ccd3df;
+      background: #fff;
+      color: #555;
+      cursor: pointer;
+      transition: all .15px;
+      white-space: nowrap;
+    }
+    .conj-type-btn.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── CONJ QUESTION ── */
+    .conj-verb-display {
+      margin: 4px 0 6px;      /* 1번: 간격 축소 */
+      text-align: center;
+    }
+    .conj-verb-word {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .conj-verb-reading {
+      font-size: 16px;
+      color: #aaa;
+      margin: 0 6px;
+    }
+    .conj-verb-meaning {
+      font-size: 16px;
+      color: #555;
+    }
+    .conj-form-display {
+      margin: 2px 0 16px;     /* 1번: 간격 축소 */
+      text-align: center;
+      line-height: 1.6;
+    }
+    .conj-form-word {
+      font-size: 30px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    /* 변형 종류 레이블 (파란 뱃지) + 뜻 (검정) */
+    .conj-type-badge {
+      display: inline-block;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 11px;
+      border-radius: 999px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .conj-type-meaning {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a2e;
+      vertical-align: middle;
+    }
+
+    /* ── CONJ MC OPTIONS (텍스트 더 작게) ── */
+    .conj-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .conj-options button {
+      padding: 12px 8px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 500;
+      border-radius: 12px;
+      border: 2px solid #dde3ef;
+      background: #f8f9fc;
+      color: #333;
+      cursor: pointer;
+      transition: all .15s;
+      line-height: 1.5;
+    }
+    .conj-options button:hover:not(:disabled) { border-color: #4f8ef7; background: #eef3fe; }
+    .conj-options button.correct { background: #e6f9ee; border-color: #28a745; color: #28a745; }
+    .conj-options button.wrong   { background: #fdeaea; border-color: #dc3545; color: #dc3545; }
+
+    /* ── DICTATION LEVEL GRID ── */
+    .dict-level-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 8px;
+      flex-wrap: nowrap;
+    }
+    .dict-round-btn {
+      min-width: 52px;
+      height: 40px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 700;
+      border-radius: 10px;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #777;
+      cursor: pointer;
+      transition: all .18s;
+      padding: 0 8px;
+      white-space: nowrap;
+    }
+    .dict-round-btn.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+    }
+    .dict-round-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .dict-round-btn:hover:not(.active):not(.disabled) {
+      border-color: #4f8ef7;
+      color: #4f8ef7;
+    }
+    .dict-sub-btn {
+      width: 44px;
+      height: 40px;
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 600;
+      border-radius: 10px;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #777;
+      cursor: pointer;
+      transition: all .18s;
+      padding: 0;
+    }
+    .dict-sub-btn.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+    }
+    .dict-sub-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .dict-sub-btn:hover:not(.active):not(.disabled) {
+      border-color: #4f8ef7;
+      color: #4f8ef7;
+    }
+
+    /* ── DICTATION PLAYER ── */
+    .dict-player-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0 14px;
+    }
+    .dict-play-btn {
+      padding: 11px 28px;
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dict-play-btn:hover { background: #2d2d50; }
+    .dict-slow-btn {
+      padding: 11px 18px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #666;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .dict-slow-btn.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+    }
+    .dict-slow-btn:hover:not(.active) {
+      border-color: #4f8ef7;
+      color: #4f8ef7;
+    }
+    .dict-notice {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.8;
+      text-align: center;
+      margin-bottom: 14px;
+    }
   </style>
 </head>
 <body>
@@ -361,6 +646,7 @@
   <button onclick="showTop('word')">단어 문제</button>
   <button onclick="showTop('wordlist')">단어 보기</button>
   <button onclick="showTop('conj')">동사 변형</button>
+  <button onclick="showTop('dictation')">받아쓰기</button>
 </nav>
 <div id="sub-nav">
   <span class="subnav-group" id="subnav-main">
@@ -378,7 +664,12 @@
     <button onclick="showSub('wordlist','kanji')">한자</button>
   </span>
   <span class="subnav-group" id="subnav-conj" style="display:none;">
-    <button class="subnav-active" onclick="showSub('conj','conj')">준비 중</button>
+    <button class="subnav-active" onclick="showSub('conj','conj-grammar')">문법</button>
+    <button onclick="showSub('conj','conj-mc')">변형 (객관식)</button>
+    <button onclick="showSub('conj','conj-sa')">변형 (주관식)</button>
+  </span>
+  <span class="subnav-group" id="subnav-dictation" style="display:none;">
+    <button class="subnav-active" onclick="showSub('dictation','dictation-quiz')">문제풀이</button>
   </span>
 </div>
 
@@ -532,17 +823,91 @@
 
 </div>
 
-<!-- ════════════ 동사 변형 (준비 중) ════════════ -->
+<!-- ════════════ 동사 변형 ════════════ -->
 <div id="conj" class="page">
-  <div class="card" style="text-align:left;">
-    <h2 style="margin-top:0;">동사 변형 퀴즈</h2>
-    <p>준비 중입니다.</p>
+
+  <!-- 유형 선택 박스 (세 퀴즈 공유) -->
+  <div class="card level-section" id="conj-type-box" style="padding-bottom: 32px;">
+    <h3>유형 선택</h3>
+    <div class="conj-cat-tabs" id="conj-cat-tabs"></div>
   </div>
+
+  <!-- [문법] 퀴즈 -->
+  <div id="conj-grammar-box" class="card">
+    <div class="question-label" id="cg-label">변형의 종류를 고르세요</div>
+    <div class="conj-verb-display" id="cg-verb"></div>
+    <div class="conj-form-display" id="cg-form"></div>
+    <div class="conj-options" id="cg-options"></div>
+    <div class="result" id="cg-result"></div>
+    <button class="next-btn" id="cg-next-btn" onclick="nextConjGrammar()">다음 문제 ▶</button>
+  </div>
+
+  <!-- [변형 객관식] 퀴즈 -->
+  <div id="conj-mc-box" class="card" style="display:none;">
+    <div class="question-label">올바른 변형 형태를 고르세요</div>
+    <div class="conj-verb-display" id="cm-verb"></div>
+    <div class="conj-form-display" id="cm-form"></div>
+    <div class="conj-options" id="cm-options"></div>
+    <div class="result" id="cm-result"></div>
+    <button class="next-btn" id="cm-next-btn" onclick="nextConjMC()">다음 문제 ▶</button>
+  </div>
+
+  <!-- [변형 주관식] 퀴즈 -->
+  <div id="conj-sa-box" class="card" style="display:none;">
+    <div class="question-label">올바른 변형 형태를 히라가나로 입력하세요</div>
+    <div class="conj-verb-display" id="cs-verb"></div>
+    <div class="conj-form-display" id="cs-form"></div>
+    <div class="sa-input-row">
+      <input type="text" id="cs-answer" placeholder="정답 입력">
+      <button onclick="submitConjSA()">제출</button>
+    </div>
+    <div class="result" id="cs-result"></div>
+    <div class="noun-desc" id="cs-desc" style="display:none;"></div>
+    <button class="next-btn" id="cs-next-btn" onclick="nextConjSA()">다음 문제 ▶</button>
+  </div>
+
+</div>
+
+<!-- ════════════ 받아쓰기 ════════════ -->
+<div id="dictation" class="page">
+
+  <!-- 레벨 선택 -->
+  <div class="card level-section" id="dict-level-card">
+    <h3>단계 선택 (복수 선택 가능)</h3>
+    <div id="dict-level-grid"></div>
+  </div>
+
+  <!-- 문제풀이 구역 -->
+  <div id="dict-quiz-box" class="card">
+    <div class="dict-notice">
+      다음 음성의 발음을 입력하세요.<br>
+      모든 내용은 한자나 가타카나로의 변환 없이 히라가나로만 작성합니다.<br>
+      또한 띄어쓰기와 문장부호는 없습니다.
+    </div>
+
+    <!-- 플레이어 -->
+    <div class="dict-player-row">
+      <button class="dict-play-btn" id="dict-play-btn" onclick="dictPlayAudio()">
+        ▶ 다시 듣기
+      </button>
+      <button class="dict-slow-btn" id="dict-slow-btn" onclick="dictToggleSlow()">🐢 느리게</button>
+    </div>
+
+    <!-- 입력 -->
+    <div class="sa-input-row">
+      <input type="text" id="dict-answer" placeholder="히라가나 입력">
+      <button onclick="submitDict()">제출</button>
+    </div>
+    <div class="result" id="dict-result"></div>
+    <button class="next-btn" id="dict-next-btn" onclick="nextDictQuestion()">다음 문제 ▶</button>
+  </div>
+
 </div>
 
 <footer>© 치로 일본어 | 제작: 4kchiro</footer>
 
 <script src="data.js"></script>
+<script src="data_conj.js"></script>
 <script>
 /* ═══ 한자 STATE ═══ */
 let kanjianswered = false;
@@ -569,7 +934,7 @@ let currentTop = 'main'; // 'main' | 'word' | 'wordlist'
 
 // 상위탭 전환 - 해당 그룹의 첫 번째 하위탭으로 이동
 function showTop(top) {
-  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj' };
+  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', dictation: 'dictation-quiz' };
   showSub(top, defaults[top]);
 }
 
@@ -579,12 +944,12 @@ function showSub(top, sub) {
 
   // 상위탭 active
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'word', 'wordlist', 'conj'];
+    const tops = ['main', 'word', 'wordlist', 'conj', 'dictation'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
 
   // 하위탭 그룹 표시/숨김
-  ['main', 'word', 'wordlist', 'conj'].forEach(g => {
+  ['main', 'word', 'wordlist', 'conj', 'dictation'].forEach(g => {
     document.getElementById('subnav-' + g).style.display = g === top ? '' : 'none';
   });
 
@@ -600,9 +965,12 @@ function showSub(top, sub) {
 
 function _activatePage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  // 단어 보기는 'wordlist' id가 없고 noun/verb/kanji 페이지를 재활용
-  const pageId = (currentTop === 'wordlist' && ['noun','verb','kanji'].includes(id))
-    ? 'wordlist' : id;
+  const conjSubs = ['conj-grammar', 'conj-mc', 'conj-sa'];
+  const dictSubs = ['dictation-quiz'];
+  const pageId = conjSubs.includes(id) ? 'conj'
+    : dictSubs.includes(id) ? 'dictation'
+    : (currentTop === 'wordlist' && ['noun','verb','kanji'].includes(id)) ? 'wordlist'
+    : id;
   document.getElementById(pageId).classList.add('active');
 
   if (pageId === 'quiz') {
@@ -611,7 +979,22 @@ function _activatePage(id) {
   }
   if (pageId === 'noun' && currentTop === 'word') nextNounQuestion();
   if (pageId === 'verb' && currentTop === 'word') nextVerbQuestion();
-  if (currentTop === 'wordlist') { selectWLCat(id); }
+  if (currentTop === 'wordlist') selectWLCat(id);
+
+  if (conjSubs.includes(id)) {
+    // 동사변형 서브 박스 전환
+    document.getElementById('conj-grammar-box').style.display = id === 'conj-grammar' ? '' : 'none';
+    document.getElementById('conj-mc-box').style.display     = id === 'conj-mc'      ? '' : 'none';
+    document.getElementById('conj-sa-box').style.display     = id === 'conj-sa'      ? '' : 'none';
+    conjCurrentSub = id;
+    if (id === 'conj-grammar') nextConjGrammar();
+    if (id === 'conj-mc')      nextConjMC();
+    if (id === 'conj-sa')      nextConjSA();
+  }
+
+  if (dictSubs.includes(id)) {
+    initDictPage();
+  }
 }
 
 /* ═══ LEVEL GRID 공통 빌더 ═══ */
@@ -1019,9 +1402,256 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') submitVerb();
     if (verbAnswered && e.key === 'ArrowRight') nextVerbQuestion();
   }
+
+  // ── 동사변형 주관식 ──
+  if (document.getElementById('conj') && document.getElementById('conj').classList.contains('active')) {
+    if (conjCurrentSub === 'conj-sa') {
+      if (e.key === 'Enter') submitConjSA();
+      if (csAnswered && e.key === 'ArrowRight') nextConjSA();
+    }
+    if (conjCurrentSub === 'conj-grammar' && cgAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjGrammar();
+    if (conjCurrentSub === 'conj-mc' && cmAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjMC();
+  }
+
+  // ── 받아쓰기 ──
+  if (document.getElementById('dictation').classList.contains('active')) {
+    if (e.key === 'Enter') submitDict();
+    if (dictAnswered && e.key === 'ArrowRight') nextDictQuestion();
+  }
 });
 
-/* ═══ WORD LIST ═══ */
+/* ═══ 받아쓰기 STATE ═══ */
+let dictAnswered = false;
+let dictCurrent = null;       // 현재 문제 [대분류, 번호, 정답]
+let dictSlowMode = false;
+let dictAudio = null;
+let dictIsFirstQuestion = true; // 레벨 변경/첫 진입 시 자동재생 방지 플래그
+
+// 대분류 1~12, 소분류 1~6 선택 상태
+// dictSelected: Map<대분류(string), Set<소분류(1~6)>>
+let dictSelected = new Map();
+
+// 대분류/소분류 → 문제번호 변환
+function dictSubToRange(sub) {
+  // sub: 1~6 → 번호 범위 [시작, 끝]
+  const start = (sub - 1) * 10 + 1;
+  return { start, end: start + 9 };
+}
+
+// 유효한(데이터 있는) 대분류 목록
+function getDictRounds() {
+  const rounds = new Set(dictationdataset.map(d => d[0]));
+  return [...rounds].sort((a, b) => Number(a) - Number(b));
+}
+
+// 특정 대분류에서 유효한 소분류
+function getDictValidSubs(round) {
+  const nums = dictationdataset.filter(d => d[0] === round).map(d => Number(d[1]));
+  const subs = new Set();
+  nums.forEach(n => subs.add(Math.ceil(n / 10)));
+  return subs;
+}
+
+// 레벨 그리드 빌드
+function buildDictLevelGrid() {
+  const container = document.getElementById('dict-level-grid');
+  container.innerHTML = '';
+  const rounds = getDictRounds();
+
+  rounds.forEach(round => {
+    const validSubs = getDictValidSubs(round);
+    const row = document.createElement('div');
+    row.className = 'dict-level-row';
+
+    // 회차 버튼 (전체 선택/해제)
+    const roundBtn = document.createElement('button');
+    roundBtn.className = 'dict-round-btn';
+    roundBtn.dataset.round = round;
+    roundBtn.textContent = `${round}회차`;
+    roundBtn.onclick = () => toggleDictRound(round);
+    row.appendChild(roundBtn);
+
+    // 소분류 버튼 1~6
+    for (let sub = 1; sub <= 6; sub++) {
+      const subBtn = document.createElement('button');
+      subBtn.className = 'dict-sub-btn';
+      subBtn.dataset.round = round;
+      subBtn.dataset.sub = sub;
+      subBtn.textContent = `${round}-${sub}`;
+      if (!validSubs.has(sub)) {
+        subBtn.classList.add('disabled');
+        subBtn.disabled = true;
+      } else {
+        subBtn.onclick = () => toggleDictSub(round, sub);
+      }
+      row.appendChild(subBtn);
+    }
+
+    container.appendChild(row);
+    updateDictRowState(round);
+  });
+}
+
+function toggleDictRound(round) {
+  const validSubs = getDictValidSubs(round);
+  const sel = dictSelected.get(round) || new Set();
+  const allOn = [...validSubs].every(s => sel.has(s));
+
+  if (allOn) {
+    dictSelected.set(round, new Set());
+  } else {
+    dictSelected.set(round, new Set(validSubs));
+  }
+  updateDictRowState(round);
+  nextDictQuestion(true);
+}
+
+function toggleDictSub(round, sub) {
+  if (!dictSelected.has(round)) dictSelected.set(round, new Set());
+  const sel = dictSelected.get(round);
+
+  if (sel.has(sub)) {
+    sel.delete(sub);
+  } else {
+    sel.add(sub);
+  }
+  updateDictRowState(round);
+  nextDictQuestion(true);
+}
+
+function updateDictRowState(round) {
+  const validSubs = getDictValidSubs(round);
+  const sel = dictSelected.get(round) || new Set();
+  const selectedCount = [...validSubs].filter(s => sel.has(s)).length;
+  const allOn = selectedCount === validSubs.size && validSubs.size > 0;
+
+  // 회차 버튼 상태
+  const roundBtn = document.querySelector(`.dict-round-btn[data-round="${round}"]`);
+  if (roundBtn) {
+    roundBtn.classList.toggle('active', allOn);
+  }
+
+  // 소분류 버튼 상태
+  for (let sub = 1; sub <= 6; sub++) {
+    const subBtn = document.querySelector(`.dict-sub-btn[data-round="${round}"][data-sub="${sub}"]`);
+    if (subBtn && !subBtn.disabled) {
+      subBtn.classList.toggle('active', sel.has(sub));
+    }
+  }
+}
+
+// 현재 선택된 문제 풀
+function getDictPool() {
+  const pool = [];
+  dictationdataset.forEach(item => {
+    const round = item[0];
+    const num = Number(item[1]);
+    const sub = Math.ceil(num / 10);
+    const sel = dictSelected.get(round);
+    if (sel && sel.has(sub)) pool.push(item);
+  });
+  return pool;
+}
+
+// 오디오 재생
+function dictPlayAudio() {
+  if (!dictCurrent) return;
+  const path = `받아쓰기/${dictCurrent[0]}_${dictCurrent[1]}.mp3`;
+  if (dictAudio) { dictAudio.pause(); dictAudio = null; }
+  dictAudio = new Audio(path);
+  dictAudio.playbackRate = dictSlowMode ? 0.7 : 1.0;
+  dictAudio.play().catch(() => {});
+}
+
+function dictToggleSlow() {
+  dictSlowMode = !dictSlowMode;
+  document.getElementById('dict-slow-btn').classList.toggle('active', dictSlowMode);
+}
+
+// 문제 초기화 (페이지 진입 or 레벨 변경)
+function initDictPage() {
+  if (dictSelected.size === 0) {
+    // 최초 진입: 1회차 전체 선택
+    const rounds = getDictRounds();
+    if (rounds.length) {
+      const first = rounds[0];
+      dictSelected.set(first, new Set(getDictValidSubs(first)));
+    }
+    buildDictLevelGrid();
+  }
+  dictIsFirstQuestion = true;
+  nextDictQuestion(false);
+}
+
+function nextDictQuestion(levelChanged) {
+  dictAnswered = false;
+  if (levelChanged) dictIsFirstQuestion = true;
+
+  const pool = getDictPool();
+  const inp = document.getElementById('dict-answer');
+
+  if (!pool.length) {
+    inp.value = '';
+    document.getElementById('dict-result').textContent = '';
+    document.getElementById('dict-result').className = 'result';
+    document.getElementById('dict-next-btn').style.display = 'none';
+    document.getElementById('dict-play-btn').style.display = 'none';
+    document.getElementById('dict-slow-btn').style.display = 'none';
+    inp.style.display = 'none';
+    document.querySelector('#dict-quiz-box .sa-input-row button').style.display = 'none';
+    document.querySelector('.dict-notice').innerHTML =
+      '<span style="color:#aaa;font-size:15px;">1개 이상의 단계를 선택해주세요.</span>';
+    return;
+  }
+
+  // 풀이 UI 복원
+  document.getElementById('dict-play-btn').style.display = '';
+  document.getElementById('dict-slow-btn').style.display = '';
+  inp.style.display = '';
+  document.querySelector('#dict-quiz-box .sa-input-row button').style.display = '';
+  document.querySelector('.dict-notice').innerHTML =
+    '다음 음성의 발음을 입력하세요.<br>모든 내용은 한자나 가타카나로의 변환 없이 히라가나로만 작성합니다.<br>또한 띄어쓰기와 문장부호는 없습니다.';
+
+  dictCurrent = pool[Math.floor(Math.random() * pool.length)];
+
+  inp.value = '';
+  inp.readOnly = false;
+  inp.style.color = '';
+  document.getElementById('dict-result').textContent = '';
+  document.getElementById('dict-result').className = 'result';
+  document.getElementById('dict-next-btn').style.display = 'none';
+
+  // 첫 문제(첫 진입/레벨 변경)는 자동재생 안 함
+  if (!dictIsFirstQuestion) {
+    dictPlayAudio();
+  }
+  dictIsFirstQuestion = false;
+  inp.focus();
+}
+
+function checkDictAnswer() {
+  if (dictAnswered || !dictCurrent) return;
+  dictAnswered = true;
+
+  const input = document.getElementById('dict-answer').value.trim();
+  const correct = dictCurrent[2];
+  const isCorrect = input === correct;
+
+  document.getElementById('dict-answer').readOnly = true;
+  document.getElementById('dict-answer').style.color = '#aaa';
+
+  const resEl = document.getElementById('dict-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
+  resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  document.getElementById('dict-next-btn').style.display = 'inline-block';
+}
+
+function submitDict() {
+  if (!dictAnswered) checkDictAnswer();
+  else nextDictQuestion(false);
+}
+
+/* ═══ INIT ─ CONJ ═══ */
 let wlCat = 'noun'; // 'noun' | 'verb' | 'kanji'
 let wlSelectedLevels = new Set([1]);
 
@@ -1115,11 +1745,356 @@ function renderWordList() {
   });
 }
 
+/* ═══ 동사변형 STATE ═══ */
+let conjCurrentSub = 'conj-grammar';
+let conjSelectedTypes = new Set(); // 선택된 변형 id Set
+let conjOpenCats = new Set();          // 현재 펼쳐진 카테고리 id들
+
+// 카테고리 탭 빌드
+function buildConjCatTabs() {
+  const container = document.getElementById('conj-cat-tabs');
+  container.innerHTML = '';
+
+  conjCategories.forEach(cat => {
+    const typesInCat = conjTypes.filter(t => t.category === cat.id);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'conj-cat-wrap';
+
+    // 버튼: label(전체선택) + arrow(펼치기) 두 영역으로 분리
+    const btn = document.createElement('div');
+    btn.className = 'conj-cat-btn';
+    btn.dataset.cat = cat.id;
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'conj-cat-label';
+    labelSpan.onclick = () => toggleConjCatSelect(cat.id); // 전체 선택/해제만
+
+    const arrowSpan = document.createElement('span');
+    arrowSpan.className = 'conj-cat-arrow';
+    arrowSpan.onclick = (e) => { e.stopPropagation(); toggleConjCatOpen(cat.id); }; // 열기/닫기만
+
+    btn.appendChild(labelSpan);
+    btn.appendChild(arrowSpan);
+    wrap.appendChild(btn);
+
+    // 상세 패널
+    const detail = document.createElement('div');
+    detail.className = 'conj-cat-detail';
+    detail.id = 'conj-detail-' + cat.id;
+    typesInCat.forEach(t => {
+      const tb = document.createElement('button');
+      tb.className = 'conj-type-btn' + (conjSelectedTypes.has(t.id) ? ' active' : '');
+      tb.textContent = t.label;
+      tb.dataset.tid = t.id;
+      tb.onclick = (e) => { e.stopPropagation(); toggleConjType(t.id, cat.id); };
+      detail.appendChild(tb);
+    });
+    wrap.appendChild(detail);
+    container.appendChild(wrap);
+
+    updateCatBtnState(btn, cat.id, typesInCat);
+  });
+}
+
+function updateCatBtnState(btn, catId, typesInCat) {
+  const total = typesInCat.length;
+  const selected = typesInCat.filter(t => conjSelectedTypes.has(t.id)).length;
+  const isOpen = conjOpenCats.has(catId);
+  const cat = conjCategories.find(c => c.id === catId);
+
+  btn.className = 'conj-cat-btn'
+    + (selected === total && total > 0 ? ' all-on' : selected > 0 ? ' some-on' : '')
+    + (isOpen ? ' open' : '');
+
+  // 5번: 체크 표시 없이 카운트만 (전체 선택 시에도 숫자 표기 제거)
+  const count = selected > 0 && selected < total ? ` ${selected}/${total}` : '';
+  const labelEl = btn.querySelector('.conj-cat-label');
+  const arrowEl = btn.querySelector('.conj-cat-arrow');
+  if (labelEl) labelEl.textContent = cat.short + count;
+  if (arrowEl) arrowEl.textContent = isOpen ? '▴' : '▾';
+}
+
+// 전체 선택/해제만 (라벨 클릭)
+function toggleConjCatSelect(catId) {
+  const typesInCat = conjTypes.filter(t => t.category === catId);
+  const allOn = typesInCat.every(t => conjSelectedTypes.has(t.id));
+  if (allOn) {
+    typesInCat.forEach(t => conjSelectedTypes.delete(t.id));
+  } else {
+    typesInCat.forEach(t => conjSelectedTypes.add(t.id));
+  }
+  rebuildConjUI();
+}
+
+// 3번: 열기/닫기 — 다른 탭 열면 기존 탭 닫힘 (단일 열림)
+function toggleConjCatOpen(catId) {
+  if (conjOpenCats.has(catId)) {
+    conjOpenCats.clear();
+  } else {
+    conjOpenCats.clear();
+    conjOpenCats.add(catId);
+  }
+  rebuildConjUIOnly(); // 1번: 열고 닫을 때는 문제 새로 내지 않음
+}
+
+function toggleConjType(tid, catId) {
+  if (conjSelectedTypes.has(tid)) {
+    conjSelectedTypes.delete(tid);
+  } else {
+    conjSelectedTypes.add(tid);
+  }
+  rebuildConjUI();
+}
+
+function rebuildConjUI() {
+  rebuildConjUIOnly();
+  // 유형 변경 시 새 문제 출제
+  if (conjCurrentSub === 'conj-grammar') nextConjGrammar();
+  else if (conjCurrentSub === 'conj-mc') nextConjMC();
+  else if (conjCurrentSub === 'conj-sa') nextConjSA();
+}
+
+// 버튼 상태만 갱신 (문제는 유지)
+function rebuildConjUIOnly() {
+  conjCategories.forEach(cat => {
+    const typesInCat = conjTypes.filter(t => t.category === cat.id);
+    const btn = document.querySelector(`.conj-cat-btn[data-cat="${cat.id}"]`);
+    if (btn) updateCatBtnState(btn, cat.id, typesInCat);
+
+    const detail = document.getElementById('conj-detail-' + cat.id);
+    if (detail) {
+      detail.classList.toggle('open', conjOpenCats.has(cat.id));
+      detail.querySelectorAll('.conj-type-btn').forEach(tb => {
+        tb.classList.toggle('active', conjSelectedTypes.has(tb.dataset.tid));
+      });
+    }
+  });
+}
+
+// 선택된 변형 풀 반환
+function getConjPool() {
+  return conjTypes.filter(t => conjSelectedTypes.has(t.id));
+}
+
+// 동사 표시 HTML 생성
+function conjVerbHTML(v) {
+  return `<span class="conj-verb-word">${v.word}</span> `
+       + `<span class="conj-verb-reading">${v.reading}</span> `
+       + `<span class="conj-verb-meaning">${v.meaning}</span>`;
+}
+
+/* ── 문법 퀴즈 ── */
+let cgAnswered = false, cgCurrent = null, cgCorrectId = null;
+
+function nextConjGrammar() {
+  cgAnswered = false;
+  const pool = getConjPool();
+  const labelEl = document.querySelector('#conj-grammar-box .question-label');
+  if (!pool.length) {
+    if (labelEl) labelEl.style.display = 'none';
+    document.getElementById('cg-verb').innerHTML = '';
+    document.getElementById('cg-form').innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 유형을 선택해주세요.</span>';
+    document.getElementById('cg-options').innerHTML = '';
+    document.getElementById('cg-result').textContent = '';
+    document.getElementById('cg-next-btn').style.display = 'none';
+    return;
+  }
+  if (labelEl) labelEl.style.display = '';
+
+  // 랜덤 동사 + 랜덤 변형
+  const verb = conjVerbs[Math.floor(Math.random() * conjVerbs.length)];
+  const typeObj = pool[Math.floor(Math.random() * pool.length)];
+  cgCurrent = { verb, typeObj };
+  cgCorrectId = typeObj.id;
+
+  // 동사 표시
+  document.getElementById('cg-verb').innerHTML = conjVerbHTML(verb);
+  // 변형 형태 표시
+  document.getElementById('cg-form').innerHTML =
+    `<span class="conj-form-word">${verb.forms[typeObj.id]}</span>`;
+
+  // 선택지: 정답 + wrong 3개 (label+meaning)
+  const wrongTypes = typeObj.wrong.map(wid => conjTypes.find(t => t.id === wid)).filter(Boolean);
+  const choices = shuffle([typeObj, ...wrongTypes]);
+
+  const opts = document.getElementById('cg-options');
+  opts.innerHTML = '';
+  choices.forEach(ct => {
+    const b = document.createElement('button');
+    b.dataset.typeId = ct.id;
+    b.innerHTML = `<strong>${ct.label}</strong><br><span style="font-size:12px;font-weight:400">${ct.meaning}</span>`;
+    b.onclick = () => checkConjGrammar(b, ct.id);
+    opts.appendChild(b);
+  });
+
+  document.getElementById('cg-result').textContent = '';
+  document.getElementById('cg-next-btn').style.display = 'none';
+}
+
+function checkConjGrammar(btn, chosenId) {
+  if (cgAnswered) return;
+  cgAnswered = true;
+  const isCorrect = chosenId === cgCorrectId;
+  document.querySelectorAll('#cg-options button').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.typeId === cgCorrectId) b.classList.add('correct');
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+  const correctType = conjTypes.find(t => t.id === cgCorrectId);
+  document.getElementById('cg-result').textContent = isCorrect
+    ? '✅ 정답입니다!'
+    : `❌ 오답입니다. 정답: ${correctType.label} — ${correctType.meaning}`;
+  document.getElementById('cg-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  document.getElementById('cg-next-btn').style.display = 'inline-block';
+}
+
+/* ── 변형 객관식 퀴즈 ── */
+let cmAnswered = false, cmCurrent = null;
+
+function nextConjMC() {
+  cmAnswered = false;
+  const pool = getConjPool();
+  const labelEl = document.querySelector('#conj-mc-box .question-label');
+  if (!pool.length) {
+    if (labelEl) labelEl.style.display = 'none';
+    document.getElementById('cm-verb').innerHTML = '';
+    document.getElementById('cm-form').innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 유형을 선택해주세요.</span>';
+    document.getElementById('cm-options').innerHTML = '';
+    document.getElementById('cm-result').textContent = '';
+    document.getElementById('cm-next-btn').style.display = 'none';
+    return;
+  }
+  if (labelEl) labelEl.style.display = '';
+
+  const verb = conjVerbs[Math.floor(Math.random() * conjVerbs.length)];
+  const typeObj = pool[Math.floor(Math.random() * pool.length)];
+  cmCurrent = { verb, typeObj };
+
+  document.getElementById('cm-verb').innerHTML = conjVerbHTML(verb);
+  document.getElementById('cm-form').innerHTML =
+    `<span class="conj-type-badge">${typeObj.label}</span><span class="conj-type-meaning">${typeObj.meaning}</span>`;
+
+  // 선택지: 같은 동사의 정답 형태 + wrong 3개 형태
+  const correctForm = verb.forms[typeObj.id];
+  const wrongForms = typeObj.wrong
+    .map(wid => verb.forms[wid])
+    .filter(f => f && f !== correctForm);
+  const choices = shuffle([
+    { form: correctForm, correct: true },
+    ...wrongForms.map(f => ({ form: f, correct: false }))
+  ]).slice(0, 4);
+
+  const opts = document.getElementById('cm-options');
+  opts.innerHTML = '';
+  choices.forEach(ch => {
+    const b = document.createElement('button');
+    b.textContent = ch.form;
+    b.onclick = () => checkConjMC(b, ch.correct);
+    opts.appendChild(b);
+  });
+
+  document.getElementById('cm-result').textContent = '';
+  document.getElementById('cm-next-btn').style.display = 'none';
+}
+
+function checkConjMC(btn, isCorrect) {
+  if (cmAnswered) return;
+  cmAnswered = true;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    document.querySelectorAll('#cm-options button').forEach(b => {
+      if (b.textContent === cmCurrent.verb.forms[cmCurrent.typeObj.id]) b.classList.add('correct');
+    });
+  }
+  document.querySelectorAll('#cm-options button').forEach(b => b.disabled = true);
+  document.getElementById('cm-result').textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${cmCurrent.verb.forms[cmCurrent.typeObj.id]}`;
+  document.getElementById('cm-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  document.getElementById('cm-next-btn').style.display = 'inline-block';
+}
+
+/* ── 변형 주관식 퀴즈 ── */
+let csAnswered = false, csCurrent = null;
+
+function nextConjSA() {
+  csAnswered = false;
+  const pool = getConjPool();
+  const inp = document.getElementById('cs-answer');
+  const labelEl = document.querySelector('#conj-sa-box .question-label');
+
+  if (!pool.length) {
+    if (labelEl) labelEl.style.display = 'none';
+    document.getElementById('cs-verb').innerHTML = '';
+    document.getElementById('cs-form').innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 유형을 선택해주세요.</span>';
+    document.getElementById('cs-result').textContent = '';
+    document.getElementById('cs-desc').style.display = 'none';
+    document.getElementById('cs-next-btn').style.display = 'none';
+    inp.value = '';
+    return;
+  }
+  if (labelEl) labelEl.style.display = '';
+
+  const verb = conjVerbs[Math.floor(Math.random() * conjVerbs.length)];
+  const typeObj = pool[Math.floor(Math.random() * pool.length)];
+  csCurrent = { verb, typeObj };
+
+  document.getElementById('cs-verb').innerHTML = conjVerbHTML(verb);
+  document.getElementById('cs-form').innerHTML =
+    `<span class="conj-type-badge">${typeObj.label}</span><span class="conj-type-meaning">${typeObj.meaning}</span>`;
+
+  inp.value = '';
+  inp.readOnly = false;
+  inp.style.color = '';
+  document.getElementById('cs-result').textContent = '';
+  document.getElementById('cs-result').className = 'result';
+  document.getElementById('cs-desc').style.display = 'none';
+  document.getElementById('cs-next-btn').style.display = 'none';
+  inp.focus();
+}
+
+function checkConjSA() {
+  if (csAnswered) return;
+  csAnswered = true;
+  const input = document.getElementById('cs-answer').value.trim();
+  const correct = csCurrent.verb.forms[csCurrent.typeObj.id];
+  const isCorrect = input === correct;
+
+  document.getElementById('cs-answer').readOnly = true;
+  document.getElementById('cs-answer').style.color = '#aaa';
+
+  document.getElementById('cs-result').textContent = isCorrect
+    ? '✅ 정답입니다!'
+    : `❌ 오답입니다. 정답: ${correct}`;
+  document.getElementById('cs-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+
+  // 동사 정보 표시
+  document.getElementById('cs-desc').innerHTML = conjVerbHTML(csCurrent.verb);
+  document.getElementById('cs-desc').style.display = 'block';
+  document.getElementById('cs-next-btn').style.display = 'inline-block';
+}
+
+function submitConjSA() {
+  if (!csAnswered) checkConjSA();
+  else nextConjSA();
+}
+
+/* ═══ INIT ─ CONJ ═══ */
+function initConj() {
+  // "의지/희망" short 레이블을 줄바꿈 없이 표시되도록 단축
+  const willCat = conjCategories.find(c => c.id === 'will');
+  if (willCat) willCat.short = '의지';
+  // 기초&연결 카테고리 전체를 기본 선택
+  conjTypes.filter(t => t.category === 'basic').forEach(t => conjSelectedTypes.add(t.id));
+  buildConjCatTabs();
+}
+initConj();
+
 /* ═══ INIT ═══ */
 buildKanjiLevelGrid();
 buildNounLevelGrid();
 buildVerbLevelGrid();
 buildWLLevelGrid();
+// 받아쓰기 레벨 그리드는 페이지 첫 진입 시 initDictPage()에서 빌드
 </script>
 </body>
 </html>

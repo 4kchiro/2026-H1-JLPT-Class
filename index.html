@@ -560,9 +560,9 @@
     .dict-sub-btn {
       width: 44px;
       height: 40px;
-      font-size: 12px;
+      font-size: 15px;
       font-family: inherit;
-      font-weight: 600;
+      font-weight: 700;
       border-radius: 10px;
       border: 2px solid #ccd3df;
       background: #f0f2f5;
@@ -894,9 +894,20 @@
     </div>
 
     <!-- 입력 -->
-    <div class="sa-input-row">
-      <input type="text" id="dict-answer" placeholder="히라가나 입력">
-      <button onclick="submitDict()">제출</button>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:14px;">
+      <textarea id="dict-answer" placeholder="히라가나 입력" rows="2"
+        style="width:100%; max-width:460px; padding:12px 16px; font-size:18px; font-family:inherit;
+               border:2px solid #dde3ef; border-radius:10px; outline:none; resize:none;
+               text-align:center; transition:border-color .15s; line-height:1.6; overflow:hidden;"
+        oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"
+        onfocus="this.style.borderColor='#4f8ef7';"
+        onblur="this.style.borderColor='#dde3ef';"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitDict();}"
+      ></textarea>
+      <button onclick="submitDict()"
+        style="padding:11px 32px; font-size:15px; font-family:inherit; font-weight:700;
+               border:none; background:#4f8ef7; color:#fff; border-radius:10px; cursor:pointer; transition:background .15s;"
+        onmouseover="this.style.background='#3a7de4'" onmouseout="this.style.background='#4f8ef7'">제출</button>
     </div>
     <div class="result" id="dict-result"></div>
     <button class="next-btn" id="dict-next-btn" onclick="nextDictQuestion()">다음 문제 ▶</button>
@@ -1122,7 +1133,7 @@ function nextNounQuestion() {
   descEl.style.display = 'none';
   descEl.innerHTML = '';
   nextBtn.style.display = 'none';
-  answerInput.focus();
+  answerInput.focus({ preventScroll: true });
 }
 
 function checkNounAnswer() {
@@ -1148,7 +1159,6 @@ function checkNounAnswer() {
 
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctDisplay}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
-  document.getElementById('noun-answer').readOnly = true;
   document.getElementById('noun-answer').style.color = '#aaa';
 
   // 단어 정보 공개
@@ -1214,7 +1224,7 @@ function nextVerbQuestion() {
   descEl.style.display = 'none';
   descEl.innerHTML = '';
   nextBtn.style.display = 'none';
-  answerInput.focus();
+  answerInput.focus({ preventScroll: true });
 }
 
 function checkVerbAnswer() {
@@ -1239,7 +1249,6 @@ function checkVerbAnswer() {
 
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctDisplay}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
-  document.getElementById('verb-answer').readOnly = true;
   document.getElementById('verb-answer').style.color = '#aaa';
 
   descEl.innerHTML = buildWordDesc(verbCurrent);
@@ -1351,7 +1360,7 @@ function nextSAQuestion() {
   document.getElementById('sa-description').textContent = '';
   document.getElementById('sa-description').style.display = 'none';
   document.getElementById('sa-next-btn').style.display = 'none';
-  document.getElementById('sa-answer').focus();
+  document.getElementById('sa-answer').focus({ preventScroll: true });
 }
 
 function checkSAAnswer() {
@@ -1359,7 +1368,6 @@ function checkSAAnswer() {
   kanjianswered = true;
   const input = document.getElementById('sa-answer').value.trim();
   const isCorrect = input === current[1] || (current[2] && input === current[2]);
-  document.getElementById('sa-answer').readOnly = true;
   document.getElementById('sa-answer').style.color = '#aaa';
   showResult(document.getElementById('sa-result'), isCorrect, current[1]);
   showDescription(document.getElementById('sa-description'), current[6]);
@@ -1415,8 +1423,7 @@ document.addEventListener('keydown', (e) => {
 
   // ── 받아쓰기 ──
   if (document.getElementById('dictation').classList.contains('active')) {
-    if (e.key === 'Enter') submitDict();
-    if (dictAnswered && e.key === 'ArrowRight') nextDictQuestion();
+    if (dictAnswered && e.key === 'ArrowRight') nextDictQuestion(false);
   }
 });
 
@@ -1477,7 +1484,7 @@ function buildDictLevelGrid() {
       subBtn.className = 'dict-sub-btn';
       subBtn.dataset.round = round;
       subBtn.dataset.sub = sub;
-      subBtn.textContent = `${round}-${sub}`;
+      subBtn.textContent = `${sub}`;
       if (!validSubs.has(sub)) {
         subBtn.classList.add('disabled');
         subBtn.disabled = true;
@@ -1561,6 +1568,11 @@ function dictPlayAudio() {
   dictAudio = new Audio(path);
   dictAudio.playbackRate = dictSlowMode ? 0.7 : 1.0;
   dictAudio.play().catch(() => {});
+  // 재생 버튼 클릭 후 입력창에 포커스 유지
+  setTimeout(() => {
+    const inp = document.getElementById('dict-answer');
+    if (inp && !dictAnswered) inp.focus({ preventScroll: true });
+  }, 50);
 }
 
 function dictToggleSlow() {
@@ -1626,7 +1638,7 @@ function nextDictQuestion(levelChanged) {
     dictPlayAudio();
   }
   dictIsFirstQuestion = false;
-  inp.focus();
+  inp.focus({ preventScroll: true });
 }
 
 function checkDictAnswer() {
@@ -1637,7 +1649,6 @@ function checkDictAnswer() {
   const correct = dictCurrent[2];
   const isCorrect = input === correct;
 
-  document.getElementById('dict-answer').readOnly = true;
   document.getElementById('dict-answer').style.color = '#aaa';
 
   const resEl = document.getElementById('dict-result');
@@ -2049,7 +2060,7 @@ function nextConjSA() {
   document.getElementById('cs-result').className = 'result';
   document.getElementById('cs-desc').style.display = 'none';
   document.getElementById('cs-next-btn').style.display = 'none';
-  inp.focus();
+  inp.focus({ preventScroll: true });
 }
 
 function checkConjSA() {
@@ -2059,7 +2070,6 @@ function checkConjSA() {
   const correct = csCurrent.verb.forms[csCurrent.typeObj.id];
   const isCorrect = input === correct;
 
-  document.getElementById('cs-answer').readOnly = true;
   document.getElementById('cs-answer').style.color = '#aaa';
 
   document.getElementById('cs-result').textContent = isCorrect

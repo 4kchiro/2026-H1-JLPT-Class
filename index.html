@@ -904,7 +904,7 @@
         onblur="this.style.borderColor='#dde3ef';"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitDict();}"
       ></textarea>
-      <button onclick="submitDict()"
+      <button id="dict-submit-btn" onclick="submitDict()"
         style="padding:11px 32px; font-size:15px; font-family:inherit; font-weight:700;
                border:none; background:#4f8ef7; color:#fff; border-radius:10px; cursor:pointer; transition:background .15s;"
         onmouseover="this.style.background='#3a7de4'" onmouseout="this.style.background='#4f8ef7'">제출</button>
@@ -1610,7 +1610,7 @@ function nextDictQuestion(levelChanged) {
     document.getElementById('dict-play-btn').style.display = 'none';
     document.getElementById('dict-slow-btn').style.display = 'none';
     inp.style.display = 'none';
-    document.querySelector('#dict-quiz-box .sa-input-row button').style.display = 'none';
+    document.getElementById('dict-submit-btn').style.display = 'none';
     document.querySelector('.dict-notice').innerHTML =
       '<span style="color:#aaa;font-size:15px;">1개 이상의 단계를 선택해주세요.</span>';
     return;
@@ -1620,7 +1620,7 @@ function nextDictQuestion(levelChanged) {
   document.getElementById('dict-play-btn').style.display = '';
   document.getElementById('dict-slow-btn').style.display = '';
   inp.style.display = '';
-  document.querySelector('#dict-quiz-box .sa-input-row button').style.display = '';
+  document.getElementById('dict-submit-btn').style.display = '';
   document.querySelector('.dict-notice').innerHTML =
     '다음 음성의 발음을 입력하세요.<br>모든 내용은 한자나 가타카나로의 변환 없이 히라가나로만 작성합니다.<br>또한 띄어쓰기와 문장부호는 없습니다.';
 

@@ -419,12 +419,10 @@
       gap: 8px;
       padding: 10px 12px;
       background: #f0f2f5;
-      border-radius: 0 8px 8px 8px;
+      border-radius: 8px;
       border: 2px solid #ccd3df;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 20;
+      position: fixed;
+      z-index: 200;
       width: max-content;
       max-width: 260px;
     }
@@ -1838,7 +1836,7 @@ function toggleConjCatSelect(catId) {
   rebuildConjUI();
 }
 
-// 3번: 열기/닫기 — 다른 탭 열면 기존 탭 닫힘 (단일 열림)
+// 열기/닫기 — 다른 탭 열면 기존 탭 닫힘 (단일 열림)
 function toggleConjCatOpen(catId) {
   if (conjOpenCats.has(catId)) {
     conjOpenCats.clear();
@@ -1846,7 +1844,38 @@ function toggleConjCatOpen(catId) {
     conjOpenCats.clear();
     conjOpenCats.add(catId);
   }
-  rebuildConjUIOnly(); // 1번: 열고 닫을 때는 문제 새로 내지 않음
+  rebuildConjUIOnly();
+  positionConjDetail(catId);
+}
+
+function positionConjDetail(catId) {
+  const detail = document.getElementById('conj-detail-' + catId);
+  if (!detail || !conjOpenCats.has(catId)) return;
+
+  // 버튼 위치 기준으로 패널 좌표 계산
+  const btn = document.querySelector(`.conj-cat-btn[data-cat="${catId}"]`);
+  if (!btn) return;
+
+  const btnRect = btn.getBoundingClientRect();
+  const panelW = 260;
+  const margin = 8;
+  const vw = window.innerWidth;
+
+  // top: 버튼 바로 아래
+  const top = btnRect.bottom + 2;
+
+  // 기본은 버튼 왼쪽 정렬, 오른쪽 잘리면 오른쪽 정렬, 둘 다 안되면 중앙
+  let left = btnRect.left;
+  if (left + panelW > vw - margin) {
+    left = btnRect.right - panelW;
+  }
+  if (left < margin) {
+    left = margin;
+  }
+
+  detail.style.top = top + 'px';
+  detail.style.left = left + 'px';
+  detail.style.right = 'auto';
 }
 
 function toggleConjType(tid, catId) {
@@ -1881,6 +1910,11 @@ function rebuildConjUIOnly() {
       });
     }
   });
+  // 열려있는 패널 위치 재계산
+  if (conjOpenCats.size > 0) {
+    const openCat = [...conjOpenCats][0];
+    requestAnimationFrame(() => positionConjDetail(openCat));
+  }
 }
 
 // 선택된 변형 풀 반환
@@ -2097,6 +2131,25 @@ function initConj() {
   conjTypes.filter(t => t.category === 'basic').forEach(t => conjSelectedTypes.add(t.id));
   buildConjCatTabs();
 }
+
+// 스크롤/리사이즈 시 열린 패널 위치 재계산
+window.addEventListener('scroll', () => {
+  if (conjOpenCats.size > 0) positionConjDetail([...conjOpenCats][0]);
+}, { passive: true });
+window.addEventListener('resize', () => {
+  if (conjOpenCats.size > 0) positionConjDetail([...conjOpenCats][0]);
+});
+// 패널 외부 클릭 시 닫기
+document.addEventListener('click', (e) => {
+  if (conjOpenCats.size === 0) return;
+  const openCat = [...conjOpenCats][0];
+  const wrap = document.querySelector(`.conj-cat-btn[data-cat="${openCat}"]`)?.closest('.conj-cat-wrap');
+  const detail = document.getElementById('conj-detail-' + openCat);
+  if (wrap && !wrap.contains(e.target) && detail && !detail.contains(e.target)) {
+    conjOpenCats.clear();
+    rebuildConjUIOnly();
+  }
+});
 initConj();
 
 /* ═══ INIT ═══ */

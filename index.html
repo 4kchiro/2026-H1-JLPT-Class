@@ -517,6 +517,7 @@
     .conj-options button:hover:not(:disabled) { border-color: #4f8ef7; background: #eef3fe; }
     .conj-options button.correct { background: #e6f9ee; border-color: #28a745; color: #28a745; }
     .conj-options button.wrong   { background: #fdeaea; border-color: #dc3545; color: #dc3545; }
+    .tour-flash { background: #1a6ef5 !important; border-color: #1a6ef5 !important; color: #fff !important; }
 
     /* ── DICTATION LEVEL GRID ── */
     .dict-level-row {
@@ -635,14 +636,171 @@
       text-align: center;
       margin-bottom: 14px;
     }
+
+    /* ── TOUR MODE ── */
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      min-height: 28px;
+    }
+    .card-header > *:first-child {
+      flex: 1;
+      min-width: 0;
+    }
+    .tour-btn {
+      flex-shrink: 0;
+      margin-left: auto;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 700;
+      border-radius: 999px;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #666;
+      cursor: pointer;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+    .tour-btn.active {
+      background: #1a1a2e;
+      border-color: #1a1a2e;
+      color: #fff;
+    }
+    .tour-progress-wrap {
+      margin-bottom: 14px;
+      display: none;
+    }
+    .tour-progress-wrap.show { display: block; }
+    .tour-progress-label {
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+      margin-bottom: 4px;
+    }
+    .tour-progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .tour-progress-bar-fill {
+      height: 100%;
+      background: #4f8ef7;
+      border-radius: 999px;
+      transition: width .3s ease;
+    }
+
+    /* ── TOUR POPUP ── */
+    .tour-popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 1000;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+    .tour-popup-overlay.open { display: flex; }
+    .tour-popup {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.18);
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 80px);
+      overflow: hidden;
+    }
+    .tour-popup-score {
+      flex-shrink: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .tour-popup-score .score-num { color: #4f8ef7; }
+    .tour-wrong-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 24px;
+    }
+    .tour-wrong-item {
+      background: #f8f9fc;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tour-wrong-item-body { flex: 1; min-width: 0; }
+    .tour-wrong-word {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 3px;
+    }
+    .tour-wrong-detail {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+    .tour-wrong-answers { font-size: 13px; line-height: 1.8; }
+    .tour-wrong-answers .my-ans  { color: #dc3545; }
+    .tour-wrong-answers .cor-ans { color: #28a745; font-weight: 700; }
+    .tour-play-btn {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+    .tour-play-btn:hover { background: #1a1a2e; border-color: #1a1a2e; color: #fff; }
+    .tour-popup-close {
+      flex-shrink: 0;
+      display: block;
+      width: 100%;
+      padding: 13px;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 0 0 20px 20px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .tour-popup-close:hover { background: #2d2d50; }
   </style>
 </head>
 <body>
 
 <nav id="main-nav">
   <button class="nav-active" onclick="showTop('main')">메인</button>
-  <button onclick="showTop('word')">단어 문제</button>
   <button onclick="showTop('wordlist')">단어 보기</button>
+  <button onclick="showTop('word')">단어 문제</button>
   <button onclick="showTop('conj')">동사 변형</button>
   <button onclick="showTop('dictation')">받아쓰기</button>
 </nav>
@@ -724,7 +882,14 @@
 
   <!-- 문제 컨테이너 -->
   <div id="noun-container" class="card">
-    <div class="question-label" id="noun-question-label">다음 단어의 발음을 입력하세요</div>
+    <div class="card-header">
+      <div class="question-label" id="noun-question-label">다음 단어의 발음을 입력하세요</div>
+      <button class="tour-btn" id="noun-tour-btn" onclick="toggleTour('noun')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="noun-tour-progress">
+      <div class="tour-progress-label" id="noun-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="noun-tour-fill"></div></div>
+    </div>
     <div class="question" id="noun-question"></div>
     <div class="sa-input-row">
       <input type="text" id="noun-answer" placeholder="정답 입력">
@@ -754,7 +919,14 @@
 
   <!-- 문제 컨테이너 -->
   <div id="verb-container" class="card">
-    <div class="question-label" id="verb-question-label">다음 단어의 발음을 입력하세요</div>
+    <div class="card-header">
+      <div class="question-label" id="verb-question-label">다음 단어의 발음을 입력하세요</div>
+      <button class="tour-btn" id="verb-tour-btn" onclick="toggleTour('verb')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="verb-tour-progress">
+      <div class="tour-progress-label" id="verb-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="verb-tour-fill"></div></div>
+    </div>
     <div class="question" id="verb-question"></div>
     <div class="sa-input-row">
       <input type="text" id="verb-answer" placeholder="정답 입력">
@@ -784,7 +956,14 @@
 
   <!-- 객관식 컨테이너 -->
   <div id="mc-container" class="card">
-    <div class="question-label">다음 한자의 음을 고르세요</div>
+    <div class="card-header">
+      <div class="question-label">다음 한자의 음을 고르세요</div>
+      <button class="tour-btn" id="kanji-mc-tour-btn" onclick="toggleTour('kanji-mc')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="kanji-mc-tour-progress">
+      <div class="tour-progress-label" id="kanji-mc-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="kanji-mc-tour-fill"></div></div>
+    </div>
     <div class="question" id="mc-question"></div>
     <div class="options" id="mc-options"></div>
     <div class="result" id="mc-result"></div>
@@ -794,7 +973,14 @@
 
   <!-- 주관식 컨테이너 -->
   <div id="sa-container" class="card" style="display:none;">
-    <div class="question-label">다음 한자의 음을 입력하세요</div>
+    <div class="card-header">
+      <div class="question-label">다음 한자의 음을 입력하세요</div>
+      <button class="tour-btn" id="kanji-sa-tour-btn" onclick="toggleTour('kanji-sa')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="kanji-sa-tour-progress">
+      <div class="tour-progress-label" id="kanji-sa-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="kanji-sa-tour-fill"></div></div>
+    </div>
     <div class="question" id="sa-question"></div>
     <div class="sa-input-row">
       <input type="text" id="sa-answer" placeholder="정답 입력">
@@ -832,7 +1018,14 @@
 
   <!-- [문법] 퀴즈 -->
   <div id="conj-grammar-box" class="card">
-    <div class="question-label" id="cg-label">변형의 종류를 고르세요</div>
+    <div class="card-header">
+      <div class="question-label" id="cg-label">변형의 종류를 고르세요</div>
+      <button class="tour-btn" id="cg-tour-btn" onclick="toggleTour('cg')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="cg-tour-progress">
+      <div class="tour-progress-label" id="cg-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="cg-tour-fill"></div></div>
+    </div>
     <div class="conj-verb-display" id="cg-verb"></div>
     <div class="conj-form-display" id="cg-form"></div>
     <div class="conj-options" id="cg-options"></div>
@@ -842,7 +1035,14 @@
 
   <!-- [변형 객관식] 퀴즈 -->
   <div id="conj-mc-box" class="card" style="display:none;">
-    <div class="question-label">올바른 변형 형태를 고르세요</div>
+    <div class="card-header">
+      <div class="question-label">올바른 변형 형태를 고르세요</div>
+      <button class="tour-btn" id="cm-tour-btn" onclick="toggleTour('cm')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="cm-tour-progress">
+      <div class="tour-progress-label" id="cm-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="cm-tour-fill"></div></div>
+    </div>
     <div class="conj-verb-display" id="cm-verb"></div>
     <div class="conj-form-display" id="cm-form"></div>
     <div class="conj-options" id="cm-options"></div>
@@ -852,7 +1052,14 @@
 
   <!-- [변형 주관식] 퀴즈 -->
   <div id="conj-sa-box" class="card" style="display:none;">
-    <div class="question-label">올바른 변형 형태를 히라가나로 입력하세요</div>
+    <div class="card-header">
+      <div class="question-label">올바른 변형 형태를 히라가나로 입력하세요</div>
+      <button class="tour-btn" id="cs-tour-btn" onclick="toggleTour('cs')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="cs-tour-progress">
+      <div class="tour-progress-label" id="cs-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="cs-tour-fill"></div></div>
+    </div>
     <div class="conj-verb-display" id="cs-verb"></div>
     <div class="conj-form-display" id="cs-form"></div>
     <div class="sa-input-row">
@@ -877,10 +1084,17 @@
 
   <!-- 문제풀이 구역 -->
   <div id="dict-quiz-box" class="card">
-    <div class="dict-notice">
-      다음 음성의 발음을 입력하세요.<br>
-      모든 내용은 한자나 가타카나로의 변환 없이 히라가나로만 작성합니다.<br>
-      또한 띄어쓰기와 문장부호는 없습니다.
+    <div class="card-header">
+      <div class="dict-notice" style="margin-bottom:0; text-align:left; flex:1;">
+        다음 음성의 발음을 입력하세요.<br>
+        모든 내용은 한자나 가타카나로의 변환 없이 히라가나로만 작성합니다.<br>
+        또한 띄어쓰기와 문장부호는 없습니다.
+      </div>
+      <button class="tour-btn" id="dict-tour-btn" onclick="toggleTour('dict')" style="margin-left:10px; align-self:flex-start;">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="dict-tour-progress">
+      <div class="tour-progress-label" id="dict-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="dict-tour-fill"></div></div>
     </div>
 
     <!-- 플레이어 -->
@@ -913,6 +1127,15 @@
 
 </div>
 
+<!-- ════════════ 한바퀴 결과 팝업 ════════════ -->
+<div class="tour-popup-overlay" id="tour-popup-overlay">
+  <div class="tour-popup">
+    <div class="tour-popup-score" id="tour-popup-score"></div>
+    <div class="tour-wrong-list" id="tour-wrong-list"></div>
+    <button class="tour-popup-close" onclick="closeTourPopup()">확인</button>
+  </div>
+</div>
+
 <footer>© 치로 일본어 | 제작: 4kchiro</footer>
 
 <script src="data.js"></script>
@@ -943,17 +1166,26 @@ let currentTop = 'main'; // 'main' | 'word' | 'wordlist'
 
 // 상위탭 전환 - 해당 그룹의 첫 번째 하위탭으로 이동
 function showTop(top) {
+  // 탭 이동 시 모든 한바퀴 취소
+  ['noun','verb','kanji-mc','kanji-sa','cg','cm','cs','dict'].forEach(id => cancelTourIfActive(id));
   const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', dictation: 'dictation-quiz' };
   showSub(top, defaults[top]);
 }
 
 // 하위탭 전환
 function showSub(top, sub) {
+  // 하위탭 이동 시 해당 탑의 한바퀴 취소
+  const topTourMap = {
+    word: ['noun','verb','kanji-mc','kanji-sa'],
+    conj: ['cg','cm','cs'],
+    dictation: ['dict']
+  };
+  if (topTourMap[top]) topTourMap[top].forEach(id => cancelTourIfActive(id));
   currentTop = top;
 
   // 상위탭 active
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'word', 'wordlist', 'conj', 'dictation'];
+    const tops = ['main', 'wordlist', 'word', 'conj', 'dictation'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
 
@@ -991,7 +1223,10 @@ function _activatePage(id) {
   if (currentTop === 'wordlist') selectWLCat(id);
 
   if (conjSubs.includes(id)) {
-    // 동사변형 서브 박스 전환
+    // 탭 전환 시 이전 탭 한바퀴 취소
+    ['cg','cm','cs'].forEach(tid => { if (tid !== id.replace('conj-grammar','cg').replace('conj-mc','cm').replace('conj-sa','cs')) cancelTourIfActive(tid); });
+    const newId = id === 'conj-grammar' ? 'cg' : id === 'conj-mc' ? 'cm' : 'cs';
+    ['cg','cm','cs'].filter(t => t !== newId).forEach(t => cancelTourIfActive(t));
     document.getElementById('conj-grammar-box').style.display = id === 'conj-grammar' ? '' : 'none';
     document.getElementById('conj-mc-box').style.display     = id === 'conj-mc'      ? '' : 'none';
     document.getElementById('conj-sa-box').style.display     = id === 'conj-sa'      ? '' : 'none';
@@ -1039,6 +1274,8 @@ function toggleKanjiLevel(level, btn) {
     selectedLevels.add(level);
     btn.classList.add('active');
   }
+  cancelTourIfActive('kanji-mc');
+  cancelTourIfActive('kanji-sa');
   const isMC = document.getElementById('btn-mc').classList.contains('active');
   isMC ? nextMCQuestion() : nextSAQuestion();
 }
@@ -1052,13 +1289,13 @@ function buildNounLevelGrid() {
 }
 function toggleNounLevel(level, btn) {
   if (nounSelectedLevels.has(level)) {
-    if (nounSelectedLevels.size === 1) return;
     nounSelectedLevels.delete(level);
     btn.classList.remove('active');
   } else {
     nounSelectedLevels.add(level);
     btn.classList.add('active');
   }
+  cancelTourIfActive('noun');
   nextNounQuestion();
 }
 function getFilteredNounDataset() {
@@ -1073,13 +1310,13 @@ function buildVerbLevelGrid() {
 }
 function toggleVerbLevel(level, btn) {
   if (verbSelectedLevels.has(level)) {
-    if (verbSelectedLevels.size === 1) return;
     verbSelectedLevels.delete(level);
     btn.classList.remove('active');
   } else {
     verbSelectedLevels.add(level);
     btn.classList.add('active');
   }
+  cancelTourIfActive('verb');
   nextVerbQuestion();
 }
 function getFilteredVerbDataset() {
@@ -1090,6 +1327,7 @@ function getFilteredVerbDataset() {
 
 /* ═══ 명사 MODE SWITCH ═══ */
 function switchNounMode(mode) {
+  cancelTourIfActive('noun');
   nounMode = mode;
   document.getElementById('noun-btn-reading').classList.toggle('active', mode === 'reading');
   document.getElementById('noun-btn-meaning').classList.toggle('active', mode === 'meaning');
@@ -1110,9 +1348,7 @@ function nextNounQuestion() {
   const answerInput = document.getElementById('noun-answer');
 
   if (!dataset.length) {
-    qEl.textContent = nounMode === 'reading'
-      ? '해당 단계에 발음 출제 가능한 데이터가 없습니다.'
-      : '해당 단계의 데이터가 없습니다.';
+    qEl.innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 단계를 선택해주세요.</span>';
     resEl.textContent = '';
     resEl.className = 'result';
     descEl.style.display = 'none';
@@ -1159,6 +1395,9 @@ function checkNounAnswer() {
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('noun-answer').style.color = '#aaa';
 
+  const st = getTourState('noun');
+  if (st.active) { tourSubmit('noun', isCorrect, input, correctDisplay, nounCurrent); return; }
+
   // 단어 정보 공개
   descEl.innerHTML = buildWordDesc(nounCurrent);
   descEl.style.display = 'block';
@@ -1181,6 +1420,7 @@ function buildWordDesc(item) {
 
 /* ═══ 동사 MODE SWITCH ═══ */
 function switchVerbMode(mode) {
+  cancelTourIfActive('verb');
   verbMode = mode;
   document.getElementById('verb-btn-reading').classList.toggle('active', mode === 'reading');
   document.getElementById('verb-btn-meaning').classList.toggle('active', mode === 'meaning');
@@ -1201,9 +1441,7 @@ function nextVerbQuestion() {
   const answerInput = document.getElementById('verb-answer');
 
   if (!dataset.length) {
-    qEl.textContent = verbMode === 'reading'
-      ? '해당 단계에 발음 출제 가능한 데이터가 없습니다.'
-      : '해당 단계의 데이터가 없습니다.';
+    qEl.innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 단계를 선택해주세요.</span>';
     resEl.textContent = '';
     resEl.className = 'result';
     descEl.style.display = 'none';
@@ -1249,6 +1487,9 @@ function checkVerbAnswer() {
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('verb-answer').style.color = '#aaa';
 
+  const st = getTourState('verb');
+  if (st.active) { tourSubmit('verb', isCorrect, input, correctDisplay, verbCurrent); return; }
+
   descEl.innerHTML = buildWordDesc(verbCurrent);
   descEl.style.display = 'block';
   nextBtn.style.display = 'inline-block';
@@ -1261,6 +1502,8 @@ function submitVerb() {
 
 /* ═══ 한자 MODE SWITCH ═══ */
 function switchKanjiMode(mode) {
+  cancelTourIfActive('kanji-mc');
+  cancelTourIfActive('kanji-sa');
   document.getElementById('btn-mc').classList.remove('active');
   document.getElementById('btn-sa').classList.remove('active');
   document.getElementById('mc-container').style.display = 'none';
@@ -1324,6 +1567,13 @@ function checkMCAnswer(btn, choice) {
   if (kanjianswered) return;
   kanjianswered = true;
   const isCorrect = choice === current[1];
+
+  const stMC = getTourState('kanji-mc');
+  if (stMC.active) {
+    tourSubmit('kanji-mc', isCorrect, choice, current[1], current, btn);
+    return;
+  }
+
   btn.classList.add(isCorrect ? 'correct' : 'wrong');
   if (!isCorrect) {
     document.querySelectorAll('#mc-options button').forEach(b => {
@@ -1366,6 +1616,13 @@ function checkSAAnswer() {
   kanjianswered = true;
   const input = document.getElementById('sa-answer').value.trim();
   const isCorrect = input === current[1] || (current[2] && input === current[2]);
+
+  const stSA = getTourState('kanji-sa');
+  if (stSA.active) {
+    tourSubmit('kanji-sa', isCorrect, input, current[1], current);
+    return;
+  }
+
   document.getElementById('sa-answer').style.color = '#aaa';
   showResult(document.getElementById('sa-result'), isCorrect, current[1]);
   showDescription(document.getElementById('sa-description'), current[6]);
@@ -1415,8 +1672,20 @@ document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') submitConjSA();
       if (csAnswered && e.key === 'ArrowRight') nextConjSA();
     }
-    if (conjCurrentSub === 'conj-grammar' && cgAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjGrammar();
-    if (conjCurrentSub === 'conj-mc' && cmAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjMC();
+    if (conjCurrentSub === 'conj-grammar') {
+      if (!cgAnswered && ['1','2','3','4'].includes(e.key)) {
+        const buttons = document.querySelectorAll('#cg-options button');
+        if (buttons[+e.key - 1]) buttons[+e.key - 1].click();
+      }
+      if (cgAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjGrammar();
+    }
+    if (conjCurrentSub === 'conj-mc') {
+      if (!cmAnswered && ['1','2','3','4'].includes(e.key)) {
+        const buttons = document.querySelectorAll('#cm-options button');
+        if (buttons[+e.key - 1]) buttons[+e.key - 1].click();
+      }
+      if (cmAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjMC();
+    }
   }
 
   // ── 받아쓰기 ──
@@ -1508,6 +1777,7 @@ function toggleDictRound(round) {
     dictSelected.set(round, new Set(validSubs));
   }
   updateDictRowState(round);
+  cancelTourIfActive('dict');
   nextDictQuestion(true);
 }
 
@@ -1521,6 +1791,7 @@ function toggleDictSub(round, sub) {
     sel.add(sub);
   }
   updateDictRowState(round);
+  cancelTourIfActive('dict');
   nextDictQuestion(true);
 }
 
@@ -1650,6 +1921,13 @@ function checkDictAnswer() {
   document.getElementById('dict-answer').style.color = '#aaa';
 
   const resEl = document.getElementById('dict-result');
+
+  const stDict = getTourState('dict');
+  if (stDict.active) {
+    tourSubmit('dict', isCorrect, input, correct, dictCurrent);
+    return;
+  }
+
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('dict-next-btn').style.display = 'inline-block';
@@ -1662,7 +1940,7 @@ function submitDict() {
 
 /* ═══ INIT ─ CONJ ═══ */
 let wlCat = 'noun'; // 'noun' | 'verb' | 'kanji'
-let wlSelectedLevels = new Set([1]);
+let wlSelectedLevels = new Set();
 
 function selectWLCat(cat) {
   wlCat = cat;
@@ -1677,12 +1955,8 @@ function buildWLLevelGrid() {
   const levelGetter = wlCat === 'kanji' ? d => d[7] : d => d[3];
   const levelsWithData = new Set(dataset.map(d => levelGetter(d)));
 
-  // wlSelectedLevels를 유효한 단계로만 유지
+  // wlSelectedLevels를 유효한 단계로만 유지 (없으면 빈 상태 허용)
   wlSelectedLevels = new Set([...wlSelectedLevels].filter(l => levelsWithData.has(l)));
-  if (wlSelectedLevels.size === 0) {
-    const first = Math.min(...levelsWithData);
-    if (isFinite(first)) wlSelectedLevels.add(first);
-  }
 
   const grid = document.getElementById('wl-level-grid');
   grid.innerHTML = '';
@@ -1697,7 +1971,6 @@ function buildWLLevelGrid() {
       if (wlSelectedLevels.has(i)) btn.classList.add('active');
       btn.addEventListener('click', () => {
         if (wlSelectedLevels.has(i)) {
-          if (wlSelectedLevels.size === 1) return;
           wlSelectedLevels.delete(i);
           btn.classList.remove('active');
         } else {
@@ -1725,7 +1998,6 @@ function renderWordList() {
   }
 
   if (!items.length) {
-    grid.innerHTML = '<p style="color:#aaa;text-align:center;padding:20px 0;">해당 단계의 데이터가 없습니다.</p>';
     return;
   }
 
@@ -1981,12 +2253,23 @@ function checkConjGrammar(btn, chosenId) {
   if (cgAnswered) return;
   cgAnswered = true;
   const isCorrect = chosenId === cgCorrectId;
+  const correctType = conjTypes.find(t => t.id === cgCorrectId);
+
+  const stCG = getTourState('cg');
+  if (stCG.active) {
+    const myLabel = conjTypes.find(t => t.id === chosenId);
+    tourSubmit('cg', isCorrect,
+      myLabel ? `${myLabel.label} — ${myLabel.meaning}` : '(없음)',
+      `${correctType.label} — ${correctType.meaning}`,
+      cgCurrent, btn);
+    return;
+  }
+
   document.querySelectorAll('#cg-options button').forEach(b => {
     b.disabled = true;
     if (b.dataset.typeId === cgCorrectId) b.classList.add('correct');
   });
   if (!isCorrect) btn.classList.add('wrong');
-  const correctType = conjTypes.find(t => t.id === cgCorrectId);
   document.getElementById('cg-result').textContent = isCorrect
     ? '✅ 정답입니다!'
     : `❌ 오답입니다. 정답: ${correctType.label} — ${correctType.meaning}`;
@@ -2046,14 +2329,22 @@ function nextConjMC() {
 function checkConjMC(btn, isCorrect) {
   if (cmAnswered) return;
   cmAnswered = true;
+  const correctForm = cmCurrent.verb.forms[cmCurrent.typeObj.id];
+
+  const stCM = getTourState('cm');
+  if (stCM.active) {
+    tourSubmit('cm', isCorrect, btn.textContent, correctForm, cmCurrent, btn);
+    return;
+  }
+
   btn.classList.add(isCorrect ? 'correct' : 'wrong');
   if (!isCorrect) {
     document.querySelectorAll('#cm-options button').forEach(b => {
-      if (b.textContent === cmCurrent.verb.forms[cmCurrent.typeObj.id]) b.classList.add('correct');
+      if (b.textContent === correctForm) b.classList.add('correct');
     });
   }
   document.querySelectorAll('#cm-options button').forEach(b => b.disabled = true);
-  document.getElementById('cm-result').textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${cmCurrent.verb.forms[cmCurrent.typeObj.id]}`;
+  document.getElementById('cm-result').textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctForm}`;
   document.getElementById('cm-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('cm-next-btn').style.display = 'inline-block';
 }
@@ -2104,14 +2395,17 @@ function checkConjSA() {
   const correct = csCurrent.verb.forms[csCurrent.typeObj.id];
   const isCorrect = input === correct;
 
-  document.getElementById('cs-answer').style.color = '#aaa';
+  const stCS = getTourState('cs');
+  if (stCS.active) {
+    tourSubmit('cs', isCorrect, input, correct, csCurrent);
+    return;
+  }
 
+  document.getElementById('cs-answer').style.color = '#aaa';
   document.getElementById('cs-result').textContent = isCorrect
     ? '✅ 정답입니다!'
     : `❌ 오답입니다. 정답: ${correct}`;
   document.getElementById('cs-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
-
-  // 동사 정보 표시
   document.getElementById('cs-desc').innerHTML = conjVerbHTML(csCurrent.verb);
   document.getElementById('cs-desc').style.display = 'block';
   document.getElementById('cs-next-btn').style.display = 'inline-block';
@@ -2151,6 +2445,401 @@ document.addEventListener('click', (e) => {
   }
 });
 initConj();
+
+/* ═══════════════════════════════════════════════
+   한바퀴 돌기 엔진
+═══════════════════════════════════════════════ */
+// tourState: 각 퀴즈ID 별 상태 관리
+// quizId: 'noun'|'verb'|'kanji-mc'|'kanji-sa'|'cg'|'cm'|'cs'|'dict'
+const tourStates = {};
+
+function getTourState(id) {
+  if (!tourStates[id]) {
+    tourStates[id] = {
+      active: false,
+      deck: [],       // 셔플된 문제 덱
+      idx: 0,         // 현재 인덱스
+      correct: 0,
+      wrongs: [],     // [{item, myAnswer, correctAnswer}]
+    };
+  }
+  return tourStates[id];
+}
+
+// 퀴즈별 현재 풀(pool) 가져오기
+function getTourPool(id) {
+  switch (id) {
+    case 'noun':     return getFilteredNounDataset();
+    case 'verb':     return getFilteredVerbDataset();
+    case 'kanji-mc':
+    case 'kanji-sa': return getFilteredKanjiDataset();
+    case 'cg':
+    case 'cm':
+    case 'cs': {
+      // 동사변형: verb×type 조합 전체
+      const pool = getConjPool();
+      const combos = [];
+      conjVerbs.forEach(v => pool.forEach(t => combos.push({ verb: v, typeObj: t })));
+      return combos;
+    }
+    case 'dict':     return getDictPool();
+    default: return [];
+  }
+}
+
+function toggleTour(id) {
+  const st = getTourState(id);
+  if (st.active) {
+    cancelTour(id);
+  } else {
+    startTour(id);
+  }
+}
+
+function startTour(id) {
+  const pool = getTourPool(id);
+  if (!pool.length) return;
+  const st = getTourState(id);
+  st.active = true;
+  st.deck = shuffle([...pool]);
+  st.idx = 0;
+  st.correct = 0;
+  st.wrongs = [];
+  document.getElementById(tourBtnId(id)).classList.add('active');
+  updateTourProgress(id);
+  // 현재 문제를 덱 첫번째로 교체
+  tourNextQuestion(id);
+}
+
+function cancelTour(id) {
+  const st = getTourState(id);
+  st.active = false;
+  document.getElementById(tourBtnId(id)).classList.remove('active');
+  hideTourProgress(id);
+  // 일반 모드로 새 문제 출제
+  callNextQuestion(id);
+}
+
+function tourBtnId(id) {
+  return id + '-tour-btn';
+}
+
+function updateTourProgress(id) {
+  const st = getTourState(id);
+  if (!st.active) return;
+  const total = st.deck.length;
+  const done = st.idx;
+  const pct = total > 0 ? (done / total) * 100 : 0;
+  const wrap = document.getElementById(id + '-tour-progress');
+  const label = document.getElementById(id + '-tour-label');
+  const fill  = document.getElementById(id + '-tour-fill');
+  if (wrap)  wrap.classList.add('show');
+  if (label) label.textContent = `${done} / ${total}`;
+  if (fill)  fill.style.width = pct + '%';
+}
+
+function hideTourProgress(id) {
+  const wrap = document.getElementById(id + '-tour-progress');
+  if (wrap) wrap.classList.remove('show');
+}
+
+// 한바퀴 모드에서 다음 문제 세팅 (각 퀴즈의 next 함수를 덱 기반으로 override)
+function tourNextQuestion(id) {
+  const st = getTourState(id);
+  if (!st.active) return;
+  updateTourProgress(id);
+  if (st.idx >= st.deck.length) {
+    // 한바퀴 완료
+    finishTour(id);
+    return;
+  }
+  const item = st.deck[st.idx];
+  setTourQuestion(id, item);
+}
+
+function setTourQuestion(id, item) {
+  switch (id) {
+    case 'noun':     setNounTourQ(item); break;
+    case 'verb':     setVerbTourQ(item); break;
+    case 'kanji-mc': setKanjiMCTourQ(item); break;
+    case 'kanji-sa': setKanjiSATourQ(item); break;
+    case 'cg':       setCGTourQ(item); break;
+    case 'cm':       setCMTourQ(item); break;
+    case 'cs':       setCSTourQ(item); break;
+    case 'dict':     setDictTourQ(item); break;
+  }
+}
+
+// 한바퀴 모드에서 정답/오답 처리 후 다음 문제로
+function tourSubmit(id, isCorrect, myAnswer, correctAnswer, item, flashEl) {
+  const st = getTourState(id);
+  if (!st.active) return;
+  if (isCorrect) {
+    st.correct++;
+  } else {
+    st.wrongs.push({ item, myAnswer, correctAnswer });
+  }
+  st.idx++;
+
+  if (flashEl) {
+    // 객관식: 선택한 버튼 파란색으로 잠깐 강조 후 다음 문제
+    flashEl.classList.add('tour-flash');
+    setTimeout(() => tourNextQuestion(id), 500);
+  } else {
+    setTimeout(() => tourNextQuestion(id), 300);
+  }
+}
+
+function finishTour(id) {
+  const st = getTourState(id);
+  st.active = false;
+  document.getElementById(tourBtnId(id)).classList.remove('active');
+  hideTourProgress(id);
+  showTourPopup(id, st);
+  // 일반 모드로 복귀
+  callNextQuestion(id);
+}
+
+function callNextQuestion(id) {
+  switch (id) {
+    case 'noun':     nextNounQuestion(); break;
+    case 'verb':     nextVerbQuestion(); break;
+    case 'kanji-mc': nextMCQuestion(); break;
+    case 'kanji-sa': nextSAQuestion(); break;
+    case 'cg':       nextConjGrammar(); break;
+    case 'cm':       nextConjMC(); break;
+    case 'cs':       nextConjSA(); break;
+    case 'dict':     nextDictQuestion(false); break;
+  }
+}
+
+/* ── 팝업 ── */
+function showTourPopup(id, st) {
+  const total = st.deck.length;
+  const correct = st.correct;
+  const scoreEl = document.getElementById('tour-popup-score');
+  scoreEl.innerHTML = `결과: <span class="score-num">${correct} / ${total}</span>`;
+
+  const listEl = document.getElementById('tour-wrong-list');
+  listEl.innerHTML = '';
+  st.wrongs.forEach(w => {
+    const div = document.createElement('div');
+    div.className = 'tour-wrong-item';
+    div.innerHTML = `
+      <div class="tour-wrong-item-body">
+        ${buildTourWrongBody(id, w)}
+      </div>
+      ${id === 'dict' ? `<button class="tour-play-btn" onclick="tourPlayDict('${w.item[0]}','${w.item[1]}')">▶</button>` : ''}
+    `;
+    listEl.appendChild(div);
+  });
+
+  document.getElementById('tour-popup-overlay').classList.add('open');
+}
+
+function buildTourWrongBody(id, w) {
+  const item = w.item;
+  switch (id) {
+    case 'noun':
+    case 'verb': {
+      const same = item[0] === item[1];
+      const reading = same ? '' : `<span style="color:#aaa;font-size:13px;margin:0 4px">${item[1]}</span>`;
+      return `
+        <div class="tour-wrong-word">${item[0]}${reading}</div>
+        <div class="tour-wrong-detail">${item[2]}</div>
+        <div class="tour-wrong-answers">
+          <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
+          <span class="cor-ans">정답: ${w.correctAnswer}</span>
+        </div>`;
+    }
+    case 'kanji-mc':
+    case 'kanji-sa': {
+      return `
+        <div class="tour-wrong-word">${item[0]}</div>
+        <div class="tour-wrong-detail" style="font-size:12px;">${item[6].replace(/\n/g, ' · ')}</div>
+        <div class="tour-wrong-answers">
+          <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
+          <span class="cor-ans">정답: ${w.correctAnswer}</span>
+        </div>`;
+    }
+    case 'cg': {
+      // item = {verb, typeObj}
+      const v = item.verb, t = item.typeObj;
+      return `
+        <div class="tour-wrong-word">${v.word} <span style="font-size:14px;color:#aaa">${v.reading}</span> <span style="font-size:14px;color:#555">${v.meaning}</span></div>
+        <div class="tour-wrong-detail">표시된 형태: ${v.forms[t.id]}</div>
+        <div class="tour-wrong-answers">
+          <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
+          <span class="cor-ans">정답: ${t.label} — ${t.meaning}</span>
+        </div>`;
+    }
+    case 'cm':
+    case 'cs': {
+      const v = item.verb, t = item.typeObj;
+      return `
+        <div class="tour-wrong-word">${v.word} <span style="font-size:14px;color:#aaa">${v.reading}</span> <span style="font-size:14px;color:#555">${v.meaning}</span></div>
+        <div class="tour-wrong-detail"><span style="background:#4f8ef7;color:#fff;padding:2px 8px;border-radius:999px;font-size:12px">${t.label}</span> ${t.meaning}</div>
+        <div class="tour-wrong-answers">
+          <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
+          <span class="cor-ans">정답: ${w.correctAnswer}</span>
+        </div>`;
+    }
+    case 'dict': {
+      return `
+        <div class="tour-wrong-word">${item[0]}회차 ${item[1]}번</div>
+        <div class="tour-wrong-answers">
+          <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
+          <span class="cor-ans">정답: ${w.correctAnswer}</span>
+        </div>`;
+    }
+  }
+  return '';
+}
+
+function tourPlayDict(round, num) {
+  const path = `받아쓰기/${round}_${num}.mp3`;
+  const audio = new Audio(path);
+  audio.play().catch(() => {});
+}
+
+function closeTourPopup() {
+  document.getElementById('tour-popup-overlay').classList.remove('open');
+}
+
+/* ── 각 퀴즈별 한바퀴 문제 세팅 함수 ── */
+
+function setNounTourQ(item) {
+  nounAnswered = false;
+  nounCurrent = item;
+  document.getElementById('noun-question').textContent = item[0];
+  const inp = document.getElementById('noun-answer');
+  inp.value = ''; inp.style.color = '';
+  document.getElementById('noun-result').textContent = '';
+  document.getElementById('noun-result').className = 'result';
+  document.getElementById('noun-description').style.display = 'none';
+  document.getElementById('noun-next-btn').style.display = 'none';
+  inp.focus({ preventScroll: true });
+}
+
+function setVerbTourQ(item) {
+  verbAnswered = false;
+  verbCurrent = item;
+  document.getElementById('verb-question').textContent = item[0];
+  const inp = document.getElementById('verb-answer');
+  inp.value = ''; inp.style.color = '';
+  document.getElementById('verb-result').textContent = '';
+  document.getElementById('verb-result').className = 'result';
+  document.getElementById('verb-description').style.display = 'none';
+  document.getElementById('verb-next-btn').style.display = 'none';
+  inp.focus({ preventScroll: true });
+}
+
+function setKanjiMCTourQ(item) {
+  kanjianswered = false;
+  current = item;
+  const choices = shuffle([item[1], item[3], item[4], item[5]]);
+  document.getElementById('mc-question').textContent = item[0];
+  document.getElementById('mc-result').textContent = '';
+  document.getElementById('mc-result').className = 'result';
+  document.getElementById('mc-description').style.display = 'none';
+  document.getElementById('mc-next-btn').style.display = 'none';
+  document.getElementById('mc-options').innerHTML = choices.map(ch =>
+    `<button onclick="checkMCAnswer(this,'${ch}')">${ch}</button>`
+  ).join('');
+}
+
+function setKanjiSATourQ(item) {
+  kanjianswered = false;
+  current = item;
+  document.getElementById('sa-question').textContent = item[0];
+  const inp = document.getElementById('sa-answer');
+  inp.value = ''; inp.style.color = '';
+  document.getElementById('sa-result').textContent = '';
+  document.getElementById('sa-result').className = 'result';
+  document.getElementById('sa-description').style.display = 'none';
+  document.getElementById('sa-next-btn').style.display = 'none';
+  inp.focus({ preventScroll: true });
+}
+
+function setCGTourQ(item) {
+  cgAnswered = false;
+  cgCurrent = item;
+  cgCorrectId = item.typeObj.id;
+  document.getElementById('cg-verb').innerHTML = conjVerbHTML(item.verb);
+  document.getElementById('cg-form').innerHTML = `<span class="conj-form-word">${item.verb.forms[item.typeObj.id]}</span>`;
+  const wrongTypes = item.typeObj.wrong.map(wid => conjTypes.find(t => t.id === wid)).filter(Boolean);
+  const choices = shuffle([item.typeObj, ...wrongTypes]);
+  const opts = document.getElementById('cg-options');
+  opts.innerHTML = '';
+  choices.forEach(ct => {
+    const b = document.createElement('button');
+    b.dataset.typeId = ct.id;
+    b.innerHTML = `<strong>${ct.label}</strong><br><span style="font-size:12px;font-weight:400">${ct.meaning}</span>`;
+    b.onclick = () => checkConjGrammar(b, ct.id);
+    opts.appendChild(b);
+  });
+  document.getElementById('cg-result').textContent = '';
+  document.getElementById('cg-next-btn').style.display = 'none';
+}
+
+function setCMTourQ(item) {
+  cmAnswered = false;
+  cmCurrent = item;
+  document.getElementById('cm-verb').innerHTML = conjVerbHTML(item.verb);
+  document.getElementById('cm-form').innerHTML =
+    `<span class="conj-type-badge">${item.typeObj.label}</span><span class="conj-type-meaning">${item.typeObj.meaning}</span>`;
+  const correctForm = item.verb.forms[item.typeObj.id];
+  const wrongForms = item.typeObj.wrong.map(wid => item.verb.forms[wid]).filter(f => f && f !== correctForm);
+  const choices = shuffle([{ form: correctForm, correct: true }, ...wrongForms.map(f => ({ form: f, correct: false }))]).slice(0, 4);
+  const opts = document.getElementById('cm-options');
+  opts.innerHTML = '';
+  choices.forEach(ch => {
+    const b = document.createElement('button');
+    b.textContent = ch.form;
+    b.onclick = () => checkConjMC(b, ch.correct);
+    opts.appendChild(b);
+  });
+  document.getElementById('cm-result').textContent = '';
+  document.getElementById('cm-next-btn').style.display = 'none';
+}
+
+function setCSTourQ(item) {
+  csAnswered = false;
+  csCurrent = item;
+  document.getElementById('cs-verb').innerHTML = conjVerbHTML(item.verb);
+  document.getElementById('cs-form').innerHTML =
+    `<span class="conj-type-badge">${item.typeObj.label}</span><span class="conj-type-meaning">${item.typeObj.meaning}</span>`;
+  const inp = document.getElementById('cs-answer');
+  inp.value = ''; inp.style.color = '';
+  document.getElementById('cs-result').textContent = '';
+  document.getElementById('cs-result').className = 'result';
+  document.getElementById('cs-desc').style.display = 'none';
+  document.getElementById('cs-next-btn').style.display = 'none';
+  inp.focus({ preventScroll: true });
+}
+
+function setDictTourQ(item) {
+  dictAnswered = false;
+  dictCurrent = item;
+  const inp = document.getElementById('dict-answer');
+  inp.value = ''; inp.style.color = '';
+  document.getElementById('dict-result').textContent = '';
+  document.getElementById('dict-result').className = 'result';
+  document.getElementById('dict-next-btn').style.display = 'none';
+  dictPlayAudio();
+  inp.focus({ preventScroll: true });
+}
+
+/* ── 레벨/탭 변경 시 한바퀴 취소 ── */
+function cancelTourIfActive(id) {
+  const st = tourStates[id];
+  if (st && st.active) {
+    st.active = false;
+    const btn = document.getElementById(tourBtnId(id));
+    if (btn) btn.classList.remove('active');
+    hideTourProgress(id);
+  }
+}
 
 /* ═══ INIT ═══ */
 buildKanjiLevelGrid();

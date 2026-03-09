@@ -83,6 +83,52 @@
       margin-bottom: 18px;
     }
 
+    /* ── HOW TO PAGE ── */
+    .howto-section {
+      margin-bottom: 28px;
+    }
+    .howto-section:last-child { margin-bottom: 0; }
+    .howto-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #4f8ef7;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e8eef8;
+    }
+    .howto-body {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.85;
+    }
+    .howto-body strong { color: #1a1a2e; }
+    .howto-tag {
+      display: inline-block;
+      background: #f0f4ff;
+      color: #4f8ef7;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .howto-key {
+      display: inline-block;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin: 0 2px;
+      vertical-align: middle;
+      font-family: monospace;
+      letter-spacing: .03em;
+    }
+
     /* ── SWITCH ROW ── */
     .mode-switch {
       display: flex;
@@ -1168,6 +1214,7 @@
 <div id="sub-nav">
   <span class="subnav-group" id="subnav-main">
     <button class="subnav-active" onclick="showSub('main','home')">Main</button>
+    <button onclick="showSub('main','howto')">How to</button>
     <button onclick="showSub('main','about')">About</button>
   </span>
   <span class="subnav-group" id="subnav-word" style="display:none;">
@@ -1193,37 +1240,108 @@
 
 <!-- ════════════ 메인·홈 ════════════ -->
 <div id="home" class="page active">
+  <div class="card" style="text-align:center;">
+    <h1 style="margin:0 0 8px; font-size:24px;">치로 일본어 JLPT N3 대비</h1>
+    <p style="margin:0; font-size:14px; color:#888;">chiro4k@gmail.com</p>
+  </div>
+</div>
+
+<!-- ════════════ How to ════════════ -->
+<div id="howto" class="page">
   <div class="card" style="text-align:left;">
-    <h1 style="margin-top:0;">치로 일본어 JLPT N3 대비</h1>
-    <p>
-      <strong>1. 한자 문제 :: 두음법칙</strong><br>
-      주관식 문제에서는 두음법칙 적용 여부 상관없이 어떤 발음을 입력해도 정답 처리됩니다.<br>
-      객관식 문제는 단일 정답을 선택하지만, 혼동되는 오답은 포함되어 있지 않습니다.
-    </p>
-    <p>
-      <strong>2. 키보드 조작</strong><br>
-      객관식 문제 : 숫자패드(1~4)로 선택, → 키로 다음 문제<br>
-      주관식 문제 : Enter 키로 제출, Enter 키 혹은 → 키로 다음 문제
-    </p>
+
+    <div class="howto-section">
+      <div class="howto-title">단어 문제</div>
+      <div class="howto-body">
+        <strong>명사 · 동사</strong> 탭에서 단어의 <strong>발음</strong> 또는 <strong>뜻</strong>을 맞히는 주관식 문제예요.<br>
+        상단의 <strong>발음 / 뜻</strong> 버튼으로 출제 방향을 전환할 수 있고, 단계 선택으로 원하는 범위만 골라 풀 수 있어요.<br><br>
+        <strong>한자</strong> 탭에서는 한자의 음(읽기)을 맞히는 문제예요. <strong>객관식</strong>과 <strong>주관식</strong> 중 선택 가능해요.<br>
+        주관식에서는 <strong>두음법칙 적용 여부에 관계없이</strong> 어떤 발음을 입력해도 정답 처리돼요.<br>
+        객관식에서는 혼동되는 오답 선택지가 의도적으로 포함되어 있지 않아요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">동사 변형</div>
+      <div class="howto-body">
+        일본어 동사의 활용형을 연습하는 문제예요. 세 가지 유형이 있어요.<br><br>
+        <span class="howto-tag">문법</span> 주어진 활용형이 어떤 변형인지 고르는 객관식<br>
+        <span class="howto-tag">변형 객관식</span> 지정된 변형 형태를 보기에서 고르기<br>
+        <span class="howto-tag">변형 주관식</span> 지정된 변형 형태를 직접 히라가나로 입력<br><br>
+        화면 상단에서 <strong>1그룹 / 2그룹 / 3그룹</strong>을 선택해 원하는 그룹만 출제할 수 있어요.<br>
+        그 아래 유형 선택에서 て형, た형, ない형 등 연습할 활용형을 고를 수 있어요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">받아쓰기</div>
+      <div class="howto-body">
+        음성을 듣고 히라가나로 받아쓰는 문제예요. <strong>띄어쓰기·문장부호 없이</strong> 입력해요.<br>
+        <strong>▶ 다시 듣기</strong> 버튼으로 반복 재생할 수 있고, <strong>느리게</strong> 버튼으로 천천히 들을 수 있어요.<br>
+        회차와 번호를 선택해 원하는 범위만 출제 가능해요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">한바퀴 돌기</div>
+      <div class="howto-body">
+        각 문제 카드 우상단의 <strong>[한바퀴 돌기]</strong> 버튼을 누르면 현재 선택된 범위의 문제를 <strong>셔플 후 한 번씩 전부</strong> 출제해요.<br>
+        한바퀴 중에는 정답 여부가 즉시 표시되지 않고 빠르게 넘어가요.<br>
+        완료되면 결과 팝업에서 점수와 오답 목록을 확인할 수 있어요.<br>
+        레벨·그룹 변경, 탭 이동, 버튼 재클릭 시 취소돼요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">오답 복습</div>
+      <div class="howto-body">
+        문제를 틀렸을 때 <strong>[오답 저장]</strong> 버튼을 눌러 저장하면, 상단바의 <strong>오답 복습</strong> 탭에서 모아볼 수 있어요.<br>
+        한바퀴 돌기 결과 팝업에서도 오답을 한꺼번에 저장할 수 있어요.<br><br>
+        오답 카테고리를 클릭하면 저장된 오답 목록이 표시돼요.<br>
+        <strong>[복습하기]</strong>를 누르면 해당 오답들만 무작위로 출제돼요. 같은 문제를 <strong>3번 맞히면</strong> 오답 횟수가 1 차감돼요.<br>
+        <strong>휴지통 버튼</strong>으로 삭제 모드를 켜면 오답 횟수를 직접 조정하거나 전체 삭제할 수 있어요.<br>
+        오답 데이터는 <strong>브라우저에 저장</strong>되어 창을 닫아도 유지돼요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">키보드 조작</div>
+      <div class="howto-body">
+        <strong>객관식</strong> — <span class="howto-key">1</span><span class="howto-key">2</span><span class="howto-key">3</span><span class="howto-key">4</span> 로 선택 &nbsp;·&nbsp; <span class="howto-key">→</span> 또는 <span class="howto-key">Enter</span> 로 다음 문제<br>
+        <strong>주관식</strong> — <span class="howto-key">Enter</span> 로 제출 &nbsp;·&nbsp; <span class="howto-key">→</span> 또는 <span class="howto-key">Enter</span> 로 다음 문제<br>
+        <strong>받아쓰기</strong> — <span class="howto-key">Enter</span> 로 제출 &nbsp;·&nbsp; <span class="howto-key">→</span> 로 다음 문제<br>
+        <strong>복습하기</strong> — 동일하게 키보드 조작 가능
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- ════════════ About ════════════ -->
 <div id="about" class="page">
   <div class="card" style="text-align:left;">
-    <h2 style="margin-top:0;">About</h2>
-    <p>
-      <strong>1. 문의사항</strong><br>
-      오류 및 건의사항은 치로에게 연락 주세요.
-    </p>
-    <p>
-      <strong>2. 이용안내</strong><br>
-      링크를 함부로 업로드하거나 허가없이 타인에게 공유하지 말아주시기 바랍니다.
-    </p>
-    <p>
-      <strong>제작</strong><br>
-      치로 일본어
-    </p>
+
+    <div class="howto-section">
+      <div class="howto-title">문의사항</div>
+      <div class="howto-body">
+        오류 및 건의사항은 치로에게 연락 주세요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">이용안내</div>
+      <div class="howto-body">
+        링크를 함부로 업로드하거나 허가없이 타인에게 공유하지 말아주시기 바랍니다.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">제작</div>
+      <div class="howto-body">
+        치로 일본어
+      </div>
+    </div>
+
   </div>
 </div>
 

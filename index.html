@@ -399,6 +399,159 @@
       text-align: center;
       white-space: pre-wrap;
     }
+    /* ── WORDLIST 다운로드 모드 진입 버튼 ── */
+    #wl-download-mode-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 8px;
+      border: 1.5px solid #4f8ef7;
+      background: #fff;
+      color: #4f8ef7;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background .15s, color .15s;
+    }
+    #wl-download-mode-btn:hover { background: #4f8ef7; color: #fff; }
+    #wl-download-mode-btn.active { background: #4f8ef7; color: #fff; }
+
+    /* ── WORDLIST 선택/인쇄 툴바 (다운로드 모드에서만 표시) ── */
+    #wl-toolbar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    #wl-toolbar.wl-mode-active { display: flex; }
+    #wl-toolbar button {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #4f8ef7;
+      background: #fff;
+      color: #4f8ef7;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    #wl-toolbar button:hover { background: #4f8ef7; color: #fff; }
+    #wl-toolbar button.wl-action-btn { background: #4f8ef7; color: #fff; }
+    #wl-toolbar button.wl-action-btn:hover { background: #2d6fd4; }
+    #wl-toolbar button:disabled { opacity: .4; cursor: default; pointer-events: none; }
+    #wl-select-count { font-size: 13px; color: #888; margin-left: 4px; }
+
+    /* ── 카드: 기본 / 다운로드 모드 ── */
+    .wl-card {
+      position: relative;
+      transition: box-shadow .15s, border .15s;
+      border: 2px solid transparent;
+    }
+    .wl-mode-active .wl-card { cursor: pointer; }
+    .wl-card.wl-selected {
+      border: 2px solid #4f8ef7;
+      box-shadow: 0 0 0 3px rgba(79,142,247,.18);
+    }
+    /* 체크 아이콘: 다운로드 모드에서만 표시 */
+    .wl-card-check {
+      display: none;
+      position: absolute;
+      top: 6px; right: 7px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      background: #fff;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: transparent;
+      transition: background .15s, border .15s, color .15s;
+    }
+    .wl-mode-active .wl-card-check { display: flex; }
+    .wl-card.wl-selected .wl-card-check {
+      background: #4f8ef7; border-color: #4f8ef7; color: #fff;
+    }
+
+    /* ── PNG 확인 팝업 ── */
+    #wl-png-popup {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    #wl-png-popup.open { display: flex; }
+    #wl-png-popup-inner {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 24px 20px;
+      max-width: 340px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    #wl-png-popup-inner p { font-size: 14px; color: #333; line-height: 1.6; margin: 0 0 18px; }
+    #wl-png-popup-inner .popup-btns { display: flex; flex-direction: column; gap: 8px; }
+    #wl-png-popup-inner .popup-btns button {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .popup-btn-primary { background: #4f8ef7; color: #fff; }
+    .popup-btn-secondary { background: #e8f0fe; color: #4f8ef7; }
+    .popup-btn-cancel { background: #f0f0f0; color: #666; }
+
+    /* ── 인쇄용 격자 (화면에서 숨김) ── */
+    #wl-print-area { display: none; }
+    @media print {
+      body > *:not(#wl-print-area) { display: none !important; }
+      #wl-print-area {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        margin: 0; padding: 0;
+      }
+      /* A4: 210×297mm, 브라우저 기본 여백 고려 → 실 사용 약 190×270mm */
+      .wl-print-page {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 3px;
+        width: 190mm;
+        height: 270mm;
+        box-sizing: border-box;
+        page-break-after: always;
+      }
+      .wl-print-page:last-child { page-break-after: avoid; }
+      .wl-print-cell {
+        border: 1px solid #bbb;
+        border-radius: 3px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 4px 3px;
+        overflow: hidden;
+        gap: 1px;
+      }
+      .wl-pc-word  { font-size: 13pt; font-weight: 700; color: #000; line-height: 1.2; }
+      .wl-pc-read  { font-size: 8pt;  color: #666; margin: 0; }
+      .wl-pc-mean  { font-size: 8pt;  color: #222; line-height: 1.3; margin-top: 2px; }
+      /* 한자 인쇄 */
+      .wl-pc-kanji-char  { font-size: 14pt; font-weight: 700; color: #000; line-height: 1.2; }
+      .wl-pc-kanji-read  { font-size: 8pt;  color: #2255cc; font-weight: 600; margin: 0; }
+      .wl-pc-kanji-ex    { font-size: 7pt; color: #444; line-height: 1.5; margin-top: 3px; }
+      .wl-pc-kanji-ex-row { display: flex; justify-content: center; gap: 6px; }
+    }
+
     /* ── CONJ CATEGORY BOX ── */
     #conj-type-box { overflow: visible; }
     .conj-group-btns {
@@ -1494,9 +1647,36 @@
     <div class="level-grid" id="wl-level-grid"></div>
   </div>
 
+  <!-- 다운로드 모드 진입 버튼 -->
+  <button id="wl-download-mode-btn" onclick="wlToggleDownloadMode()">⬇ 다운로드</button>
+
+  <!-- 선택/다운로드 툴바 (다운로드 모드에서만 표시) -->
+  <div id="wl-toolbar">
+    <button id="wl-btn-all" onclick="wlSelectAll()">전체 선택</button>
+    <button id="wl-btn-none" onclick="wlSelectNone()">선택 해제</button>
+    <button id="wl-btn-png" class="wl-action-btn" onclick="wlDownloadPNG()" disabled>PNG 저장</button>
+    <button id="wl-btn-print" class="wl-action-btn" onclick="wlPrint()" disabled>인쇄/PDF 저장</button>
+    <span id="wl-select-count">0개 선택됨</span>
+  </div>
+
   <!-- 단어 카드 목록 -->
   <div id="wl-card-grid"></div>
 
+</div>
+
+<!-- 인쇄 전용 영역 (평소 숨김) -->
+<div id="wl-print-area"></div>
+
+<!-- PNG 다운로드 확인 팝업 -->
+<div id="wl-png-popup">
+  <div id="wl-png-popup-inner">
+    <p id="wl-png-popup-msg"></p>
+    <div class="popup-btns">
+      <button class="popup-btn-primary" id="wl-popup-btn1" onclick="wlPopupAction('one')">1장만 다운로드</button>
+      <button class="popup-btn-secondary" id="wl-popup-btn2" onclick="wlPopupAction('zip')">압축파일 다운로드</button>
+      <button class="popup-btn-cancel" onclick="wlPopupClose()">취소</button>
+    </div>
+  </div>
 </div>
 
 <!-- ════════════ 동사 변형 ════════════ -->
@@ -1692,6 +1872,8 @@
 
 <footer>© 치로 일본어 | 제작: 4kchiro</footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="data.js"></script>
 <script src="data_conj.js"></script>
 <script>
@@ -2531,6 +2713,8 @@ let wlSelectedLevels = new Set();
 
 function selectWLCat(cat) {
   wlCat = cat;
+  wlSelected = new Set();
+  wlRenderedItems = [];
   buildWLLevelGrid();
   renderWordList();
 }
@@ -2574,6 +2758,8 @@ function buildWLLevelGrid() {
 function renderWordList() {
   const grid = document.getElementById('wl-card-grid');
   grid.innerHTML = '';
+  wlSelected.clear();
+  wlUpdateToolbar();
 
   let items = [];
   if (wlCat === 'noun') {
@@ -2584,33 +2770,308 @@ function renderWordList() {
     items = kanjidataset.filter(d => wlSelectedLevels.has(d[7]));
   }
 
-  if (!items.length) {
-    return;
-  }
+  if (!items.length) return;
 
-  items.forEach(item => {
+  items.forEach((item, idx) => {
     const card = document.createElement('div');
     card.className = 'wl-card';
+    card.dataset.idx = idx;
+
+    const checkEl = document.createElement('div');
+    checkEl.className = 'wl-card-check';
+    checkEl.textContent = '✓';
+    card.appendChild(checkEl);
 
     if (wlCat === 'kanji') {
-      // 한자 카드: 한자 / 발음(파란색) / 예문들
-      card.innerHTML = `
+      card.innerHTML += `
         <div class="wl-kanji-char">${item[0]}</div>
         <div class="wl-kanji-reading">${item[1]}</div>
         <div class="wl-kanji-examples">${item[6]}</div>
       `;
     } else {
-      // 명사·동사 카드: 단어 / 발음(회색, 동일하면 생략) / 뜻
       const sameAsWord = item[0] === item[1];
-      card.innerHTML = `
+      card.innerHTML += `
         <div class="wl-word">${item[0]}</div>
         <div class="wl-reading" style="${sameAsWord ? 'visibility:hidden' : ''}">${item[1]}</div>
         <div class="wl-meaning">${item[2]}</div>
       `;
     }
 
+    card.addEventListener('click', (e) => wlToggleCard(card, idx, e));
     grid.appendChild(card);
   });
+
+  // 렌더된 아이템 캐시 저장
+  wlRenderedItems = items;
+}
+
+/* ═══ 단어 보기 선택/다운로드/인쇄 ═══ */
+let wlSelected = new Set();
+let wlRenderedItems = [];
+let wlDownloadMode = false;
+let wlLastClickedIdx = null;  // shift+클릭용
+
+function wlToggleDownloadMode() {
+  wlDownloadMode = !wlDownloadMode;
+  const btn = document.getElementById('wl-download-mode-btn');
+  const toolbar = document.getElementById('wl-toolbar');
+  const grid = document.getElementById('wl-card-grid');
+  btn.classList.toggle('active', wlDownloadMode);
+  btn.textContent = wlDownloadMode ? '✕ 다운로드' : '⬇ 다운로드';
+  toolbar.classList.toggle('wl-mode-active', wlDownloadMode);
+  grid.classList.toggle('wl-mode-active', wlDownloadMode);
+  if (!wlDownloadMode) { wlSelectNone(); wlLastClickedIdx = null; }
+}
+
+function wlToggleCard(card, idx, e) {
+  if (!wlDownloadMode) return;
+  // Shift+클릭: 범위 선택
+  if (e && e.shiftKey && wlLastClickedIdx !== null) {
+    const from = Math.min(wlLastClickedIdx, idx);
+    const to   = Math.max(wlLastClickedIdx, idx);
+    const cards = document.querySelectorAll('#wl-card-grid .wl-card');
+    const doSelect = !wlSelected.has(idx);
+    for (let i = from; i <= to; i++) {
+      if (doSelect) { wlSelected.add(i); cards[i].classList.add('wl-selected'); }
+      else          { wlSelected.delete(i); cards[i].classList.remove('wl-selected'); }
+    }
+  } else {
+    if (wlSelected.has(idx)) { wlSelected.delete(idx); card.classList.remove('wl-selected'); }
+    else                     { wlSelected.add(idx);    card.classList.add('wl-selected'); }
+    wlLastClickedIdx = idx;
+  }
+  wlUpdateToolbar();
+}
+
+function wlSelectAll() {
+  document.querySelectorAll('#wl-card-grid .wl-card').forEach((card, idx) => {
+    wlSelected.add(idx); card.classList.add('wl-selected');
+  });
+  wlUpdateToolbar();
+}
+
+function wlSelectNone() {
+  document.querySelectorAll('#wl-card-grid .wl-card').forEach(card => card.classList.remove('wl-selected'));
+  wlSelected.clear();
+  wlUpdateToolbar();
+}
+
+function wlUpdateToolbar() {
+  const n = wlSelected.size;
+  document.getElementById('wl-select-count').textContent = `${n}개 선택됨`;
+  document.getElementById('wl-btn-png').disabled   = n === 0;
+  document.getElementById('wl-btn-print').disabled = n === 0;
+}
+
+function wlGetSelectedItems() {
+  return [...wlSelected].sort((a,b)=>a-b).map(i => wlRenderedItems[i]);
+}
+
+/* ── 셀 HTML 생성 헬퍼 ── */
+function wlBuildCell(item, forPNG) {
+  // forPNG: inline style 사용 / !forPNG: 인쇄용 class 사용
+  const cell = document.createElement('div');
+
+  if (forPNG) {
+    cell.style.cssText = `
+      border:1px solid #bbb; border-radius:4px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:5px 4px; overflow:hidden; background:#fff;
+    `;
+  } else {
+    cell.className = 'wl-print-cell';
+  }
+
+  if (!item) return cell;
+
+  if (wlCat === 'kanji') {
+    // 예시단어 2개씩 묶어서 줄 구성
+    const exRaw = (item[6] || '').trim();
+    const exList = exRaw ? exRaw.split(/\n|、|,|，/).map(s=>s.trim()).filter(Boolean) : [];
+    const exRows = [];
+    for (let i = 0; i < exList.length; i += 2) {
+      exRows.push(exList.slice(i, i+2));
+    }
+    const exHTML = exRows.map(row => {
+      const justify = row.length === 1 ? 'justify-content:center;' : '';
+      if (forPNG) {
+        return `<div style="display:flex;gap:8px;${justify}font-size:10px;color:#666;line-height:1.5;">${row.map(w=>`<span>${w}</span>`).join('')}</div>`;
+      } else {
+        return `<div class="wl-pc-kanji-ex-row" style="${justify}">${row.map(w=>`<span>${w}</span>`).join('')}</div>`;
+      }
+    }).join('');
+
+    if (forPNG) {
+      cell.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:22px;font-weight:700;color:#1a1a2e;line-height:1.2;">${item[0]}</div>
+          <div style="font-size:12px;color:#4f8ef7;font-weight:600;margin:2px 0 4px;">${item[1]}</div>
+        </div>
+        <div style="overflow:hidden;">${exHTML}</div>
+      `;
+    } else {
+      cell.innerHTML = `
+        <div class="wl-pc-kanji-char">${item[0]}</div>
+        <div class="wl-pc-kanji-read">${item[1]}</div>
+        <div class="wl-pc-kanji-ex">${exHTML}</div>
+      `;
+    }
+  } else {
+    // 명사/동사
+    const sameAsWord = item[0] === item[1];
+    if (forPNG) {
+      cell.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:22px;font-weight:700;color:#1a1a2e;line-height:1.2;">${item[0]}</div>
+          <div style="font-size:12px;color:#aaa;margin:2px 0 3px;${sameAsWord?'visibility:hidden':''}">${item[1]}</div>
+        </div>
+        <div style="font-size:13px;color:#333;line-height:1.4;overflow:hidden;">${item[2]}</div>
+      `;
+    } else {
+      cell.innerHTML = `
+        <div class="wl-pc-word">${item[0]}</div>
+        <div class="wl-pc-read" style="${sameAsWord?'visibility:hidden':''}">${item[1]}</div>
+        <div class="wl-pc-mean">${item[2]}</div>
+      `;
+    }
+  }
+  return cell;
+}
+
+/* ── 격자 빌드 (PNG용 / 인쇄용 공통) ── */
+function wlBuildGrid(items, forPNG) {
+  const COLS = 4, ROWS = 8, PAGE = COLS * ROWS;
+  const pages = [];
+  const totalPages = Math.ceil(items.length / PAGE);
+  for (let p = 0; p < totalPages; p++) {
+    const grid = document.createElement('div');
+    if (forPNG) {
+      grid.style.cssText = `
+        display:grid;
+        grid-template-columns:repeat(${COLS},1fr);
+        grid-template-rows:repeat(${ROWS},${Math.floor(1050/ROWS)}px);
+        gap:4px; width:740px; padding:14px;
+        background:#fff; box-sizing:border-box;
+      `;
+    } else {
+      grid.className = 'wl-print-page';
+    }
+    const slice = items.slice(p * PAGE, (p + 1) * PAGE);
+    while (slice.length < PAGE) slice.push(null);
+    slice.forEach(item => grid.appendChild(wlBuildCell(item, forPNG)));
+    pages.push(grid);
+  }
+  return pages;
+}
+
+/* ── PNG 다운로드 ── */
+let wlPngPendingItems = null;
+
+function wlDownloadPNG() {
+  const items = wlGetSelectedItems();
+  if (!items.length) return;
+  const PAGE = 32;
+  if (items.length > PAGE) {
+    const remaining = items.length - PAGE;
+    document.getElementById('wl-png-popup-msg').innerHTML =
+      `선택한 단어가 <b>${items.length}개</b>입니다.<br>1장에는 최대 32개만 포함됩니다.<br>나머지 <b>${remaining}개</b>는 압축파일로 받을 수 있습니다.`;
+    document.getElementById('wl-popup-btn1').style.display = '';
+    document.getElementById('wl-popup-btn2').style.display = '';
+    wlPngPendingItems = items;
+    document.getElementById('wl-png-popup').classList.add('open');
+  } else {
+    wlExecutePNG(items, false);
+  }
+}
+
+function wlPopupAction(mode) {
+  wlPopupClose();
+  if (!wlPngPendingItems) return;
+  wlExecutePNG(wlPngPendingItems, mode === 'zip');
+  wlPngPendingItems = null;
+}
+
+function wlPopupClose() {
+  document.getElementById('wl-png-popup').classList.remove('open');
+}
+
+async function wlExecutePNG(items, doZip) {
+  const btn = document.getElementById('wl-btn-png');
+  btn.disabled = true; btn.textContent = '생성 중...';
+
+  const PAGE = 32;
+  const label = wlCat === 'kanji' ? '한자' : wlCat === 'verb' ? '동사' : '명사';
+  const pagesToRender = doZip
+    ? wlBuildGrid(items, true)
+    : wlBuildGrid(items.slice(0, PAGE), true);
+
+  try {
+    if (doZip && typeof JSZip !== 'undefined') {
+      const zip = new JSZip();
+      for (let i = 0; i < pagesToRender.length; i++) {
+        const canvas = await wlRenderCanvas(pagesToRender[i]);
+        const base64 = canvas._dataUrl.split(',')[1];
+        zip.file(`치로단어_${label}_${i+1}페이지.png`, base64, { base64: true });
+      }
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `치로단어_${label}_전체.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    } else {
+      // 1장만
+      const canvas = await wlRenderCanvas(pagesToRender[0]);
+      const a = document.createElement('a');
+      a.href = canvas._dataUrl;
+      a.download = `치로단어_${label}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      if (doZip) alert('JSZip 라이브러리를 불러오지 못해 1장만 저장됩니다.');
+    }
+  } catch(e) {
+    alert('PNG 생성 중 오류가 발생했습니다.');
+    console.error(e);
+  }
+
+  btn.textContent = 'PNG 저장';
+  btn.disabled = wlSelected.size === 0;
+}
+
+async function wlRenderCanvas(gridEl) {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;background:#fff;z-index:-1;';
+  wrapper.appendChild(gridEl);
+  document.body.appendChild(wrapper);
+  // 브라우저 레이아웃 완료 대기
+  await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+  const canvas = await html2canvas(gridEl, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    allowTaint: true,
+    logging: false
+  });
+  // dataUrl을 DOM 제거 전에 추출
+  const dataUrl = canvas.toDataURL('image/png');
+  document.body.removeChild(wrapper);
+  // dataUrl을 canvas 객체에 캐시해서 반환
+  canvas._dataUrl = dataUrl;
+  return canvas;
+}
+
+/* ── 인쇄 ── */
+function wlPrint() {
+  const items = wlGetSelectedItems();
+  if (!items.length) return;
+  const area = document.getElementById('wl-print-area');
+  area.innerHTML = '';
+  wlBuildGrid(items, false).forEach(pg => area.appendChild(pg));
+  window.print();
 }
 
 /* ═══ 동사변형 STATE ═══ */

@@ -3938,10 +3938,10 @@ function renderReviewQuestion() {
         <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
-        if (e.key === 'Enter') submitReview();
-        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+        e.stopPropagation();
+        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
       });
-      document.getElementById('rv-answer').focus({ preventScroll: true });
+      setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       // checkFn 등록
       reviewCheckFn = () => {
         const input = document.getElementById('rv-answer').value.trim();
@@ -3966,10 +3966,10 @@ function renderReviewQuestion() {
         <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
-        if (e.key === 'Enter') submitReview();
-        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+        e.stopPropagation();
+        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
       });
-      document.getElementById('rv-answer').focus({ preventScroll: true });
+      setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       reviewCheckFn = () => {
         const input = document.getElementById('rv-answer').value.trim();
         const isCorrect = isReading ? input === d[1] : (input.length > 0 && d[2].includes(input));
@@ -4009,10 +4009,10 @@ function renderReviewQuestion() {
         <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
-        if (e.key === 'Enter') submitReview();
-        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+        e.stopPropagation();
+        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
       });
-      document.getElementById('rv-answer').focus({ preventScroll: true });
+      setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       reviewCheckFn = () => {
         const input = document.getElementById('rv-answer').value.trim();
         const isCorrect = input === d[1] || (d[2] && input === d[2]);
@@ -4088,10 +4088,10 @@ function renderReviewQuestion() {
         <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
-        if (e.key === 'Enter') submitReview();
-        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+        e.stopPropagation();
+        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
       });
-      document.getElementById('rv-answer').focus({ preventScroll: true });
+      setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       reviewCheckFn = () => {
         const input = document.getElementById('rv-answer').value.trim();
         return { isCorrect: input === v.forms[t.id], correct: v.forms[t.id], descHTML: null };
@@ -4115,14 +4115,18 @@ function renderReviewQuestion() {
                    text-align:center;transition:border-color .15s;line-height:1.6;overflow:hidden;"
             oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
             onfocus="this.style.borderColor='#4f8ef7';" onblur="this.style.borderColor='#dde3ef';"
-            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault(); if(reviewAnswered){reviewNextQuestion();}else{submitReview();}}"></textarea>
+            onkeydown="event.stopPropagation(); if(event.key==='Enter'&&!event.shiftKey){event.preventDefault(); if(reviewAnswered){reviewNextQuestion();}else{submitReview();}}"></textarea>
           <button onclick="submitReview()" style="padding:11px 32px;font-size:15px;font-family:inherit;font-weight:700;border:none;background:#4f8ef7;color:#fff;border-radius:10px;cursor:pointer;">제출</button>
         </div>
         <div class="result" id="rv-result"></div>
         <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
       area.appendChild(card);
-      // 자동 재생
-      setTimeout(() => rvPlayDict(round, num), 300);
+      // 자동 재생 + 입력창 포커스
+      setTimeout(() => {
+        rvPlayDict(round, num);
+        const el = document.getElementById('rv-answer');
+        if (el) el.focus({ preventScroll: true });
+      }, 300);
       reviewCheckFn = () => {
         const input = document.getElementById('rv-answer').value.trim();
         return { isCorrect: d && input === d[2], correct: d ? d[2] : '?', descHTML: null };
@@ -4237,14 +4241,12 @@ document.addEventListener('keydown', function(e) {
     return;
   }
 
-  // Enter: 입력 중이 아닐 때, 또는 입력 중이더라도 이미 answered면 다음 문제
+  // Enter: 다음 문제 (input/textarea의 Enter는 stopPropagation으로 여기 안 옴)
   if (e.code === 'Enter') {
-    if (nextVisible && (!isInput || reviewAnswered)) {
+    if (nextVisible) {
       e.preventDefault();
       reviewNextQuestion();
-      return;
     }
-    // 주관식 입력 중 + 미제출: submitReview (input의 자체 핸들러가 처리하므로 여기선 패스)
     return;
   }
 

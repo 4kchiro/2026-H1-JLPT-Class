@@ -275,7 +275,7 @@
       display: none;
       margin-top: 14px;
       padding: 11px 32px;
-      font-size: 15px;
+      font-size: 14px;
       font-family: inherit;
       font-weight: 700;
       border: none;
@@ -286,6 +286,7 @@
       transition: background .15s;
     }
     .next-btn:hover { background: #2d2d50; }
+    .btn-row .next-btn { margin-top: 0; }
 
     /* ── FOOTER ── */
     footer {
@@ -828,6 +829,22 @@
       transition: all .15s;
     }
     .tour-play-btn:hover { background: #1a1a2e; border-color: #1a1a2e; color: #fff; }
+    .tour-item-save-btn {
+      flex-shrink: 0;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #dc3545;
+      color: #fff;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .tour-item-save-btn:hover { background: #b02030; }
+    .tour-item-save-btn.saved { background: #aaa; cursor: default; }
     .tour-popup-close {
       flex-shrink: 0;
       display: block;
@@ -844,6 +861,298 @@
       transition: background .15s;
     }
     .tour-popup-close:hover { background: #2d2d50; }
+
+    /* ══════════════════════════════════
+       오답 저장 버튼
+    ══════════════════════════════════ */
+    .btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .save-wrong-btn {
+      display: none;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #dc3545;
+      color: #fff;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .save-wrong-btn:hover { background: #b02030; }
+    .save-wrong-btn.saved {
+      background: #aaa;
+      cursor: default;
+    }
+
+    /* ══════════════════════════════════
+       오답 노트 메인 페이지
+    ══════════════════════════════════ */
+    .wrong-cat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .wrong-cat-item {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: box-shadow .15s, transform .12s;
+      border: 2px solid transparent;
+    }
+    .wrong-cat-item:hover:not(.disabled) {
+      box-shadow: 0 4px 18px rgba(79,142,247,.18);
+      border-color: #4f8ef7;
+      transform: translateY(-1px);
+    }
+    .wrong-cat-item.disabled {
+      opacity: .45;
+      cursor: default;
+    }
+    .wrong-cat-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    .wrong-cat-sub {
+      font-size: 13px;
+      color: #888;
+      margin-left: 5px;
+      font-weight: 400;
+    }
+    .wrong-count-badge {
+      flex-shrink: 0;
+      min-width: 32px;
+      height: 32px;
+      padding: 0 10px;
+      background: #4f8ef7;
+      color: #fff;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════
+       오답 상세 페이지
+    ══════════════════════════════════ */
+    .wrong-detail-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .wrong-back-btn {
+      padding: 7px 14px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 700;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #444;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .wrong-back-btn:hover { border-color: #4f8ef7; color: #4f8ef7; }
+    .wrong-detail-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      flex: 1;
+    }
+    .wrong-review-btn {
+      padding: 9px 20px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .wrong-review-btn:hover { background: #3a7de4; }
+    .wrong-delete-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #f5c2c7;
+      background: #fff0f1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .wrong-delete-btn img { width: 16px; height: 16px; display: block; }
+    .wrong-delete-btn:hover { background: #dc3545; border-color: #dc3545; }
+    .wrong-delete-btn:hover img { filter: brightness(0) invert(1); }
+    .wrong-delete-btn.active { background: #dc3545; border-color: #dc3545; }
+    .wrong-delete-btn.active img { filter: brightness(0) invert(1); }
+    /* 삭제 상태: 오답횟수 조정 컨트롤 */
+    .wrong-count-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .wrong-count-ctrl-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: #dc3545;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background .15s;
+    }
+    .wrong-count-ctrl-btn img { width: 12px; height: 12px; display: block; }
+    .wrong-count-ctrl-btn:hover { background: #b02030; }
+    .wrong-count-ctrl-btn:disabled { background: #e0e0e0; cursor: default; }
+    .wrong-count-num {
+      min-width: 20px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    /* 삭제상태: 전체삭제 버튼 */
+    .wrong-deleteall-btn {
+      padding: 9px 20px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      border: none;
+      background: #dc3545;
+      color: #fff;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .wrong-deleteall-btn:hover { background: #b02030; }
+    .wrong-item-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+    .wrong-item-body { flex: 1; min-width: 0; }
+    .wrong-item-badge {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: #4f8ef7;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wrong-item-play {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+    .wrong-item-play:hover { background: #1a1a2e; border-color: #1a1a2e; color: #fff; }
+    .wrong-item-word {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .wrong-item-reading { font-size: 14px; color: #aaa; margin: 0 4px; }
+    .wrong-item-meaning { font-size: 14px; color: #555; }
+    .wrong-item-detail {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════════
+       복습하기 오버레이
+    ══════════════════════════════════ */
+    .review-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #f4f6fb;
+      z-index: 900;
+      overflow-y: auto;
+      padding: 16px;
+    }
+    .review-overlay.open { display: block; }
+    .review-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    #review-card-area .card { text-align: center; }
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .review-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      flex: 1;
+    }
+    .review-progress-text {
+      font-size: 13px;
+      color: #888;
+    }
+    /* 복습 중 정답 횟수 표시 */
+    .review-correct-counter {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .review-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      transition: background .2s;
+    }
+    .review-dot.filled { background: #4f8ef7; }
   </style>
 </head>
 <body>
@@ -854,6 +1163,7 @@
   <button onclick="showTop('word')">단어 문제</button>
   <button onclick="showTop('conj')">동사 변형</button>
   <button onclick="showTop('dictation')">받아쓰기</button>
+  <button onclick="showTop('wrong')">오답 복습</button>
 </nav>
 <div id="sub-nav">
   <span class="subnav-group" id="subnav-main">
@@ -878,6 +1188,7 @@
   <span class="subnav-group" id="subnav-dictation" style="display:none;">
     <button class="subnav-active" onclick="showSub('dictation','dictation-quiz')">문제풀이</button>
   </span>
+  <span class="subnav-group" id="subnav-wrong" style="display:none;"></span>
 </div>
 
 <!-- ════════════ 메인·홈 ════════════ -->
@@ -948,7 +1259,10 @@
     </div>
     <div class="result" id="noun-result"></div>
     <div class="noun-desc" id="noun-description" style="display:none;"></div>
-    <button class="next-btn" id="noun-next-btn" onclick="nextNounQuestion()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="noun-save-btn" onclick="saveWrong('noun')">오답 저장</button>
+      <button class="next-btn" id="noun-next-btn" onclick="nextNounQuestion()">다음 문제 ▶</button>
+    </div>
   </div>
 
 </div>
@@ -985,7 +1299,10 @@
     </div>
     <div class="result" id="verb-result"></div>
     <div class="noun-desc" id="verb-description" style="display:none;"></div>
-    <button class="next-btn" id="verb-next-btn" onclick="nextVerbQuestion()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="verb-save-btn" onclick="saveWrong('verb')">오답 저장</button>
+      <button class="next-btn" id="verb-next-btn" onclick="nextVerbQuestion()">다음 문제 ▶</button>
+    </div>
   </div>
 
 </div>
@@ -1019,7 +1336,10 @@
     <div class="options" id="mc-options"></div>
     <div class="result" id="mc-result"></div>
     <div class="description" id="mc-description" style="display:none;"></div>
-    <button class="next-btn" id="mc-next-btn" onclick="nextMCQuestion()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="mc-save-btn" onclick="saveWrong('kanji-mc')">오답 저장</button>
+      <button class="next-btn" id="mc-next-btn" onclick="nextMCQuestion()">다음 문제 ▶</button>
+    </div>
   </div>
 
   <!-- 주관식 컨테이너 -->
@@ -1039,7 +1359,10 @@
     </div>
     <div class="result" id="sa-result"></div>
     <div class="description" id="sa-description" style="display:none;"></div>
-    <button class="next-btn" id="sa-next-btn" onclick="nextSAQuestion()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="sa-save-btn" onclick="saveWrong('kanji-sa')">오답 저장</button>
+      <button class="next-btn" id="sa-next-btn" onclick="nextSAQuestion()">다음 문제 ▶</button>
+    </div>
   </div>
 
 </div>
@@ -1087,7 +1410,10 @@
     <div class="conj-form-display" id="cg-form"></div>
     <div class="conj-options" id="cg-options"></div>
     <div class="result" id="cg-result"></div>
-    <button class="next-btn" id="cg-next-btn" onclick="nextConjGrammar()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="cg-save-btn" onclick="saveWrong('cg')">오답 저장</button>
+      <button class="next-btn" id="cg-next-btn" onclick="nextConjGrammar()">다음 문제 ▶</button>
+    </div>
   </div>
 
   <!-- [변형 객관식] 퀴즈 -->
@@ -1104,7 +1430,10 @@
     <div class="conj-form-display" id="cm-form"></div>
     <div class="conj-options" id="cm-options"></div>
     <div class="result" id="cm-result"></div>
-    <button class="next-btn" id="cm-next-btn" onclick="nextConjMC()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="cm-save-btn" onclick="saveWrong('cm')">오답 저장</button>
+      <button class="next-btn" id="cm-next-btn" onclick="nextConjMC()">다음 문제 ▶</button>
+    </div>
   </div>
 
   <!-- [변형 주관식] 퀴즈 -->
@@ -1125,7 +1454,10 @@
     </div>
     <div class="result" id="cs-result"></div>
     <div class="noun-desc" id="cs-desc" style="display:none;"></div>
-    <button class="next-btn" id="cs-next-btn" onclick="nextConjSA()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="cs-save-btn" onclick="saveWrong('cs')">오답 저장</button>
+      <button class="next-btn" id="cs-next-btn" onclick="nextConjSA()">다음 문제 ▶</button>
+    </div>
   </div>
 
 </div>
@@ -1179,15 +1511,62 @@
         onmouseover="this.style.background='#3a7de4'" onmouseout="this.style.background='#4f8ef7'">제출</button>
     </div>
     <div class="result" id="dict-result"></div>
-    <button class="next-btn" id="dict-next-btn" onclick="nextDictQuestion()">다음 문제 ▶</button>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="dict-save-btn" onclick="saveWrong('dict')">오답 저장</button>
+      <button class="next-btn" id="dict-next-btn" onclick="nextDictQuestion()">다음 문제 ▶</button>
+    </div>
   </div>
 
+</div>
+
+<!-- ════════════ 오답 노트 메인 ════════════ -->
+<div id="wrong" class="page">
+  <div id="wrong-cat-list" class="wrong-cat-list"></div>
+</div>
+
+<!-- ════════════ 오답 상세 ════════════ -->
+<div id="wrong-detail" class="page">
+  <div class="wrong-detail-header">
+    <button class="wrong-back-btn" onclick="showWrongMain()">← 목록</button>
+    <div class="wrong-detail-title" id="wrong-detail-title"></div>
+    <button class="wrong-delete-btn" id="wrong-delete-btn" onclick="toggleDeleteMode()" title="오답 삭제 모드">
+      <img src="img/delete.png" alt="삭제">
+    </button>
+    <button class="wrong-review-btn" id="wrong-review-start-btn" onclick="startReview()">복습하기</button>
+  </div>
+  <div id="wrong-item-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+</div>
+
+<!-- ════════════ 복습하기 오버레이 ════════════ -->
+<div class="review-overlay" id="review-overlay">
+  <div class="review-inner">
+    <div class="review-header">
+      <button class="wrong-back-btn" onclick="closeReview()">← 나가기</button>
+      <div class="review-title" id="review-title"></div>
+      <div class="review-progress-text" id="review-progress-text"></div>
+    </div>
+    <!-- 정답 카운터 (3개 점) -->
+    <div class="review-correct-counter" id="review-correct-counter">
+      <div class="review-dot" id="rdot-0"></div>
+      <div class="review-dot" id="rdot-1"></div>
+      <div class="review-dot" id="rdot-2"></div>
+    </div>
+    <!-- 카드 삽입 영역 -->
+    <div id="review-card-area"></div>
+  </div>
 </div>
 
 <!-- ════════════ 한바퀴 결과 팝업 ════════════ -->
 <div class="tour-popup-overlay" id="tour-popup-overlay">
   <div class="tour-popup">
     <div class="tour-popup-score" id="tour-popup-score"></div>
+    <div id="tour-save-all-wrap" style="display:none; padding:12px 24px; text-align:right; border-bottom: 1px solid #f0f2f5;">
+      <button onclick="tourSaveAllWrongs()"
+        style="padding:7px 16px; font-size:13px; font-family:inherit; font-weight:700;
+               border:none; background:#dc3545; color:#fff; border-radius:999px; cursor:pointer;">
+        모든 오답 저장
+      </button>
+    </div>
     <div class="tour-wrong-list" id="tour-wrong-list"></div>
     <button class="tour-popup-close" onclick="closeTourPopup()">확인</button>
   </div>
@@ -1225,8 +1604,20 @@ let currentTop = 'main'; // 'main' | 'word' | 'wordlist'
 function showTop(top) {
   // 탭 이동 시 모든 한바퀴 취소
   ['noun','verb','kanji-mc','kanji-sa','cg','cm','cs','dict'].forEach(id => cancelTourIfActive(id));
-  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', dictation: 'dictation-quiz' };
+  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', dictation: 'dictation-quiz', wrong: 'wrong' };
+  if (top === 'wrong') { showWrongMain(); _setNavActive('wrong'); return; }
   showSub(top, defaults[top]);
+}
+
+function _setNavActive(top) {
+  document.querySelectorAll('#main-nav > button').forEach((b, i) => {
+    const tops = ['main', 'wordlist', 'word', 'conj', 'dictation', 'wrong'];
+    b.classList.toggle('nav-active', tops[i] === top);
+  });
+  ['main', 'word', 'wordlist', 'conj', 'dictation', 'wrong'].forEach(g => {
+    const el = document.getElementById('subnav-' + g);
+    if (el) el.style.display = g === top ? '' : 'none';
+  });
 }
 
 // 하위탭 전환
@@ -1242,13 +1633,14 @@ function showSub(top, sub) {
 
   // 상위탭 active
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'wordlist', 'word', 'conj', 'dictation'];
+    const tops = ['main', 'wordlist', 'word', 'conj', 'dictation', 'wrong'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
 
   // 하위탭 그룹 표시/숨김
-  ['main', 'word', 'wordlist', 'conj', 'dictation'].forEach(g => {
-    document.getElementById('subnav-' + g).style.display = g === top ? '' : 'none';
+  ['main', 'word', 'wordlist', 'conj', 'dictation', 'wrong'].forEach(g => {
+    const el = document.getElementById('subnav-' + g);
+    if (el) el.style.display = g === top ? '' : 'none';
   });
 
   // 하위탭 버튼 active
@@ -1424,6 +1816,7 @@ function nextNounQuestion() {
   descEl.style.display = 'none';
   descEl.innerHTML = '';
   nextBtn.style.display = 'none';
+  showSaveBtn('noun', false);
   answerInput.focus({ preventScroll: true });
 }
 
@@ -1459,6 +1852,7 @@ function checkNounAnswer() {
   descEl.innerHTML = buildWordDesc(nounCurrent);
   descEl.style.display = 'block';
   nextBtn.style.display = 'inline-block';
+  showSaveBtn('noun', !isCorrect);
 }
 
 function submitNoun() {
@@ -1518,6 +1912,7 @@ function nextVerbQuestion() {
   descEl.style.display = 'none';
   descEl.innerHTML = '';
   nextBtn.style.display = 'none';
+  showSaveBtn('verb', false);
   answerInput.focus({ preventScroll: true });
 }
 
@@ -1551,6 +1946,7 @@ function checkVerbAnswer() {
   descEl.innerHTML = buildWordDesc(verbCurrent);
   descEl.style.display = 'block';
   nextBtn.style.display = 'inline-block';
+  showSaveBtn('verb', !isCorrect);
 }
 
 function submitVerb() {
@@ -1599,6 +1995,7 @@ function showDescription(descEl, text) {
 /* ═══ MC ═══ */
 function nextMCQuestion() {
   kanjianswered = false;
+  showSaveBtn('kanji-mc', false);
   const dataset = getFilteredKanjiDataset();
   if (!dataset.length) {
     document.getElementById('mc-question').textContent = '해당 단계의 데이터가 없습니다.';
@@ -1643,6 +2040,7 @@ function checkMCAnswer(btn, choice) {
   showResult(document.getElementById('mc-result'), isCorrect, current[1]);
   showDescription(document.getElementById('mc-description'), current[6]);
   document.getElementById('mc-next-btn').style.display = 'inline-block';
+  showSaveBtn('kanji-mc', !isCorrect);
 }
 
 /* ═══ SA ═══ */
@@ -1667,6 +2065,7 @@ function nextSAQuestion() {
   document.getElementById('sa-description').textContent = '';
   document.getElementById('sa-description').style.display = 'none';
   document.getElementById('sa-next-btn').style.display = 'none';
+  showSaveBtn('kanji-sa', false);
   document.getElementById('sa-answer').focus({ preventScroll: true });
 }
 
@@ -1686,6 +2085,7 @@ function checkSAAnswer() {
   showResult(document.getElementById('sa-result'), isCorrect, current[1]);
   showDescription(document.getElementById('sa-description'), current[6]);
   document.getElementById('sa-next-btn').style.display = 'inline-block';
+  showSaveBtn('kanji-sa', !isCorrect);
 }
 
 function submitSA() {
@@ -1932,6 +2332,7 @@ function initDictPage() {
 
 function nextDictQuestion(levelChanged) {
   dictAnswered = false;
+  showSaveBtn('dict', false);
   if (levelChanged) dictIsFirstQuestion = true;
 
   const pool = getDictPool();
@@ -1997,6 +2398,7 @@ function checkDictAnswer() {
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('dict-next-btn').style.display = 'inline-block';
+  showSaveBtn('dict', !isCorrect);
 }
 
 function submitDict() {
@@ -2304,6 +2706,7 @@ let cgAnswered = false, cgCurrent = null, cgCorrectId = null;
 
 function nextConjGrammar() {
   cgAnswered = false;
+  showSaveBtn('cg', false);
   const pool = getConjPool();
   const verbs = getConjVerbs();
   const labelEl = document.querySelector('#conj-grammar-box .question-label');
@@ -2375,6 +2778,7 @@ function checkConjGrammar(btn, chosenId) {
     : `❌ 오답입니다. 정답: ${correctType.label} — ${correctType.meaning}`;
   document.getElementById('cg-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('cg-next-btn').style.display = 'inline-block';
+  showSaveBtn('cg', !isCorrect);
 }
 
 /* ── 변형 객관식 퀴즈 ── */
@@ -2382,6 +2786,7 @@ let cmAnswered = false, cmCurrent = null;
 
 function nextConjMC() {
   cmAnswered = false;
+  showSaveBtn('cm', false);
   const pool = getConjPool();
   const verbs = getConjVerbs();
   const labelEl = document.querySelector('#conj-mc-box .question-label');
@@ -2448,6 +2853,7 @@ function checkConjMC(btn, isCorrect) {
   document.querySelectorAll('#cm-options button').forEach(b => b.disabled = true);
   document.getElementById('cm-result').textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctForm}`;
   document.getElementById('cm-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  showSaveBtn('cm', !isCorrect);
   document.getElementById('cm-next-btn').style.display = 'inline-block';
 }
 
@@ -2456,6 +2862,7 @@ let csAnswered = false, csCurrent = null;
 
 function nextConjSA() {
   csAnswered = false;
+  showSaveBtn('cs', false);
   const pool = getConjPool();
   const verbs = getConjVerbs();
   const inp = document.getElementById('cs-answer');
@@ -2510,6 +2917,7 @@ function checkConjSA() {
     ? '✅ 정답입니다!'
     : `❌ 오답입니다. 정답: ${correct}`;
   document.getElementById('cs-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  showSaveBtn('cs', !isCorrect);
 
   // 항상 그룹 배지 표시
   document.getElementById('cs-verb').innerHTML = conjVerbHTML(csCurrent.verb, true);
@@ -2733,21 +3141,33 @@ function showTourPopup(id, st) {
   const scoreEl = document.getElementById('tour-popup-score');
   scoreEl.innerHTML = `결과: <span class="score-num">${correct} / ${total}</span>`;
 
+  // 오답 있을 때만 [모든 오답 저장] 표시
+  const hasWrongs = st.wrongs.length > 0;
+  document.getElementById('tour-save-all-wrap').style.display = hasWrongs ? '' : 'none';
+
+  // tourWrongSnapshot 갱신
+  tourWrongSnapshot = st.wrongs.map(w => getTourWrongCatKey(id, w)).filter(Boolean);
+
   const listEl = document.getElementById('tour-wrong-list');
   listEl.innerHTML = '';
-  st.wrongs.forEach(w => {
+  st.wrongs.forEach((w, idx) => {
+    const ck = getTourWrongCatKey(id, w);
     const div = document.createElement('div');
     div.className = 'tour-wrong-item';
     div.innerHTML = `
       <div class="tour-wrong-item-body">
         ${buildTourWrongBody(id, w)}
       </div>
-      ${id === 'dict' ? `<button class="tour-play-btn" onclick="tourPlayDict('${w.item[0]}','${w.item[1]}')">▶</button>` : ''}
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        ${id === 'dict' ? `<button class="tour-play-btn" onclick="tourPlayDict('${w.item[0]}','${w.item[1]}')">▶</button>` : ''}
+        ${ck ? `<button class="tour-item-save-btn" data-idx="${idx}" onclick="tourSaveOneWrong('${ck.catId}','${ck.itemKey}',this)">오답 저장</button>` : ''}
+      </div>
     `;
     listEl.appendChild(div);
   });
 
   document.getElementById('tour-popup-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 function buildTourWrongBody(id, w) {
@@ -2817,6 +3237,7 @@ function tourPlayDict(round, num) {
 
 function closeTourPopup() {
   document.getElementById('tour-popup-overlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 /* ── 각 퀴즈별 한바퀴 문제 세팅 함수 ── */
@@ -2953,6 +3374,772 @@ function cancelTourIfActive(id) {
     hideTourProgress(id);
   }
 }
+
+/* ═══════════════════════════════════════════════
+   오답 노트 엔진
+═══════════════════════════════════════════════ */
+
+// ── 카테고리 정의 ──
+const WRONG_CATS = [
+  { id: 'noun_reading', label: '단어 문제 — 명사', sub: '발음' },
+  { id: 'noun_meaning', label: '단어 문제 — 명사', sub: '뜻' },
+  { id: 'verb_reading', label: '단어 문제 — 동사', sub: '발음' },
+  { id: 'verb_meaning', label: '단어 문제 — 동사', sub: '뜻' },
+  { id: 'kanji_mc',     label: '단어 문제 — 한자', sub: '객관식' },
+  { id: 'kanji_sa',     label: '단어 문제 — 한자', sub: '주관식' },
+  { id: 'cg',           label: '동사 변형',         sub: '문법' },
+  { id: 'cm',           label: '동사 변형',         sub: '변형 (객관식)' },
+  { id: 'cs',           label: '동사 변형',         sub: '변형 (주관식)' },
+  { id: 'dict',         label: '받아쓰기',          sub: '' },
+];
+
+// ── localStorage 헬퍼 ──
+function wlsKey(catId, itemKey) { return `wc_${catId}__${itemKey}`; }
+function wlsRevKey(catId, itemKey) { return `wr_${catId}__${itemKey}`; }
+
+function getWrongCount(catId, itemKey) {
+  return parseInt(localStorage.getItem(wlsKey(catId, itemKey)) || '0', 10);
+}
+function setWrongCount(catId, itemKey, n) {
+  if (n <= 0) {
+    localStorage.removeItem(wlsKey(catId, itemKey));
+    localStorage.removeItem(wlsRevKey(catId, itemKey));
+  } else {
+    localStorage.setItem(wlsKey(catId, itemKey), String(n));
+  }
+}
+function incWrongCount(catId, itemKey) {
+  setWrongCount(catId, itemKey, getWrongCount(catId, itemKey) + 1);
+}
+function getReviewCorrect(catId, itemKey) {
+  return parseInt(localStorage.getItem(wlsRevKey(catId, itemKey)) || '0', 10);
+}
+function incReviewCorrect(catId, itemKey) {
+  const cur = getReviewCorrect(catId, itemKey);
+  const next = cur + 1;
+  if (next >= 3) {
+    // 3회 정답 → 오답횟수 1 차감, 카운터 리셋
+    const wc = getWrongCount(catId, itemKey);
+    setWrongCount(catId, itemKey, wc - 1);
+    return true; // 차감 발생
+  } else {
+    localStorage.setItem(wlsRevKey(catId, itemKey), String(next));
+    return false;
+  }
+}
+
+// ── 퀴즈 카테고리 → catId + itemKey 매핑 ──
+function getWrongKey(quizId) {
+  switch (quizId) {
+    case 'noun':     return { catId: nounMode === 'reading' ? 'noun_reading' : 'noun_meaning', itemKey: nounCurrent ? nounCurrent[0] : null };
+    case 'verb':     return { catId: verbMode === 'reading' ? 'verb_reading' : 'verb_meaning', itemKey: verbCurrent ? verbCurrent[0] : null };
+    case 'kanji-mc': return { catId: 'kanji_mc', itemKey: current ? current[0] : null };
+    case 'kanji-sa': return { catId: 'kanji_sa', itemKey: current ? current[0] : null };
+    case 'cg':       return { catId: 'cg', itemKey: cgCurrent ? `${cgCurrent.verb.word}×${cgCurrent.typeObj.id}` : null };
+    case 'cm':       return { catId: 'cm', itemKey: cmCurrent ? `${cmCurrent.verb.word}×${cmCurrent.typeObj.id}` : null };
+    case 'cs':       return { catId: 'cs', itemKey: csCurrent ? `${csCurrent.verb.word}×${csCurrent.typeObj.id}` : null };
+    case 'dict':     return { catId: 'dict', itemKey: dictCurrent ? `${dictCurrent[0]}_${dictCurrent[1]}` : null };
+    default: return null;
+  }
+}
+
+// ── 오답 저장 버튼 표시/숨김 ──
+const QUIZ_SAVE_MAP = {
+  'noun': 'noun-save-btn', 'verb': 'verb-save-btn',
+  'kanji-mc': 'mc-save-btn', 'kanji-sa': 'sa-save-btn',
+  'cg': 'cg-save-btn', 'cm': 'cm-save-btn', 'cs': 'cs-save-btn',
+  'dict': 'dict-save-btn'
+};
+function showSaveBtn(quizId, show) {
+  const btn = document.getElementById(QUIZ_SAVE_MAP[quizId]);
+  if (!btn) return;
+  btn.style.display = show ? 'inline-block' : 'none';
+  btn.classList.remove('saved');
+  btn.textContent = '오답 저장';
+}
+
+// ── 오답 저장 ──
+function saveWrong(quizId) {
+  const k = getWrongKey(quizId);
+  if (!k || !k.itemKey) return;
+  incWrongCount(k.catId, k.itemKey);
+  const btn = document.getElementById(QUIZ_SAVE_MAP[quizId]);
+  if (btn) { btn.classList.add('saved'); btn.textContent = '저장됨'; }
+  refreshWrongBadges();
+}
+
+// ── 한바퀴 팝업 오답 저장 ──
+let tourWrongSnapshot = []; // [{catId, itemKey}]
+
+function tourSaveOneWrong(catId, itemKey, btn) {
+  incWrongCount(catId, itemKey);
+  btn.classList.add('saved');
+  btn.textContent = '저장됨';
+  refreshWrongBadges();
+}
+
+function tourSaveAllWrongs() {
+  tourWrongSnapshot.forEach(w => {
+    if (getWrongCount(w.catId, w.itemKey) === 0 || true) {
+      incWrongCount(w.catId, w.itemKey);
+    }
+  });
+  // 개별 버튼 모두 저장됨으로 표시
+  document.querySelectorAll('.tour-item-save-btn').forEach(b => {
+    b.classList.add('saved'); b.textContent = '저장됨';
+  });
+  refreshWrongBadges();
+}
+
+// ── 한바퀴 팝업 오답 항목 catId/itemKey 계산 ──
+function getTourWrongCatKey(tourId, w) {
+  const item = w.item;
+  switch (tourId) {
+    case 'noun':     return { catId: nounMode === 'reading' ? 'noun_reading' : 'noun_meaning', itemKey: item[0] };
+    case 'verb':     return { catId: verbMode === 'reading' ? 'verb_reading' : 'verb_meaning', itemKey: item[0] };
+    case 'kanji-mc': return { catId: 'kanji_mc', itemKey: item[0] };
+    case 'kanji-sa': return { catId: 'kanji_sa', itemKey: item[0] };
+    case 'cg':       return { catId: 'cg', itemKey: `${item.verb.word}×${item.typeObj.id}` };
+    case 'cm':       return { catId: 'cm', itemKey: `${item.verb.word}×${item.typeObj.id}` };
+    case 'cs':       return { catId: 'cs', itemKey: `${item.verb.word}×${item.typeObj.id}` };
+    case 'dict':     return { catId: 'dict', itemKey: `${item[0]}_${item[1]}` };
+    default: return null;
+  }
+}
+
+/* ═══ 오답 노트 메인 페이지 ═══ */
+let currentWrongCat = null; // 현재 열린 상세 catId
+
+function getWrongItems(catId) {
+  const prefix = `wc_${catId}__`;
+  const result = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith(prefix)) {
+      const itemKey = key.slice(prefix.length);
+      const count = parseInt(localStorage.getItem(key), 10);
+      if (count > 0) result.push({ itemKey, count });
+    }
+  }
+  return result;
+}
+
+function getWrongTotal(catId) {
+  return getWrongItems(catId).length;
+}
+
+function buildWrongMainPage() {
+  const list = document.getElementById('wrong-cat-list');
+  list.innerHTML = '';
+  WRONG_CATS.forEach(cat => {
+    const total = getWrongTotal(cat.id);
+    const div = document.createElement('div');
+    div.className = 'wrong-cat-item' + (total === 0 ? ' disabled' : '');
+    div.innerHTML = `
+      <div style="display:flex;align-items:baseline;gap:4px;flex:1;min-width:0;">
+        <span class="wrong-cat-name">${cat.label}</span>${cat.sub ? `<span class="wrong-cat-sub">${cat.sub}</span>` : ''}
+      </div>
+      <div class="wrong-count-badge">${total}</div>`;
+    if (total > 0) div.onclick = () => openWrongDetail(cat.id);
+    list.appendChild(div);
+  });
+}
+
+function refreshWrongBadges() {
+  // 메인 페이지가 열려있으면 재빌드
+  if (document.getElementById('wrong').classList.contains('active')) buildWrongMainPage();
+  // 상세 페이지 열려있으면 재렌더
+  if (document.getElementById('wrong-detail').classList.contains('active') && currentWrongCat) {
+    buildWrongDetailPage(currentWrongCat);
+  }
+}
+
+function showWrongMain() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('wrong').classList.add('active');
+  _setNavActive('wrong');
+  buildWrongMainPage();
+}
+
+/* ═══ 오답 상세 페이지 ═══ */
+let wrongDeleteMode = false;
+// 삭제모드 중 임시 카운트 {itemKey: count}
+let wrongDeleteCounts = {};
+
+function openWrongDetail(catId) {
+  currentWrongCat = catId;
+  wrongDeleteMode = false;
+  wrongDeleteCounts = {};
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('wrong-detail').classList.add('active');
+  _setNavActive('wrong');
+  _applyDeleteModeUI();
+  buildWrongDetailPage(catId);
+}
+
+function _applyDeleteModeUI() {
+  const trashBtn = document.getElementById('wrong-delete-btn');
+  const reviewBtn = document.getElementById('wrong-review-start-btn');
+  if (!trashBtn || !reviewBtn) return;
+  if (wrongDeleteMode) {
+    trashBtn.classList.add('active');
+    reviewBtn.textContent = '전체 삭제';
+    reviewBtn.className = 'wrong-deleteall-btn';
+    reviewBtn.id = 'wrong-review-start-btn';
+    reviewBtn.onclick = deleteAllWrongs;
+  } else {
+    trashBtn.classList.remove('active');
+    reviewBtn.textContent = '복습하기';
+    reviewBtn.className = 'wrong-review-btn';
+    reviewBtn.id = 'wrong-review-start-btn';
+    reviewBtn.onclick = startReview;
+  }
+}
+
+function toggleDeleteMode() {
+  if (wrongDeleteMode) {
+    // 저장 확정: wrongDeleteCounts → localStorage 반영
+    Object.entries(wrongDeleteCounts).forEach(([itemKey, count]) => {
+      setWrongCount(currentWrongCat, itemKey, count);
+    });
+    wrongDeleteMode = false;
+    wrongDeleteCounts = {};
+  } else {
+    // 삭제 모드 진입: 현재 카운트 복사
+    wrongDeleteMode = true;
+    getWrongItems(currentWrongCat).forEach(({ itemKey, count }) => {
+      wrongDeleteCounts[itemKey] = count;
+    });
+  }
+  _applyDeleteModeUI();
+  buildWrongDetailPage(currentWrongCat);
+  refreshWrongBadges();
+}
+
+function deleteAllWrongs() {
+  if (!currentWrongCat) return;
+  // 모든 오답 횟수 0으로
+  getWrongItems(currentWrongCat).forEach(({ itemKey }) => {
+    setWrongCount(currentWrongCat, itemKey, 0);
+  });
+  wrongDeleteMode = false;
+  wrongDeleteCounts = {};
+  _applyDeleteModeUI();
+  buildWrongDetailPage(currentWrongCat);
+  refreshWrongBadges();
+}
+
+function adjustWrongCount(itemKey, delta) {
+  const original = getWrongCount(currentWrongCat, itemKey);
+  const cur = wrongDeleteCounts[itemKey] ?? original;
+  const next = Math.max(0, Math.min(original, cur + delta));
+  wrongDeleteCounts[itemKey] = next;
+  // 카드 내 숫자와 버튼 상태만 업데이트 (전체 재렌더 없이)
+  const card = document.querySelector(`.wrong-item-card[data-item-key="${CSS.escape(itemKey)}"]`);
+  if (!card) return;
+  const numEl = card.querySelector('.wrong-count-num');
+  if (numEl) numEl.textContent = next;
+  const minusBtn = card.querySelector('.wrong-ctrl-minus');
+  const plusBtn = card.querySelector('.wrong-ctrl-plus');
+  if (minusBtn) minusBtn.disabled = next <= 0;
+  if (plusBtn) plusBtn.disabled = next >= original;
+}
+
+function buildWrongDetailPage(catId) {
+  const cat = WRONG_CATS.find(c => c.id === catId);
+  document.getElementById('wrong-detail-title').textContent = cat.label + (cat.sub ? ` — ${cat.sub}` : '');
+  const items = getWrongItems(catId);
+  const list = document.getElementById('wrong-item-list');
+  list.innerHTML = '';
+  if (!items.length) {
+    list.innerHTML = '<div style="text-align:center;color:#aaa;padding:32px;">오답 데이터가 없습니다.</div>';
+    return;
+  }
+  items.forEach(({ itemKey, count }) => {
+    const displayCount = wrongDeleteMode ? (wrongDeleteCounts[itemKey] ?? count) : count;
+    const div = document.createElement('div');
+    div.className = 'wrong-item-card';
+    div.dataset.itemKey = itemKey;
+    div.innerHTML = buildWrongItemHTML(catId, itemKey, displayCount, count);
+    list.appendChild(div);
+  });
+}
+
+function buildWrongItemHTML(catId, itemKey, count, originalCount) {
+  const orig = originalCount ?? count;
+  const ik = itemKey.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const ctrl = wrongDeleteMode ? `
+    <div class="wrong-count-ctrl">
+      <button class="wrong-count-ctrl-btn wrong-ctrl-minus" onclick="adjustWrongCount('${ik}',-1)"${count <= 0 ? ' disabled' : ''}>
+        <img src="img/minus.png" alt="-">
+      </button>
+      <span class="wrong-count-num">${count}</span>
+      <button class="wrong-count-ctrl-btn wrong-ctrl-plus" onclick="adjustWrongCount('${ik}',1)"${count >= orig ? ' disabled' : ''}>
+        <img src="img/plus.png" alt="+">
+      </button>
+    </div>` : `<div class="wrong-item-badge">${count}</div>`;
+  let body = '';
+  switch (catId) {
+    case 'noun_reading':
+    case 'noun_meaning': {
+      const d = noundataset.find(x => x[0] === itemKey);
+      if (!d) { body = `<div class="wrong-item-body"><div class="wrong-item-word">${itemKey}</div></div>`; break; }
+      const sameAsWord = d[0] === d[1];
+      body = `<div class="wrong-item-body">
+        <div class="wrong-item-word">${d[0]}${sameAsWord ? '' : `<span class="wrong-item-reading">${d[1]}</span>`}</div>
+        <div class="wrong-item-detail">${d[2]}</div>
+      </div>`;
+      break;
+    }
+    case 'verb_reading':
+    case 'verb_meaning': {
+      const d = verbdataset.find(x => x[0] === itemKey);
+      if (!d) { body = `<div class="wrong-item-body"><div class="wrong-item-word">${itemKey}</div></div>`; break; }
+      const sameAsWord = d[0] === d[1];
+      body = `<div class="wrong-item-body">
+        <div class="wrong-item-word">${d[0]}${sameAsWord ? '' : `<span class="wrong-item-reading">${d[1]}</span>`}</div>
+        <div class="wrong-item-detail">${d[2]}</div>
+      </div>`;
+      break;
+    }
+    case 'kanji_mc':
+    case 'kanji_sa': {
+      const d = kanjidataset.find(x => x[0] === itemKey);
+      if (!d) { body = `<div class="wrong-item-body"><div class="wrong-item-word">${itemKey}</div></div>`; break; }
+      body = `<div class="wrong-item-body">
+        <div class="wrong-item-word">${d[0]} <span class="wrong-item-reading">${d[1]}</span></div>
+        <div class="wrong-item-detail" style="font-size:12px;">${d[6].replace(/\n/g,' · ')}</div>
+      </div>`;
+      break;
+    }
+    case 'cg': case 'cm': case 'cs': {
+      const [word, typeId] = itemKey.split('×');
+      const v = conjVerbs.find(x => x.word === word);
+      const t = conjTypes.find(x => x.id === typeId);
+      if (!v || !t) { body = `<div class="wrong-item-body"><div class="wrong-item-word">${itemKey}</div></div>`; break; }
+      const correct = catId === 'cg'
+        ? `${t.label} — ${t.meaning}`
+        : v.forms[t.id];
+      body = `<div class="wrong-item-body">
+        <div class="wrong-item-word">${v.word} <span class="wrong-item-reading">${v.reading}</span> <span class="wrong-item-meaning">${v.meaning}</span></div>
+        <div class="wrong-item-detail">
+          <span style="background:#4f8ef7;color:#fff;padding:1px 8px;border-radius:999px;font-size:12px;">${t.label}</span>
+          ${t.meaning}${catId !== 'cg' ? ` → <strong>${correct}</strong>` : ''}
+        </div>
+      </div>`;
+      break;
+    }
+    case 'dict': {
+      const [round, num] = itemKey.split('_');
+      const d = dictationdataset.find(x => x[0] === round && x[1] === num);
+      const playBtn = `<button class="wrong-item-play" onclick="wrongPlayDict('${round}','${num}')">▶</button>`;
+      body = `<div class="wrong-item-body">
+        <div style="font-size:12px;color:#aaa;margin-bottom:4px;">${round}회차 ${num}번</div>
+        ${d ? `<div class="wrong-item-word">${d[2]}</div>` : '<div class="wrong-item-word" style="color:#aaa;">?</div>'}
+      </div>${playBtn}`;
+      break;
+    }
+  }
+  return `${body}${ctrl}`;
+}
+
+function wrongPlayDict(round, num) {
+  const path = `받아쓰기/${round}/${round}_${num}.mp3`;
+  new Audio(path).play().catch(() => {});
+}
+
+/* ═══ 복습하기 ═══ */
+let reviewCatId = null;
+let reviewCurrentItem = null; // {catId, itemKey}
+let reviewCorrectCount = 0;   // 현재 문제 정답 누적
+
+function startReview() {
+  reviewCatId = currentWrongCat;
+  const items = getWrongItems(reviewCatId);
+  if (!items.length) return;
+  document.getElementById('review-title').textContent =
+    (() => { const c = WRONG_CATS.find(x => x.id === reviewCatId); return c.label + (c.sub ? ` — ${c.sub}` : ''); })();
+  document.getElementById('review-overlay').classList.add('open');
+  reviewNextQuestion();
+}
+
+function closeReview() {
+  document.getElementById('review-overlay').classList.remove('open');
+  reviewCurrentItem = null;
+  reviewCorrectCount = 0;
+  // 상세 페이지 갱신
+  if (currentWrongCat) buildWrongDetailPage(currentWrongCat);
+}
+
+function reviewNextQuestion() {
+  const items = getWrongItems(reviewCatId);
+  if (!items.length) { closeReview(); return; }
+  // 랜덤 선택
+  const w = items[Math.floor(Math.random() * items.length)];
+  reviewCurrentItem = { catId: reviewCatId, itemKey: w.itemKey };
+  reviewCorrectCount = getReviewCorrect(reviewCatId, w.itemKey);
+  updateReviewDots();
+  updateReviewProgress();
+  renderReviewQuestion();
+}
+
+function updateReviewDots() {
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById(`rdot-${i}`);
+    if (dot) dot.classList.toggle('filled', i < reviewCorrectCount);
+  }
+}
+
+function updateReviewProgress() {
+  const items = getWrongItems(reviewCatId);
+  document.getElementById('review-progress-text').textContent = `${items.length}개 남음`;
+}
+
+function renderReviewQuestion() {
+  const area = document.getElementById('review-card-area');
+  area.innerHTML = '';
+  const catId = reviewCurrentItem.catId;
+  const itemKey = reviewCurrentItem.itemKey;
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  switch (catId) {
+    case 'noun_reading': case 'noun_meaning': {
+      const d = noundataset.find(x => x[0] === itemKey);
+      if (!d) { reviewNextQuestion(); return; }
+      const isReading = catId === 'noun_reading';
+      card.innerHTML = `
+        <div class="question-label">${isReading ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
+        <div class="question" id="rv-question">${d[0]}</div>
+        <div class="sa-input-row">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <button onclick="submitReview()">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div class="noun-desc" id="rv-desc" style="display:none;"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      document.getElementById('rv-answer').addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitReview();
+        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+      });
+      document.getElementById('rv-answer').focus({ preventScroll: true });
+      // checkFn 등록
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        const isCorrect = isReading ? input === d[1] : (input.length > 0 && d[2].includes(input));
+        return { isCorrect, correct: isReading ? d[1] : d[2], descHTML: buildWordDesc(d) };
+      };
+      break;
+    }
+    case 'verb_reading': case 'verb_meaning': {
+      const d = verbdataset.find(x => x[0] === itemKey);
+      if (!d) { reviewNextQuestion(); return; }
+      const isReading = catId === 'verb_reading';
+      card.innerHTML = `
+        <div class="question-label">${isReading ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
+        <div class="question" id="rv-question">${d[0]}</div>
+        <div class="sa-input-row">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <button onclick="submitReview()">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div class="noun-desc" id="rv-desc" style="display:none;"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      document.getElementById('rv-answer').addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitReview();
+        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+      });
+      document.getElementById('rv-answer').focus({ preventScroll: true });
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        const isCorrect = isReading ? input === d[1] : (input.length > 0 && d[2].includes(input));
+        return { isCorrect, correct: isReading ? d[1] : d[2], descHTML: buildWordDesc(d) };
+      };
+      break;
+    }
+    case 'kanji_mc': {
+      const d = kanjidataset.find(x => x[0] === itemKey);
+      if (!d) { reviewNextQuestion(); return; }
+      const choices = shuffle([d[1], d[3], d[4], d[5]]);
+      card.innerHTML = `
+        <div class="question-label">다음 한자의 음을 고르세요</div>
+        <div class="question" id="rv-question">${d[0]}</div>
+        <div class="options" id="rv-options"></div>
+        <div class="result" id="rv-result"></div>
+        <div class="description" id="rv-desc" style="display:none;"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      document.getElementById('rv-options').innerHTML = choices.map(ch =>
+        `<button onclick="submitReviewMC(this,'${ch}','${d[1]}')">${ch}</button>`).join('');
+      reviewCheckFn = null;
+      break;
+    }
+    case 'kanji_sa': {
+      const d = kanjidataset.find(x => x[0] === itemKey);
+      if (!d) { reviewNextQuestion(); return; }
+      card.innerHTML = `
+        <div class="question-label">다음 한자의 음을 입력하세요</div>
+        <div class="question" id="rv-question">${d[0]}</div>
+        <div class="sa-input-row">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <button onclick="submitReview()">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div class="description" id="rv-desc" style="display:none;"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      document.getElementById('rv-answer').addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitReview();
+        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+      });
+      document.getElementById('rv-answer').focus({ preventScroll: true });
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        const isCorrect = input === d[1] || (d[2] && input === d[2]);
+        return { isCorrect, correct: d[1], descHTML: d[6].replace(/\n/g,' · ') };
+      };
+      break;
+    }
+    case 'cg': {
+      const [word, typeId] = itemKey.split('×');
+      const v = conjVerbs.find(x => x.word === word);
+      const t = conjTypes.find(x => x.id === typeId);
+      if (!v || !t) { reviewNextQuestion(); return; }
+      const wrongTypes = t.wrong.map(wid => conjTypes.find(x => x.id === wid)).filter(Boolean);
+      const choices = shuffle([t, ...wrongTypes]);
+      card.innerHTML = `
+        <div class="question-label">변형의 종류를 고르세요</div>
+        <div class="conj-verb-display">${conjVerbHTML(v)}</div>
+        <div class="conj-form-display"><span class="conj-form-word">${v.forms[t.id]}</span></div>
+        <div class="conj-options" id="rv-options"></div>
+        <div class="result" id="rv-result"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      const opts = document.getElementById('rv-options');
+      choices.forEach(ct => {
+        const b = document.createElement('button');
+        b.dataset.typeId = ct.id;
+        b.innerHTML = `<strong>${ct.label}</strong><br><span style="font-size:12px;font-weight:400">${ct.meaning}</span>`;
+        b.onclick = () => submitReviewConjGrammar(b, ct.id, t.id, `${t.label} — ${t.meaning}`);
+        opts.appendChild(b);
+      });
+      reviewCheckFn = null;
+      break;
+    }
+    case 'cm': {
+      const [word, typeId] = itemKey.split('×');
+      const v = conjVerbs.find(x => x.word === word);
+      const t = conjTypes.find(x => x.id === typeId);
+      if (!v || !t) { reviewNextQuestion(); return; }
+      const correctForm = v.forms[t.id];
+      const wrongForms = t.wrong.map(wid => v.forms[wid]).filter(f => f && f !== correctForm);
+      const choices = shuffle([{form: correctForm, correct: true}, ...wrongForms.map(f => ({form: f, correct: false}))]).slice(0,4);
+      card.innerHTML = `
+        <div class="question-label">올바른 변형 형태를 고르세요</div>
+        <div class="conj-verb-display">${conjVerbHTML(v)}</div>
+        <div class="conj-form-display"><span class="conj-type-badge">${t.label}</span><span class="conj-type-meaning">${t.meaning}</span></div>
+        <div class="conj-options" id="rv-options"></div>
+        <div class="result" id="rv-result"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      const opts = document.getElementById('rv-options');
+      choices.forEach(ch => {
+        const b = document.createElement('button'); b.textContent = ch.form;
+        b.onclick = () => submitReviewMCSimple(b, ch.correct, correctForm);
+        opts.appendChild(b);
+      });
+      reviewCheckFn = null;
+      break;
+    }
+    case 'cs': {
+      const [word, typeId] = itemKey.split('×');
+      const v = conjVerbs.find(x => x.word === word);
+      const t = conjTypes.find(x => x.id === typeId);
+      if (!v || !t) { reviewNextQuestion(); return; }
+      card.innerHTML = `
+        <div class="question-label">올바른 변형 형태를 히라가나로 입력하세요</div>
+        <div class="conj-verb-display">${conjVerbHTML(v)}</div>
+        <div class="conj-form-display"><span class="conj-type-badge">${t.label}</span><span class="conj-type-meaning">${t.meaning}</span></div>
+        <div class="sa-input-row">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <button onclick="submitReview()">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      document.getElementById('rv-answer').addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitReview();
+        if (e.key === 'ArrowRight' && document.getElementById('rv-next-btn').style.display !== 'none') reviewNextQuestion();
+      });
+      document.getElementById('rv-answer').focus({ preventScroll: true });
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        return { isCorrect: input === v.forms[t.id], correct: v.forms[t.id], descHTML: null };
+      };
+      break;
+    }
+    case 'dict': {
+      const [round, num] = itemKey.split('_');
+      const d = dictationdataset.find(x => x[0] === round && x[1] === num);
+      card.innerHTML = `
+        <div class="dict-notice" style="font-size:13px;color:#888;text-align:center;margin-bottom:14px;">
+          다음 음성의 발음을 입력하세요.<br>히라가나로만, 띄어쓰기·문장부호 없음
+        </div>
+        <div class="dict-player-row">
+          <button class="dict-play-btn" onclick="rvPlayDict('${round}','${num}')">▶ 다시 듣기</button>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px;">
+          <textarea id="rv-answer" placeholder="히라가나 입력" rows="2"
+            style="width:100%;max-width:460px;padding:12px 16px;font-size:18px;font-family:inherit;
+                   border:2px solid #dde3ef;border-radius:10px;outline:none;resize:none;
+                   text-align:center;transition:border-color .15s;line-height:1.6;overflow:hidden;"
+            oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
+            onfocus="this.style.borderColor='#4f8ef7';" onblur="this.style.borderColor='#dde3ef';"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault(); if(reviewAnswered){reviewNextQuestion();}else{submitReview();}}"></textarea>
+          <button onclick="submitReview()" style="padding:11px 32px;font-size:15px;font-family:inherit;font-weight:700;border:none;background:#4f8ef7;color:#fff;border-radius:10px;cursor:pointer;">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      // 자동 재생
+      setTimeout(() => rvPlayDict(round, num), 300);
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        return { isCorrect: d && input === d[2], correct: d ? d[2] : '?', descHTML: null };
+      };
+      break;
+    }
+  }
+}
+
+let reviewCheckFn = null;
+let reviewAnswered = false;
+
+function submitReview() {
+  if (reviewAnswered || !reviewCheckFn) return;
+  reviewAnswered = true;
+  const { isCorrect, correct, descHTML } = reviewCheckFn();
+  const inp = document.getElementById('rv-answer');
+  if (inp) inp.style.color = '#aaa';
+  const resEl = document.getElementById('rv-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
+  resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  if (descHTML) {
+    const desc = document.getElementById('rv-desc');
+    if (desc) { desc.innerHTML = descHTML; desc.style.display = 'block'; }
+  }
+  document.getElementById('rv-next-btn').style.display = 'inline-block';
+  if (isCorrect) handleReviewCorrect();
+}
+
+function submitReviewMC(btn, choice, correct) {
+  if (reviewAnswered) return;
+  reviewAnswered = true;
+  const isCorrect = choice === correct;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) document.querySelectorAll('#rv-options button').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+  document.querySelectorAll('#rv-options button').forEach(b => b.disabled = true);
+  const resEl = document.getElementById('rv-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
+  resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  showDescription(document.getElementById('rv-desc'), kanjidataset.find(x => x[1] === correct || x[0] === reviewCurrentItem.itemKey)?.[6]);
+  document.getElementById('rv-next-btn').style.display = 'inline-block';
+  if (isCorrect) handleReviewCorrect();
+}
+
+function submitReviewMCSimple(btn, isCorrect, correctForm) {
+  if (reviewAnswered) return;
+  reviewAnswered = true;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) document.querySelectorAll('#rv-options button').forEach(b => { if (b.textContent === correctForm) b.classList.add('correct'); });
+  document.querySelectorAll('#rv-options button').forEach(b => b.disabled = true);
+  const resEl = document.getElementById('rv-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctForm}`;
+  resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  document.getElementById('rv-next-btn').style.display = 'inline-block';
+  if (isCorrect) handleReviewCorrect();
+}
+
+function submitReviewConjGrammar(btn, chosenId, correctId, correctLabel) {
+  if (reviewAnswered) return;
+  reviewAnswered = true;
+  const isCorrect = chosenId === correctId;
+  document.querySelectorAll('#rv-options button').forEach(b => { b.disabled = true; if (b.dataset.typeId === correctId) b.classList.add('correct'); });
+  if (!isCorrect) btn.classList.add('wrong');
+  const resEl = document.getElementById('rv-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctLabel}`;
+  resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+  document.getElementById('rv-next-btn').style.display = 'inline-block';
+  if (isCorrect) handleReviewCorrect();
+}
+
+function handleReviewCorrect() {
+  const { catId, itemKey } = reviewCurrentItem;
+  const deducted = incReviewCorrect(catId, itemKey);
+  reviewCorrectCount = getReviewCorrect(catId, itemKey);
+  if (deducted) reviewCorrectCount = 0;
+  updateReviewDots();
+  if (deducted) {
+    // 오답 횟수 차감됨
+    updateReviewProgress();
+    buildWrongDetailPage(catId);
+  }
+}
+
+// 다음 문제로 넘어갈 때 answered 리셋
+const _origReviewNext = reviewNextQuestion;
+reviewNextQuestion = function() {
+  reviewAnswered = false;
+  reviewCheckFn = null;
+  _origReviewNext();
+};
+
+function rvPlayDict(round, num) {
+  const path = `받아쓰기/${round}/${round}_${num}.mp3`;
+  new Audio(path).play().catch(() => {});
+}
+
+// ── 복습하기 키보드 핸들러 ──
+document.addEventListener('keydown', function(e) {
+  const overlay = document.getElementById('review-overlay');
+  if (!overlay || !overlay.classList.contains('open')) return;
+
+  const tag = document.activeElement ? document.activeElement.tagName : '';
+  const isInput = tag === 'INPUT' || tag === 'TEXTAREA';
+
+  const nextBtn = document.getElementById('rv-next-btn');
+  const nextVisible = nextBtn && nextBtn.style.display !== 'none';
+
+  // → 는 항상 다음 문제 (input 여부 무관)
+  if (e.code === 'ArrowRight' && nextVisible) {
+    e.preventDefault();
+    reviewNextQuestion();
+    return;
+  }
+
+  // Enter: 입력 중이 아닐 때, 또는 입력 중이더라도 이미 answered면 다음 문제
+  if (e.code === 'Enter') {
+    if (nextVisible && (!isInput || reviewAnswered)) {
+      e.preventDefault();
+      reviewNextQuestion();
+      return;
+    }
+    // 주관식 입력 중 + 미제출: submitReview (input의 자체 핸들러가 처리하므로 여기선 패스)
+    return;
+  }
+
+  // 숫자키 1~4: 객관식 선택 (미제출 상태에서만)
+  if (!isInput && !nextVisible) {
+    const numMatch = e.code.match(/^(?:Digit|Numpad)([1-4])$/);
+    if (numMatch) {
+      const idx = parseInt(numMatch[1]) - 1;
+      const opts = document.querySelectorAll('#rv-options button');
+      if (opts[idx] && !opts[idx].disabled) opts[idx].click();
+    }
+  }
+});
 
 /* ═══ INIT ═══ */
 buildKanjiLevelGrid();

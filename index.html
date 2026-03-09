@@ -354,6 +354,33 @@
     }
     /* ── CONJ CATEGORY BOX ── */
     #conj-type-box { overflow: visible; }
+    .conj-group-btns {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .conj-group-btn {
+      flex: 1;
+      padding: 8px 0;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 999px;
+      border: 2px solid #ccd3df;
+      background: #f0f2f5;
+      color: #666;
+      cursor: pointer;
+      transition: background .18s, border-color .18s, color .18s;
+    }
+    .conj-group-btn.active {
+      background: #4f8ef7;
+      border-color: #4f8ef7;
+      color: #fff;
+    }
     .conj-cat-tabs {
       display: flex;
       justify-content: center;
@@ -448,8 +475,32 @@
 
     /* ── CONJ QUESTION ── */
     .conj-verb-display {
-      margin: 4px 0 6px;      /* 1번: 간격 축소 */
+      margin: 4px 0 6px;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .conj-group-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .conj-group-badge-placeholder {
+      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      visibility: hidden;
     }
     .conj-verb-word {
       font-size: 32px;
@@ -1012,7 +1063,13 @@
 
   <!-- 유형 선택 박스 (세 퀴즈 공유) -->
   <div class="card level-section" id="conj-type-box" style="padding-bottom: 32px;">
-    <h3>유형 선택</h3>
+    <h3>그룹 선택</h3>
+    <div class="conj-group-btns" id="conj-group-btns">
+      <button class="conj-group-btn active" data-group="1" onclick="toggleConjGroup(1, this)">1그룹</button>
+      <button class="conj-group-btn active" data-group="2" onclick="toggleConjGroup(2, this)">2그룹</button>
+      <button class="conj-group-btn active" data-group="3" onclick="toggleConjGroup(3, this)">3그룹</button>
+    </div>
+    <h3 style="margin-top:16px;">유형 선택</h3>
     <div class="conj-cat-tabs" id="conj-cat-tabs"></div>
   </div>
 
@@ -1391,12 +1448,12 @@ function checkNounAnswer() {
     correctDisplay = nounCurrent[2];
   }
 
+  const st = getTourState('noun');
+  if (st.active) { tourSubmit('noun', isCorrect, input, correctDisplay, nounCurrent); return; }
+
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctDisplay}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('noun-answer').style.color = '#aaa';
-
-  const st = getTourState('noun');
-  if (st.active) { tourSubmit('noun', isCorrect, input, correctDisplay, nounCurrent); return; }
 
   // 단어 정보 공개
   descEl.innerHTML = buildWordDesc(nounCurrent);
@@ -1405,6 +1462,7 @@ function checkNounAnswer() {
 }
 
 function submitNoun() {
+  if (tourBlocked) return;
   if (!nounAnswered) checkNounAnswer();
   else nextNounQuestion();
 }
@@ -1483,12 +1541,12 @@ function checkVerbAnswer() {
     correctDisplay = verbCurrent[2];
   }
 
+  const st = getTourState('verb');
+  if (st.active) { tourSubmit('verb', isCorrect, input, correctDisplay, verbCurrent); return; }
+
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correctDisplay}`;
   resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
   document.getElementById('verb-answer').style.color = '#aaa';
-
-  const st = getTourState('verb');
-  if (st.active) { tourSubmit('verb', isCorrect, input, correctDisplay, verbCurrent); return; }
 
   descEl.innerHTML = buildWordDesc(verbCurrent);
   descEl.style.display = 'block';
@@ -1496,6 +1554,7 @@ function checkVerbAnswer() {
 }
 
 function submitVerb() {
+  if (tourBlocked) return;
   if (!verbAnswered) checkVerbAnswer();
   else nextVerbQuestion();
 }
@@ -1630,6 +1689,7 @@ function checkSAAnswer() {
 }
 
 function submitSA() {
+  if (tourBlocked) return;
   if (!kanjianswered) checkSAAnswer();
   else nextSAQuestion();
 }
@@ -1641,9 +1701,11 @@ document.addEventListener('keydown', (e) => {
     const isMC = document.getElementById('mc-container').style.display !== 'none';
     const isSA = document.getElementById('sa-container').style.display !== 'none';
     if (isMC) {
-      if (!kanjianswered && ['1','2','3','4'].includes(e.key)) {
+      const numMap = { 'Digit1':'1','Digit2':'2','Digit3':'3','Digit4':'4','Numpad1':'1','Numpad2':'2','Numpad3':'3','Numpad4':'4' };
+      const num = numMap[e.code];
+      if (!kanjianswered && num) {
         const buttons = document.querySelectorAll('#mc-options button');
-        if (buttons[+e.key - 1]) buttons[+e.key - 1].click();
+        if (buttons[+num - 1]) buttons[+num - 1].click();
       }
       if (kanjianswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextMCQuestion();
     }
@@ -1673,16 +1735,20 @@ document.addEventListener('keydown', (e) => {
       if (csAnswered && e.key === 'ArrowRight') nextConjSA();
     }
     if (conjCurrentSub === 'conj-grammar') {
-      if (!cgAnswered && ['1','2','3','4'].includes(e.key)) {
+      const numMap = { 'Digit1':'1','Digit2':'2','Digit3':'3','Digit4':'4','Numpad1':'1','Numpad2':'2','Numpad3':'3','Numpad4':'4' };
+      const num = numMap[e.code];
+      if (!cgAnswered && num) {
         const buttons = document.querySelectorAll('#cg-options button');
-        if (buttons[+e.key - 1]) buttons[+e.key - 1].click();
+        if (buttons[+num - 1]) buttons[+num - 1].click();
       }
       if (cgAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjGrammar();
     }
     if (conjCurrentSub === 'conj-mc') {
-      if (!cmAnswered && ['1','2','3','4'].includes(e.key)) {
+      const numMap = { 'Digit1':'1','Digit2':'2','Digit3':'3','Digit4':'4','Numpad1':'1','Numpad2':'2','Numpad3':'3','Numpad4':'4' };
+      const num = numMap[e.code];
+      if (!cmAnswered && num) {
         const buttons = document.querySelectorAll('#cm-options button');
-        if (buttons[+e.key - 1]) buttons[+e.key - 1].click();
+        if (buttons[+num - 1]) buttons[+num - 1].click();
       }
       if (cmAnswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextConjMC();
     }
@@ -1934,6 +2000,7 @@ function checkDictAnswer() {
 }
 
 function submitDict() {
+  if (tourBlocked) return;
   if (!dictAnswered) checkDictAnswer();
   else nextDictQuestion(false);
 }
@@ -2029,6 +2096,7 @@ function renderWordList() {
 /* ═══ 동사변형 STATE ═══ */
 let conjCurrentSub = 'conj-grammar';
 let conjSelectedTypes = new Set(); // 선택된 변형 id Set
+let conjSelectedGroups = new Set([1, 2, 3]); // 선택된 그룹 (기본: 전체)
 let conjOpenCats = new Set();          // 현재 펼쳐진 카테고리 id들
 
 // 카테고리 탭 빌드
@@ -2194,11 +2262,41 @@ function getConjPool() {
   return conjTypes.filter(t => conjSelectedTypes.has(t.id));
 }
 
-// 동사 표시 HTML 생성
-function conjVerbHTML(v) {
-  return `<span class="conj-verb-word">${v.word}</span> `
-       + `<span class="conj-verb-reading">${v.reading}</span> `
-       + `<span class="conj-verb-meaning">${v.meaning}</span>`;
+function getConjVerbs() {
+  return conjVerbs.filter(v => conjSelectedGroups.has(v.group));
+}
+
+function getConjEmptyMessage() {
+  const noGroup = conjSelectedGroups.size === 0;
+  const noType  = conjSelectedTypes.size === 0;
+  if (noGroup && noType) return '1개 이상의 그룹과 유형을 선택해주세요.';
+  if (noGroup)           return '1개 이상의 그룹을 선택해주세요.';
+  if (noType)            return '1개 이상의 유형을 선택해주세요.';
+  return null;
+}
+
+function toggleConjGroup(group, btn) {
+  if (conjSelectedGroups.has(group)) {
+    conjSelectedGroups.delete(group);
+    btn.classList.remove('active');
+  } else {
+    conjSelectedGroups.add(group);
+    btn.classList.add('active');
+  }
+  // 현재 활성 퀴즈 갱신
+  ['cg','cm','cs'].forEach(id => cancelTourIfActive(id));
+  rebuildConjUI();
+}
+
+// 동사 표시 HTML 생성 (배지 자리 placeholder 포함)
+function conjVerbHTML(v, showGroupBadge = false) {
+  const badge = showGroupBadge
+    ? `<span class="conj-group-badge">${v.group}</span>`
+    : `<span class="conj-group-badge-placeholder"></span>`;
+  const text = `<span class="conj-verb-word">${v.word}</span> `
+             + `<span class="conj-verb-reading">${v.reading}</span> `
+             + `<span class="conj-verb-meaning">${v.meaning}</span>`;
+  return badge + text;
 }
 
 /* ── 문법 퀴즈 ── */
@@ -2207,11 +2305,13 @@ let cgAnswered = false, cgCurrent = null, cgCorrectId = null;
 function nextConjGrammar() {
   cgAnswered = false;
   const pool = getConjPool();
+  const verbs = getConjVerbs();
   const labelEl = document.querySelector('#conj-grammar-box .question-label');
-  if (!pool.length) {
+  const emptyMsg = getConjEmptyMessage();
+  if (emptyMsg || !verbs.length) {
     if (labelEl) labelEl.style.display = 'none';
     document.getElementById('cg-verb').innerHTML = '';
-    document.getElementById('cg-form').innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 유형을 선택해주세요.</span>';
+    document.getElementById('cg-form').innerHTML = `<span style="color:#aaa;font-size:15px;">${emptyMsg || '1개 이상의 그룹을 선택해주세요.'}</span>`;
     document.getElementById('cg-options').innerHTML = '';
     document.getElementById('cg-result').textContent = '';
     document.getElementById('cg-next-btn').style.display = 'none';
@@ -2220,7 +2320,7 @@ function nextConjGrammar() {
   if (labelEl) labelEl.style.display = '';
 
   // 랜덤 동사 + 랜덤 변형
-  const verb = conjVerbs[Math.floor(Math.random() * conjVerbs.length)];
+  const verb = verbs[Math.floor(Math.random() * verbs.length)];
   const typeObj = pool[Math.floor(Math.random() * pool.length)];
   cgCurrent = { verb, typeObj };
   cgCorrectId = typeObj.id;
@@ -2283,11 +2383,13 @@ let cmAnswered = false, cmCurrent = null;
 function nextConjMC() {
   cmAnswered = false;
   const pool = getConjPool();
+  const verbs = getConjVerbs();
   const labelEl = document.querySelector('#conj-mc-box .question-label');
-  if (!pool.length) {
+  const emptyMsg = getConjEmptyMessage();
+  if (emptyMsg || !verbs.length) {
     if (labelEl) labelEl.style.display = 'none';
     document.getElementById('cm-verb').innerHTML = '';
-    document.getElementById('cm-form').innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 유형을 선택해주세요.</span>';
+    document.getElementById('cm-form').innerHTML = `<span style="color:#aaa;font-size:15px;">${emptyMsg || '1개 이상의 그룹을 선택해주세요.'}</span>`;
     document.getElementById('cm-options').innerHTML = '';
     document.getElementById('cm-result').textContent = '';
     document.getElementById('cm-next-btn').style.display = 'none';
@@ -2295,7 +2397,7 @@ function nextConjMC() {
   }
   if (labelEl) labelEl.style.display = '';
 
-  const verb = conjVerbs[Math.floor(Math.random() * conjVerbs.length)];
+  const verb = verbs[Math.floor(Math.random() * verbs.length)];
   const typeObj = pool[Math.floor(Math.random() * pool.length)];
   cmCurrent = { verb, typeObj };
 
@@ -2355,13 +2457,15 @@ let csAnswered = false, csCurrent = null;
 function nextConjSA() {
   csAnswered = false;
   const pool = getConjPool();
+  const verbs = getConjVerbs();
   const inp = document.getElementById('cs-answer');
   const labelEl = document.querySelector('#conj-sa-box .question-label');
+  const emptyMsg = getConjEmptyMessage();
 
-  if (!pool.length) {
+  if (emptyMsg || !verbs.length) {
     if (labelEl) labelEl.style.display = 'none';
     document.getElementById('cs-verb').innerHTML = '';
-    document.getElementById('cs-form').innerHTML = '<span style="color:#aaa;font-size:15px;">1개 이상의 유형을 선택해주세요.</span>';
+    document.getElementById('cs-form').innerHTML = `<span style="color:#aaa;font-size:15px;">${emptyMsg || '1개 이상의 그룹을 선택해주세요.'}</span>`;
     document.getElementById('cs-result').textContent = '';
     document.getElementById('cs-desc').style.display = 'none';
     document.getElementById('cs-next-btn').style.display = 'none';
@@ -2370,7 +2474,7 @@ function nextConjSA() {
   }
   if (labelEl) labelEl.style.display = '';
 
-  const verb = conjVerbs[Math.floor(Math.random() * conjVerbs.length)];
+  const verb = verbs[Math.floor(Math.random() * verbs.length)];
   const typeObj = pool[Math.floor(Math.random() * pool.length)];
   csCurrent = { verb, typeObj };
 
@@ -2406,12 +2510,15 @@ function checkConjSA() {
     ? '✅ 정답입니다!'
     : `❌ 오답입니다. 정답: ${correct}`;
   document.getElementById('cs-result').className = 'result ' + (isCorrect ? 'correct' : 'wrong');
-  document.getElementById('cs-desc').innerHTML = conjVerbHTML(csCurrent.verb);
-  document.getElementById('cs-desc').style.display = 'block';
+
+  // 항상 그룹 배지 표시
+  document.getElementById('cs-verb').innerHTML = conjVerbHTML(csCurrent.verb, true);
+
   document.getElementById('cs-next-btn').style.display = 'inline-block';
 }
 
 function submitConjSA() {
+  if (tourBlocked) return;
   if (!csAnswered) checkConjSA();
   else nextConjSA();
 }
@@ -2476,10 +2583,11 @@ function getTourPool(id) {
     case 'cg':
     case 'cm':
     case 'cs': {
-      // 동사변형: verb×type 조합 전체
+      // 동사변형: 선택된 그룹×선택된 유형 조합
       const pool = getConjPool();
+      const verbs = getConjVerbs();
       const combos = [];
-      conjVerbs.forEach(v => pool.forEach(t => combos.push({ verb: v, typeObj: t })));
+      verbs.forEach(v => pool.forEach(t => combos.push({ verb: v, typeObj: t })));
       return combos;
     }
     case 'dict':     return getDictPool();
@@ -2571,6 +2679,8 @@ function setTourQuestion(id, item) {
 }
 
 // 한바퀴 모드에서 정답/오답 처리 후 다음 문제로
+let tourBlocked = false; // 주관식 따닥 방지
+
 function tourSubmit(id, isCorrect, myAnswer, correctAnswer, item, flashEl) {
   const st = getTourState(id);
   if (!st.active) return;
@@ -2584,9 +2694,12 @@ function tourSubmit(id, isCorrect, myAnswer, correctAnswer, item, flashEl) {
   if (flashEl) {
     // 객관식: 선택한 버튼 파란색으로 잠깐 강조 후 다음 문제
     flashEl.classList.add('tour-flash');
-    setTimeout(() => tourNextQuestion(id), 500);
+    tourBlocked = true;
+    setTimeout(() => { tourBlocked = false; tourNextQuestion(id); }, 500);
   } else {
-    setTimeout(() => tourNextQuestion(id), 300);
+    // 주관식: 짧은 텀 후 다음 문제 (따닥 방지)
+    tourBlocked = true;
+    setTimeout(() => { tourBlocked = false; tourNextQuestion(id); }, 400);
   }
 }
 

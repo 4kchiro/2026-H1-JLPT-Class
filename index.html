@@ -1898,7 +1898,7 @@ function getDictPool() {
 // 오디오 재생
 function dictPlayAudio() {
   if (!dictCurrent) return;
-  const path = `받아쓰기/${dictCurrent[0]}_${dictCurrent[1]}.mp3`;
+  const path = `받아쓰기/${dictCurrent[0]}/${dictCurrent[0]}_${dictCurrent[1]}.mp3`;
   if (dictAudio) { dictAudio.pause(); dictAudio = null; }
   dictAudio = new Audio(path);
   dictAudio.playbackRate = dictSlowMode ? 0.7 : 1.0;
@@ -2810,7 +2810,7 @@ function buildTourWrongBody(id, w) {
 }
 
 function tourPlayDict(round, num) {
-  const path = `받아쓰기/${round}_${num}.mp3`;
+  const path = `받아쓰기/${round}/${round}_${num}.mp3`;
   const audio = new Audio(path);
   audio.play().catch(() => {});
 }

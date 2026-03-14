@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
   <title>치로 일본어 JLPT N3 대비</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -81,6 +82,7 @@
       padding: 28px 24px;
       box-shadow: 0 2px 16px rgba(0,0,0,.06);
       margin-bottom: 18px;
+      position: relative;
     }
 
     /* ── HOW TO PAGE ── */
@@ -171,6 +173,14 @@
       gap: 8px;
       justify-content: center;
     }
+    .level-grid.level-grid-8 {
+      grid-template-columns: repeat(8, 44px);
+    }
+    .level-grid.level-grid-8 button {
+      width: 44px;
+      height: 44px;
+      font-size: 14px;
+    }
     .level-grid button {
       width: 48px;
       height: 48px;
@@ -210,6 +220,7 @@
       font-size: 14px;
       color: #888;
       margin-bottom: 4px;
+      text-align: center;
     }
 
     /* ── MC OPTIONS ── */
@@ -405,6 +416,8 @@
       align-items: center;
       gap: 6px;
       padding: 7px 16px;
+      height: 34px;
+      box-sizing: border-box;
       border-radius: 8px;
       border: 1.5px solid #4f8ef7;
       background: #fff;
@@ -412,7 +425,6 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      margin-bottom: 10px;
       transition: background .15s, color .15s;
     }
     #wl-download-mode-btn:hover { background: #4f8ef7; color: #fff; }
@@ -551,6 +563,154 @@
       .wl-pc-kanji-ex    { font-size: 7pt; color: #444; line-height: 1.5; margin-top: 3px; }
       .wl-pc-kanji-ex-row { display: flex; justify-content: center; gap: 6px; }
     }
+
+    /* ── 외래어 단어보기 카드 ── */
+    .wl-loanword-word { font-size: 20px; font-weight: 700; color: #1a1a2e; line-height: 1.3; }
+    .wl-loanword-meaning { font-size: 13px; color: #555; margin-top: 2px; }
+    .wl-loanword-origin { font-size: 11px; color: #aaa; margin-top: 2px; font-style: italic; }
+
+    /* ── 단어보기 정렬 버튼 ── */
+    #wl-sort-btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-block;
+      padding: 0 14px;
+      height: 34px;
+      line-height: 30px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 700;
+      border: 2px solid #ccd3df;
+      border-radius: 999px;
+      background: #f0f2f5;
+      color: #666;
+      cursor: pointer;
+      transition: all .18s;
+      box-sizing: border-box;
+    }
+    #wl-sort-btn.active { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
+    .wl-top-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      min-height: 34px;
+    }
+
+    /* ── 한바퀴 n개 선택 팝업 ── */
+    #lw-tour-popup {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 1200;
+      align-items: center;
+      justify-content: center;
+    }
+    #lw-tour-popup.open { display: flex; }
+    #lw-tour-popup-inner {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 28px 20px;
+      width: 300px;
+      max-width: 92vw;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    #lw-tour-popup-inner p { font-size: 14px; color: #333; line-height: 1.6; margin: 0 0 16px; font-weight: 700; }
+    #lw-tour-popup-inner .popup-btns { display: flex; flex-direction: column; gap: 8px; }
+    #lw-tour-popup-inner .popup-btns button {
+      padding: 11px 0; font-size: 14px; font-family: inherit; font-weight: 700;
+      border: none; border-radius: 10px; cursor: pointer; transition: opacity .15s;
+    }
+    #lw-tour-popup-inner .popup-btns button:hover { opacity: .85; }
+    .lw-popup-btn-all  { background: #4f8ef7; color: #fff; border: none !important; }
+    .lw-popup-btn-n    { background: #fff; color: #4f8ef7; border: 2px solid #4f8ef7 !important; }
+    .lw-popup-btn-cancel { background: #f0f2f5; color: #666; border: none !important; }
+    #lw-tour-n-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0; }
+    #lw-tour-n-row label { font-size: 13px; color: #555; white-space: nowrap; }
+    #lw-tour-n-input {
+      width: 70px; padding: 7px 10px; font-size: 14px; font-family: inherit;
+      border: 2px solid #dde3ef; border-radius: 8px; outline: none; text-align: center;
+    }
+    #lw-tour-n-input:focus { border-color: #4f8ef7; }
+
+    /* ── 그룹표시 토글 버튼 (변형 주관식) ── */
+    #lw-desc {
+      font-family: inherit;
+      font-size: 15px;
+    }
+    #cs-group-toggle-btn {
+      position: absolute;
+      top: 28px;
+      left: 24px;
+      padding: 5px 12px; font-size: 12px; font-family: inherit; font-weight: 700;
+      border: 2px solid #ccd3df; border-radius: 999px;
+      background: #f0f2f5; color: #666; cursor: pointer; transition: all .18s;
+      white-space: nowrap; z-index: 1;
+    }
+    #cs-group-toggle-btn.active { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
+
+    /* ── 문장 번역 ── */
+    .trans-sentence {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+      margin: 8px 0 18px;
+      line-height: 1.5;
+    }
+    .trans-keyword {
+      color: #4f8ef7;
+      font-weight: 700;
+    }
+    .trans-model-answer {
+      text-align: center;
+      margin: 8px 0 4px;
+    }
+    .trans-model-answer .trans-ma-label {
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+    .trans-model-answer .trans-ma-body {
+      font-size: 18px;
+      font-weight: 700;
+      color: #4f8ef7;
+      line-height: 1.6;
+    }
+    .trans-keywords-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin: 8px 0 2px;
+    }
+    .trans-kw-tag {
+      background: #e8f0fe;
+      color: #4f8ef7;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .trans-kw-tag.hit  { background: #4f8ef7; color: #fff; }
+    .trans-kw-tag.miss { background: #fdecea; color: #d32f2f; text-decoration: line-through; }
+
+    /* 한바퀴 번역 결과 팝업용 */
+    .trans-tour-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .trans-tour-item:last-child { border-bottom: none; }
+    .trans-tour-item.correct { border-left: 4px solid #22c55e; }
+    .trans-tour-item.wrong   { border-left: 4px solid #ef4444; }
+    .trans-tour-sentence { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+    .trans-tour-my   { font-size: 13px; color: #aaa; margin-bottom: 2px; }
+    .trans-tour-ans  { font-size: 13px; color: #333; margin-top: 2px; }
+    .trans-tour-ans-label { font-size: 11px; color: #aaa; }
+    .trans-tour-ans-body  { font-weight: 700; color: #4f8ef7; }
 
     /* ── CONJ CATEGORY BOX ── */
     #conj-type-box { overflow: visible; }
@@ -890,16 +1050,21 @@
 
     /* ── TOUR MODE ── */
     .card-header {
+      position: relative;
       display: flex;
       align-items: flex-start;
-      justify-content: space-between;
-      gap: 8px;
+      justify-content: center;
       margin-bottom: 10px;
       min-height: 28px;
     }
     .card-header > *:first-child {
-      flex: 1;
-      min-width: 0;
+      width: 100%;
+      text-align: center;
+    }
+    .card-header .tour-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
     }
     .tour-btn {
       flex-shrink: 0;
@@ -1357,10 +1522,11 @@
 <body>
 
 <nav id="main-nav">
-  <button class="nav-active" onclick="showTop('main')">메인</button>
+  <button onclick="showTop('main')">메인</button>
   <button onclick="showTop('wordlist')">단어 보기</button>
   <button onclick="showTop('word')">단어 문제</button>
   <button onclick="showTop('conj')">동사 변형</button>
+  <button onclick="showTop('trans')">문장 번역</button>
   <button onclick="showTop('dictation')">받아쓰기</button>
   <button onclick="showTop('wrong')">오답 복습</button>
 </nav>
@@ -1374,17 +1540,20 @@
     <button onclick="showSub('word','noun')">명사</button>
     <button onclick="showSub('word','verb')">동사</button>
     <button onclick="showSub('word','quiz')">한자</button>
+    <button onclick="showSub('word','loanword')">외래어</button>
   </span>
   <span class="subnav-group" id="subnav-wordlist" style="display:none;">
     <button onclick="showSub('wordlist','noun')">명사</button>
     <button onclick="showSub('wordlist','verb')">동사</button>
     <button onclick="showSub('wordlist','kanji')">한자</button>
+    <button onclick="showSub('wordlist','loanword')">외래어</button>
   </span>
   <span class="subnav-group" id="subnav-conj" style="display:none;">
     <button class="subnav-active" onclick="showSub('conj','conj-grammar')">문법</button>
     <button onclick="showSub('conj','conj-mc')">변형 (객관식)</button>
     <button onclick="showSub('conj','conj-sa')">변형 (주관식)</button>
   </span>
+  <span class="subnav-group" id="subnav-trans" style="display:none;"></span>
   <span class="subnav-group" id="subnav-dictation" style="display:none;">
     <button class="subnav-active" onclick="showSub('dictation','dictation-quiz')">문제풀이</button>
   </span>
@@ -1505,6 +1674,9 @@
       <div class="howto-title">이용안내</div>
       <div class="howto-body">
         링크를 함부로 업로드하거나 허가없이 타인에게 공유하지 말아주시기 바랍니다.
+        <div style="margin-top:10px; padding:10px 14px; background:#fff8e1; border-left:3px solid #f59e0b; border-radius:6px; font-size:13px; color:#555; line-height:1.7;">
+          ⚠️ 본 페이지는 비공개 과외 수업용 자료입니다. 링크의 외부 공유, 무단 복제, 재배포를 금합니다. 데이터 및 학습 구조에 대한 저작권은 제작자에게 있습니다.
+        </div>
       </div>
     </div>
 
@@ -1515,6 +1687,56 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ════════════ 외래어 문제 ════════════ -->
+<div id="loanword" class="page">
+
+  <!-- 발음 / 뜻 -->
+  <div class="mode-switch">
+    <button id="lw-btn-reading" class="active" onclick="switchLWMode('reading')">단어</button>
+    <button id="lw-btn-meaning" onclick="switchLWMode('meaning')">뜻</button>
+  </div>
+
+  <!-- 문제 컨테이너 -->
+  <div id="lw-container" class="card">
+    <div class="card-header">
+      <div class="question-label" id="lw-question-label">다음 단어의 뜻을 입력하세요</div>
+      <button class="tour-btn" id="lw-tour-btn" onclick="lwTourStart()">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="lw-tour-progress">
+      <div class="tour-progress-label" id="lw-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="lw-tour-fill"></div></div>
+    </div>
+    <div class="question" id="lw-question"></div>
+    <div class="sa-input-row">
+      <input type="text" id="lw-answer" placeholder="정답 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();submitLW();}">
+      <button onclick="submitLW()">제출</button>
+    </div>
+    <div class="result" id="lw-result"></div>
+    <div class="noun-desc" id="lw-desc" style="display:none;"></div>
+    <div class="btn-row">
+      <button class="save-wrong-btn" id="lw-save-btn" onclick="saveWrong('lw')">오답 저장</button>
+      <button class="next-btn" id="lw-next-btn" onclick="nextLWQuestion()">다음 문제 ▶</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- 외래어 한바퀴 선택 팝업 -->
+<div id="lw-tour-popup">
+  <div id="lw-tour-popup-inner">
+    <p>한바퀴 돌기 방식을 선택하세요</p>
+    <div class="popup-btns">
+      <button class="lw-popup-btn-all" onclick="lwTourConfirm('all')">전체 한바퀴</button>
+      <div id="lw-tour-n-row">
+        <label>한 세트 문제 수:</label>
+        <input type="text" inputmode="numeric" pattern="[0-9]*" id="lw-tour-n-input" value="20">
+      </div>
+      <button class="lw-popup-btn-n" onclick="lwTourConfirm('n')">한 세트 랜덤 출제</button>
+      <button class="lw-popup-btn-cancel" onclick="lwTourPopupClose()">취소</button>
+    </div>
   </div>
 </div>
 
@@ -1661,14 +1883,17 @@
 <!-- ════════════ 단어 보기 ════════════ -->
 <div id="wordlist" class="page">
 
-  <!-- 단계 선택 -->
-  <div class="card level-section">
+  <!-- 단계 선택 (외래어는 숨김) -->
+  <div class="card level-section" id="wl-level-section">
     <h3>단계 선택 (복수 선택 가능)</h3>
     <div class="level-grid" id="wl-level-grid"></div>
   </div>
 
-  <!-- 다운로드 모드 진입 버튼 -->
-  <button id="wl-download-mode-btn" onclick="wlToggleDownloadMode()">⬇ 다운로드</button>
+  <!-- 상단 바: 다운로드 + 정렬 -->
+  <div class="wl-top-bar">
+    <button id="wl-download-mode-btn" onclick="wlToggleDownloadMode()">⬇ 다운로드</button>
+    <button id="wl-sort-btn" onclick="wlToggleSort()">단어순</button>
+  </div>
 
   <!-- 선택/다운로드 툴바 (다운로드 모드에서만 표시) -->
   <div id="wl-toolbar">
@@ -1756,6 +1981,7 @@
 
   <!-- [변형 주관식] 퀴즈 -->
   <div id="conj-sa-box" class="card" style="display:none;">
+    <button id="cs-group-toggle-btn" onclick="toggleCSGroupDisplay()" title="그룹 항상 표시">그룹 표시</button>
     <div class="card-header">
       <div class="question-label">올바른 변형 형태를 히라가나로 입력하세요</div>
       <button class="tour-btn" id="cs-tour-btn" onclick="toggleTour('cs')">한바퀴 돌기</button>
@@ -1775,6 +2001,64 @@
     <div class="btn-row">
       <button class="save-wrong-btn" id="cs-save-btn" onclick="saveWrong('cs')">오답 저장</button>
       <button class="next-btn" id="cs-next-btn" onclick="nextConjSA()">다음 문제 ▶</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════ 문장 번역 ════════════ -->
+<div id="trans" class="page">
+
+  <!-- 시범 기능 안내 -->
+  <div style="background:#fff8e6;border:1.5px solid #f5c842;border-radius:12px;padding:14px 18px;margin-bottom:14px;font-size:13px;color:#7a5c00;line-height:1.7;text-align:center;">
+    본 문제는 시범 기능입니다. 문제 방식을 검토 후 정식 추가를 준비중에 있습니다.<br>그 전까지 출제되어 있는 문제로 자유롭게 공부해주세요.
+  </div>
+
+  <!-- 단계 선택 -->
+  <div class="card level-section">
+    <h3>단계 선택 (복수 선택 가능)</h3>
+    <div class="level-grid level-grid-8" id="trans-level-grid"></div>
+  </div>
+
+  <!-- 문제 카드 -->
+  <div class="card" id="trans-quiz-box">
+    <div class="card-header">
+      <div class="question-label" id="trans-question-label">다음 문장을 한국어로 번역하세요</div>
+      <button class="tour-btn" id="trans-tour-btn" onclick="toggleTour('trans')">한바퀴 돌기</button>
+    </div>
+    <div class="tour-progress-wrap" id="trans-tour-progress">
+      <div class="tour-progress-label" id="trans-tour-label"></div>
+      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="trans-tour-fill"></div></div>
+    </div>
+
+    <div class="trans-sentence" id="trans-question"></div>
+
+    <div style="display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:14px;">
+      <textarea id="trans-answer" placeholder="한국어로 입력" rows="2"
+        style="width:100%; max-width:460px; padding:12px 16px; font-size:17px; font-family:inherit;
+               border:2px solid #dde3ef; border-radius:10px; outline:none; resize:none;
+               text-align:center; transition:border-color .15s; line-height:1.6; overflow:hidden;"
+        oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"
+        onfocus="this.style.borderColor='#4f8ef7';"
+        onblur="this.style.borderColor='#dde3ef';"
+        onkeydown="event.stopPropagation(); if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitTrans();}"
+      ></textarea>
+      <button id="trans-submit-btn" onclick="submitTrans()"
+        style="padding:11px 32px; font-size:15px; font-family:inherit; font-weight:700;
+               border:none; background:#4f8ef7; color:#fff; border-radius:10px; cursor:pointer; transition:background .15s;"
+        onmouseover="this.style.background='#3a7de4'" onmouseout="this.style.background='#4f8ef7'">제출</button>
+    </div>
+
+    <div class="result" id="trans-result"></div>
+    <div id="trans-answer-area" style="display:none; text-align:center; margin:4px 0 8px;">
+      <div class="trans-model-answer" id="trans-model-answer"></div>
+      <div class="trans-keywords-row" id="trans-keywords-row"></div>
+    </div>
+    <div class="btn-row">
+      <!-- [오답저장 비활성화 - 채점 기능 복구 시 주석 해제]
+      <button class="save-wrong-btn" id="trans-save-btn" onclick="saveWrong('trans')">오답 저장</button>
+      -->
+      <button class="next-btn" id="trans-next-btn" onclick="nextTransQuestion()">다음 문제 ▶</button>
     </div>
   </div>
 
@@ -1890,12 +2174,14 @@
   </div>
 </div>
 
-<footer>© 치로 일본어 | 제작: 4kchiro</footer>
+<footer>© 치로 일본어. All rights reserved.</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="data.js"></script>
 <script src="data_conj.js"></script>
+<script src="data_loanword.js" onerror="window.loanworddataset=[];"></script>
+<script src="data_trans.js" onerror="window.transdataset=window.transdataset||[];"></script>
 <script>
 /* ═══ 한자 STATE ═══ */
 let kanjianswered = false;
@@ -1923,18 +2209,18 @@ let currentTop = 'main'; // 'main' | 'word' | 'wordlist'
 // 상위탭 전환 - 해당 그룹의 첫 번째 하위탭으로 이동
 function showTop(top) {
   // 탭 이동 시 모든 한바퀴 취소
-  ['noun','verb','kanji-mc','kanji-sa','cg','cm','cs','dict'].forEach(id => cancelTourIfActive(id));
-  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', dictation: 'dictation-quiz', wrong: 'wrong' };
+  ['noun','verb','kanji-mc','kanji-sa','cg','cm','cs','dict','trans'].forEach(id => cancelTourIfActive(id));
+  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', trans: 'trans', dictation: 'dictation-quiz', wrong: 'wrong' };
   if (top === 'wrong') { showWrongMain(); _setNavActive('wrong'); return; }
   showSub(top, defaults[top]);
 }
 
 function _setNavActive(top) {
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'wordlist', 'word', 'conj', 'dictation', 'wrong'];
+    const tops = ['main', 'wordlist', 'word', 'conj', 'trans', 'dictation', 'wrong'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
-  ['main', 'word', 'wordlist', 'conj', 'dictation', 'wrong'].forEach(g => {
+  ['main', 'word', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'].forEach(g => {
     const el = document.getElementById('subnav-' + g);
     if (el) el.style.display = g === top ? '' : 'none';
   });
@@ -1946,19 +2232,20 @@ function showSub(top, sub) {
   const topTourMap = {
     word: ['noun','verb','kanji-mc','kanji-sa'],
     conj: ['cg','cm','cs'],
-    dictation: ['dict']
+    dictation: ['dict'],
+    trans: ['trans']
   };
   if (topTourMap[top]) topTourMap[top].forEach(id => cancelTourIfActive(id));
   currentTop = top;
 
   // 상위탭 active
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'wordlist', 'word', 'conj', 'dictation', 'wrong'];
+    const tops = ['main', 'wordlist', 'word', 'conj', 'trans', 'dictation', 'wrong'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
 
   // 하위탭 그룹 표시/숨김
-  ['main', 'word', 'wordlist', 'conj', 'dictation', 'wrong'].forEach(g => {
+  ['main', 'word', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'].forEach(g => {
     const el = document.getElementById('subnav-' + g);
     if (el) el.style.display = g === top ? '' : 'none';
   });
@@ -1979,7 +2266,7 @@ function _activatePage(id) {
   const dictSubs = ['dictation-quiz'];
   const pageId = conjSubs.includes(id) ? 'conj'
     : dictSubs.includes(id) ? 'dictation'
-    : (currentTop === 'wordlist' && ['noun','verb','kanji'].includes(id)) ? 'wordlist'
+    : (currentTop === 'wordlist' && ['noun','verb','kanji','loanword'].includes(id)) ? 'wordlist'
     : id;
   document.getElementById(pageId).classList.add('active');
 
@@ -1989,6 +2276,7 @@ function _activatePage(id) {
   }
   if (pageId === 'noun' && currentTop === 'word') nextNounQuestion();
   if (pageId === 'verb' && currentTop === 'word') nextVerbQuestion();
+  if (pageId === 'loanword' && currentTop === 'word') nextLWQuestion();
   if (currentTop === 'wordlist') selectWLCat(id);
 
   if (conjSubs.includes(id)) {
@@ -2007,6 +2295,10 @@ function _activatePage(id) {
 
   if (dictSubs.includes(id)) {
     initDictPage();
+  }
+
+  if (id === 'trans') {
+    initTransPage();
   }
 }
 
@@ -2735,11 +3027,15 @@ function selectWLCat(cat) {
   wlCat = cat;
   wlSelected = new Set();
   wlRenderedItems = [];
+  // 외래어는 단계 없음 → 레벨 섹션 숨김
+  const levelSection = document.getElementById('wl-level-section');
+  if (levelSection) levelSection.style.display = cat === 'loanword' ? 'none' : '';
   buildWLLevelGrid();
   renderWordList();
 }
 
 function buildWLLevelGrid() {
+  if (wlCat === 'loanword') return; // 단계 없음
   const dataset = wlCat === 'noun' ? noundataset
                 : wlCat === 'verb' ? verbdataset
                 : kanjidataset;
@@ -2786,8 +3082,16 @@ function renderWordList() {
     items = noundataset.filter(d => wlSelectedLevels.has(d[3]));
   } else if (wlCat === 'verb') {
     items = verbdataset.filter(d => wlSelectedLevels.has(d[3]));
+  } else if (wlCat === 'loanword') {
+    items = typeof loanworddataset !== 'undefined' ? [...loanworddataset] : [];
   } else {
     items = kanjidataset.filter(d => wlSelectedLevels.has(d[7]));
+  }
+
+  // 정렬 적용
+  const sortMode = wlSortModes[wlCat] || 'level';
+  if (sortMode === 'word') {
+    items = wlSortByWord(items, wlCat);
   }
 
   if (!items.length) return;
@@ -2807,6 +3111,14 @@ function renderWordList() {
         <div class="wl-kanji-char">${item[0]}</div>
         <div class="wl-kanji-reading">${item[1]}</div>
         <div class="wl-kanji-examples">${item[6]}</div>
+      `;
+    } else if (wlCat === 'loanword') {
+      const wordLen = item[0].length;
+      const wordFontSize = wordLen >= 7 ? '16px' : '20px';
+      card.innerHTML += `
+        <div class="wl-loanword-word" style="font-size:${wordFontSize};white-space:nowrap;">${item[0]}</div>
+        <div class="wl-loanword-meaning">${item[1]}</div>
+        ${item[2] ? `<div class="wl-loanword-origin">${item[2]}</div>` : ''}
       `;
     } else {
       const sameAsWord = item[0] === item[1];
@@ -2936,8 +3248,24 @@ function wlBuildCell(item, forPNG) {
         <div class="wl-pc-kanji-ex">${exHTML}</div>
       `;
     }
+  } else if (wlCat === 'loanword') {
+    // 외래어
+    if (forPNG) {
+      cell.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="font-size:20px;font-weight:700;color:#1a1a2e;line-height:1.3;">${item[0]}</div>
+          <div style="font-size:12px;color:#555;margin:3px 0 2px;">${item[1]}</div>
+          ${item[2] ? `<div style="font-size:11px;color:#aaa;font-style:italic;">${item[2]}</div>` : ''}
+        </div>
+      `;
+    } else {
+      cell.innerHTML = `
+        <div class="wl-pc-word">${item[0]}</div>
+        <div class="wl-pc-mean">${item[1]}</div>
+        ${item[2] ? `<div class="wl-pc-read">${item[2]}</div>` : ''}
+      `;
+    }
   } else {
-    // 명사/동사
     const sameAsWord = item[0] === item[1];
     if (forPNG) {
       cell.innerHTML = `
@@ -3484,7 +3812,7 @@ function nextConjSA() {
   const typeObj = pool[Math.floor(Math.random() * pool.length)];
   csCurrent = { verb, typeObj };
 
-  document.getElementById('cs-verb').innerHTML = conjVerbHTML(verb);
+  document.getElementById('cs-verb').innerHTML = conjVerbHTML(verb, csShowGroup);
   document.getElementById('cs-form').innerHTML =
     `<span class="conj-type-badge">${typeObj.label}</span><span class="conj-type-meaning">${typeObj.meaning}</span>`;
 
@@ -3598,6 +3926,7 @@ function getTourPool(id) {
       return combos;
     }
     case 'dict':     return getDictPool();
+    case 'trans':    return getTransPool();
     default: return [];
   }
 }
@@ -3682,7 +4011,19 @@ function setTourQuestion(id, item) {
     case 'cm':       setCMTourQ(item); break;
     case 'cs':       setCSTourQ(item); break;
     case 'dict':     setDictTourQ(item); break;
+    case 'trans':    setTransTourQ(item); break;
+    case 'lw':       setLWTourQ(item); break;
   }
+}
+
+function setTransTourQ(item) {
+  transCurrent = item;
+  nextTransQuestion(true);
+}
+
+function setLWTourQ(item) {
+  lwCurrent = item;
+  nextLWQuestion();
 }
 
 // 한바퀴 모드에서 정답/오답 처리 후 다음 문제로
@@ -3730,6 +4071,8 @@ function callNextQuestion(id) {
     case 'cm':       nextConjMC(); break;
     case 'cs':       nextConjSA(); break;
     case 'dict':     nextDictQuestion(false); break;
+    case 'trans':    nextTransQuestion(true); break;
+    case 'lw':       nextLWQuestion(); break;
   }
 }
 
@@ -3738,32 +4081,63 @@ function showTourPopup(id, st) {
   const total = st.deck.length;
   const correct = st.correct;
   const scoreEl = document.getElementById('tour-popup-score');
-  scoreEl.innerHTML = `결과: <span class="score-num">${correct} / ${total}</span>`;
-
-  // 오답 있을 때만 [모든 오답 저장] 표시
-  const hasWrongs = st.wrongs.length > 0;
-  document.getElementById('tour-save-all-wrap').style.display = hasWrongs ? '' : 'none';
-
-  // tourWrongSnapshot 갱신
-  tourWrongSnapshot = st.wrongs.map(w => getTourWrongCatKey(id, w)).filter(Boolean);
+  if (id === 'trans') {
+    scoreEl.innerHTML = `총 <span class="score-num">${total}</span>문장`;
+  } else {
+    scoreEl.innerHTML = `결과: <span class="score-num">${correct} / ${total}</span>`;
+  }
 
   const listEl = document.getElementById('tour-wrong-list');
   listEl.innerHTML = '';
-  st.wrongs.forEach((w, idx) => {
-    const ck = getTourWrongCatKey(id, w);
-    const div = document.createElement('div');
-    div.className = 'tour-wrong-item';
-    div.innerHTML = `
-      <div class="tour-wrong-item-body">
-        ${buildTourWrongBody(id, w)}
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-        ${id === 'dict' ? `<button class="tour-play-btn" onclick="tourPlayDict('${w.item[0]}','${w.item[1]}')">▶</button>` : ''}
-        ${ck ? `<button class="tour-item-save-btn" data-idx="${idx}" onclick="tourSaveOneWrong('${ck.catId}','${ck.itemKey}',this)">오답 저장</button>` : ''}
-      </div>
-    `;
-    listEl.appendChild(div);
-  });
+
+  // 번역은 전체 문장 결과 목록으로 표시 (정오 구분 없음)
+  if (id === 'trans') {
+    document.getElementById('tour-save-all-wrap').style.display = 'none';
+    st.deck.forEach(item => {
+      const entry = st.wrongs.find(w => w.item[0] === item[0]);
+      const div = document.createElement('div');
+      div.className = 'trans-tour-item';
+      div.innerHTML = `
+        <div class="trans-tour-sentence">${item[0]}</div>
+        <div class="trans-tour-my">내 답: ${entry ? (entry.myAnswer || '(없음)') : '(없음)'}</div>
+        <div class="trans-tour-ans"><span class="trans-tour-ans-label">답안 예시</span> <span class="trans-tour-ans-body">${item[1]}</span></div>
+      `;
+      /* [채점 기능 비활성화 - 복구 시 주석 해제]
+      let modelHL = item[1];
+      (item[2] || []).forEach(kw => { modelHL = modelHL.replace(kw, `<span class="trans-keyword">${kw}</span>`); });
+      const kwTags = entry && entry.results
+        ? (item[2] || []).map((kw, i) => `<span class="trans-kw-tag ${entry.results[i] ? 'hit' : 'miss'}">${kw}</span>`).join('')
+        : '';
+      div.querySelector('.trans-tour-ans').innerHTML = '답안 예시: ' + modelHL;
+      if (kwTags) div.innerHTML += `<div class="trans-keywords-row" style="margin-top:4px;">${kwTags}</div>`;
+      const isCorrect = entry ? (entry.results || []).every(Boolean) : true;
+      div.classList.add(isCorrect ? 'correct' : 'wrong');
+      if (!isCorrect) div.innerHTML += `<div style="margin-top:6px;"><button class="tour-item-save-btn" onclick="tourSaveOneWrong('trans','${item[0].replace(/'/g,"\\'")}',this)">오답 저장</button></div>`;
+      */
+      listEl.appendChild(div);
+    });
+    tourWrongSnapshot = [];
+  } else {
+    // 기존 방식: 오답만 표시
+    const hasWrongs = st.wrongs.length > 0;
+    document.getElementById('tour-save-all-wrap').style.display = hasWrongs ? '' : 'none';
+    tourWrongSnapshot = st.wrongs.map(w => getTourWrongCatKey(id, w)).filter(Boolean);
+    st.wrongs.forEach((w, idx) => {
+      const ck = getTourWrongCatKey(id, w);
+      const div = document.createElement('div');
+      div.className = 'tour-wrong-item';
+      div.innerHTML = `
+        <div class="tour-wrong-item-body">
+          ${buildTourWrongBody(id, w)}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          ${id === 'dict' ? `<button class="tour-play-btn" onclick="tourPlayDict('${w.item[0]}','${w.item[1]}')">▶</button>` : ''}
+          ${ck ? `<button class="tour-item-save-btn" data-idx="${idx}" onclick="tourSaveOneWrong('${ck.catId}','${ck.itemKey}',this)">오답 저장</button>` : ''}
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  }
 
   document.getElementById('tour-popup-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -3819,6 +4193,15 @@ function buildTourWrongBody(id, w) {
     case 'dict': {
       return `
         <div class="tour-wrong-word">${item[0]}회차 ${item[1]}번</div>
+        <div class="tour-wrong-answers">
+          <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
+          <span class="cor-ans">정답: ${w.correctAnswer}</span>
+        </div>`;
+    }
+    case 'lw': {
+      return `
+        <div class="tour-wrong-word">${item[0]}</div>
+        <div class="tour-wrong-detail">${item[1]}${item[2] ? ` (${item[2]})` : ''}</div>
         <div class="tour-wrong-answers">
           <span class="my-ans">내 답: ${w.myAnswer || '(없음)'}</span><br>
           <span class="cor-ans">정답: ${w.correctAnswer}</span>
@@ -3939,7 +4322,7 @@ function setCMTourQ(item) {
 function setCSTourQ(item) {
   csAnswered = false;
   csCurrent = item;
-  document.getElementById('cs-verb').innerHTML = conjVerbHTML(item.verb);
+  document.getElementById('cs-verb').innerHTML = conjVerbHTML(item.verb, csShowGroup);
   document.getElementById('cs-form').innerHTML =
     `<span class="conj-type-badge">${item.typeObj.label}</span><span class="conj-type-meaning">${item.typeObj.meaning}</span>`;
   const inp = document.getElementById('cs-answer');
@@ -3986,10 +4369,14 @@ const WRONG_CATS = [
   { id: 'verb_meaning', label: '단어 문제 — 동사', sub: '뜻' },
   { id: 'kanji_mc',     label: '단어 문제 — 한자', sub: '객관식' },
   { id: 'kanji_sa',     label: '단어 문제 — 한자', sub: '주관식' },
+  { id: 'lw_reading',   label: '단어 문제 — 외래어', sub: '단어' },
+  { id: 'lw_meaning',   label: '단어 문제 — 외래어', sub: '뜻' },
   { id: 'cg',           label: '동사 변형',         sub: '문법' },
   { id: 'cm',           label: '동사 변형',         sub: '변형 (객관식)' },
   { id: 'cs',           label: '동사 변형',         sub: '변형 (주관식)' },
   { id: 'dict',         label: '받아쓰기',          sub: '' },
+  // [오답저장 비활성화 - 채점 기능 복구 시 주석 해제]
+  // { id: 'trans',        label: '문장 번역',          sub: '' },
 ];
 
 // ── localStorage 헬퍼 ──
@@ -4038,6 +4425,9 @@ function getWrongKey(quizId) {
     case 'cm':       return { catId: 'cm', itemKey: cmCurrent ? `${cmCurrent.verb.word}×${cmCurrent.typeObj.id}` : null };
     case 'cs':       return { catId: 'cs', itemKey: csCurrent ? `${csCurrent.verb.word}×${csCurrent.typeObj.id}` : null };
     case 'dict':     return { catId: 'dict', itemKey: dictCurrent ? `${dictCurrent[0]}_${dictCurrent[1]}` : null };
+    case 'lw':       return { catId: lwMode === 'reading' ? 'lw_reading' : 'lw_meaning', itemKey: lwCurrent ? lwCurrent[0] : null };
+    // [오답저장 비활성화 - 채점 기능 복구 시 주석 해제]
+    // case 'trans':    return { catId: 'trans', itemKey: transCurrent ? transCurrent[0] : null };
     default: return null;
   }
 }
@@ -4047,7 +4437,10 @@ const QUIZ_SAVE_MAP = {
   'noun': 'noun-save-btn', 'verb': 'verb-save-btn',
   'kanji-mc': 'mc-save-btn', 'kanji-sa': 'sa-save-btn',
   'cg': 'cg-save-btn', 'cm': 'cm-save-btn', 'cs': 'cs-save-btn',
-  'dict': 'dict-save-btn'
+  'dict': 'dict-save-btn',
+  'lw':   'lw-save-btn'
+  // [오답저장 비활성화 - 채점 기능 복구 시 주석 해제]
+  // ,'trans': 'trans-save-btn'
 };
 function showSaveBtn(quizId, show) {
   const btn = document.getElementById(QUIZ_SAVE_MAP[quizId]);
@@ -4102,6 +4495,9 @@ function getTourWrongCatKey(tourId, w) {
     case 'cm':       return { catId: 'cm', itemKey: `${item.verb.word}×${item.typeObj.id}` };
     case 'cs':       return { catId: 'cs', itemKey: `${item.verb.word}×${item.typeObj.id}` };
     case 'dict':     return { catId: 'dict', itemKey: `${item[0]}_${item[1]}` };
+    case 'lw':       return { catId: lwMode === 'reading' ? 'lw_reading' : 'lw_meaning', itemKey: item[0] };
+    // [오답저장 비활성화 - 채점 기능 복구 시 주석 해제]
+    // case 'trans':    return { catId: 'trans', itemKey: item[0] };
     default: return null;
   }
 }
@@ -4338,6 +4734,25 @@ function buildWrongItemHTML(catId, itemKey, count, originalCount) {
       </div>${playBtn}`;
       break;
     }
+    case 'lw_reading':
+    case 'lw_meaning': {
+      const d = typeof loanworddataset !== 'undefined' ? loanworddataset.find(x => x[0] === itemKey) : null;
+      body = `<div class="wrong-item-body">
+        <div class="wrong-item-word">${itemKey}</div>
+        ${d ? `<div class="wrong-item-detail">${d[1]}${d[2] ? ` (${d[2]})` : ''}</div>` : ''}
+      </div>`;
+      break;
+    }
+    /* [오답저장 비활성화 - 채점 기능 복구 시 주석 해제]
+    case 'trans': {
+      const d = window.transdataset ? transdataset.find(x => x[0] === itemKey) : null;
+      body = `<div class="wrong-item-body">
+        <div class="wrong-item-word" style="font-size:15px;">${itemKey}</div>
+        ${d ? `<div class="wrong-item-detail">${d[1]}</div>` : ''}
+      </div>`;
+      break;
+    }
+    */
   }
   return `${body}${ctrl}`;
 }
@@ -4614,6 +5029,77 @@ function renderReviewQuestion() {
       };
       break;
     }
+    case 'lw_reading':
+    case 'lw_meaning': {
+      const isReading = catId === 'lw_reading';
+      const d = typeof loanworddataset !== 'undefined' ? loanworddataset.find(x => x[0] === itemKey) : null;
+      if (!d) { reviewNextQuestion(); return; }
+      const qText = isReading ? d[1] : d[0];
+      const correctAns = isReading ? d[0] : d[1];
+      card.innerHTML = `
+        <div class="question-label">${isReading ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
+        <div class="question">${qText}</div>
+        <div class="sa-input-row">
+          <input type="text" id="rv-answer" placeholder="정답 입력">
+          <button onclick="submitReview()">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
+      document.getElementById('rv-answer').addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
+      });
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        const isCorrect = input === correctAns;
+        const descHTML = `<span style="color:#666;font-size:14px;">${isReading ? '뜻' : '발음'}: ${isReading ? d[1] : d[0]}${d[2] ? ` &nbsp;|&nbsp; 원어: ${d[2]}` : ''}</span>`;
+        return { isCorrect, correct: correctAns, descHTML };
+      };
+      break;
+    }
+    /* [오답복습 비활성화 - 채점 기능 복구 시 주석 해제]
+    case 'trans': {
+      const d = window.transdataset ? transdataset.find(x => x[0] === itemKey) : null;
+      if (!d) { reviewNextQuestion(); return; }
+      card.innerHTML = `
+        <div class="question-label">다음 문장을 한국어로 번역하세요</div>
+        <div class="trans-sentence" id="rv-question">${d[0]}</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px;">
+          <textarea id="rv-answer" placeholder="한국어로 입력" rows="2"
+            style="width:100%;max-width:460px;padding:12px 16px;font-size:17px;font-family:inherit;
+                   border:2px solid #dde3ef;border-radius:10px;outline:none;resize:none;
+                   text-align:center;transition:border-color .15s;line-height:1.6;overflow:hidden;"
+            oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';"
+            onfocus="this.style.borderColor='#4f8ef7';" onblur="this.style.borderColor='#dde3ef';"
+            onkeydown="event.stopPropagation(); if(event.key==='Enter'&&!event.shiftKey){event.preventDefault(); if(reviewAnswered){reviewNextQuestion();}else{submitReview();}}"></textarea>
+          <button onclick="submitReview()" style="padding:11px 32px;font-size:15px;font-family:inherit;font-weight:700;border:none;background:#4f8ef7;color:#fff;border-radius:10px;cursor:pointer;">제출</button>
+        </div>
+        <div class="result" id="rv-result"></div>
+        <div id="rv-trans-detail" style="display:none;text-align:center;margin:4px 0 8px;">
+          <div class="trans-model-answer" id="rv-trans-model"></div>
+          <div class="trans-keywords-row" id="rv-trans-kws"></div>
+        </div>
+        <div class="btn-row"><button class="next-btn" id="rv-next-btn" onclick="reviewNextQuestion()" style="display:none;">다음 문제 ▶</button></div>`;
+      area.appendChild(card);
+      document.getElementById('rv-answer').addEventListener('keydown', e => { e.stopPropagation(); });
+      setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
+      reviewCheckFn = () => {
+        const input = document.getElementById('rv-answer').value.trim();
+        const keywords = d[2];
+        const results = transCheckKeywords(input, keywords);
+        const isCorrect = results.every(Boolean);
+        let modelHL = d[1];
+        keywords.forEach(kw => { modelHL = modelHL.replace(kw, `<span class="trans-keyword">${kw}</span>`); });
+        document.getElementById('rv-trans-model').innerHTML = '답안 예시: ' + modelHL;
+        document.getElementById('rv-trans-kws').innerHTML = keywords.map((kw, i) =>
+          `<span class="trans-kw-tag ${results[i] ? 'hit' : 'miss'}">${kw}</span>`).join('');
+        document.getElementById('rv-trans-detail').style.display = '';
+        return { isCorrect, correct: d[1], descHTML: null };
+      };
+      break;
+    }
+    */
   }
 }
 
@@ -4742,12 +5228,331 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+/* ═══ 문장 번역 STATE ═══ */
+let transCurrent = null;
+let transAnswered = false;
+let transSelectedLevels = new Set();
+
+function initTransPage() {
+  if (!window.transdataset) window.transdataset = [];
+  buildTransLevelGrid();
+  nextTransQuestion();
+}
+
+function buildTransLevelGrid() {
+  const grid = document.getElementById('trans-level-grid');
+  if (!window.transdataset || !transdataset.length) {
+    grid.innerHTML = '<div style="color:#aaa;font-size:13px;padding:8px 0;">data_trans.js 파일을 추가하면 단계가 표시됩니다.</div>';
+    return;
+  }
+  const levelsWithData = new Set(transdataset.map(d => d[3]));
+  grid.innerHTML = '';
+  for (let i = 1; i <= 32; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.dataset.level = i;
+    if (!levelsWithData.has(i)) {
+      btn.classList.add('disabled');
+      btn.disabled = true;
+    } else {
+      if (transSelectedLevels.has(i)) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        if (transSelectedLevels.has(i)) { transSelectedLevels.delete(i); btn.classList.remove('active'); }
+        else { transSelectedLevels.add(i); btn.classList.add('active'); }
+        nextTransQuestion();
+      });
+    }
+    grid.appendChild(btn);
+  }
+  // 아무것도 선택 안 됐으면 첫 단계 자동 선택
+  if (transSelectedLevels.size === 0 && levelsWithData.size > 0) {
+    const first = Math.min(...levelsWithData);
+    transSelectedLevels.add(first);
+    grid.querySelector(`button[data-level="${first}"]`).classList.add('active');
+  }
+}
+
+function getTransPool() {
+  if (!window.transdataset) return [];
+  return transdataset.filter(d => transSelectedLevels.has(d[3]));
+}
+
+function nextTransQuestion(fromTour = false) {
+  if (!window.transdataset || !transdataset.length) {
+    document.getElementById('trans-question').textContent = 'data_trans.js 파일을 추가하면 문제가 출제됩니다.';
+    document.getElementById('trans-answer-area').style.display = 'none';
+    document.getElementById('trans-result').textContent = '';
+    document.getElementById('trans-next-btn').style.display = 'none';
+    document.getElementById('trans-submit-btn').style.display = 'none';
+    return;
+  }
+  const pool = getTransPool();
+  if (!pool.length) {
+    document.getElementById('trans-question').textContent = '단계를 선택해주세요.';
+    document.getElementById('trans-answer-area').style.display = 'none';
+    document.getElementById('trans-result').textContent = '';
+    document.getElementById('trans-next-btn').style.display = 'none';
+    return;
+  }
+  transAnswered = false;
+  if (!fromTour) transCurrent = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById('trans-question').textContent = transCurrent[0];
+  document.getElementById('trans-answer').value = '';
+  document.getElementById('trans-answer').style.height = 'auto';
+  document.getElementById('trans-result').textContent = '';
+  document.getElementById('trans-answer-area').style.display = 'none';
+  document.getElementById('trans-next-btn').style.display = 'none';
+  document.getElementById('trans-submit-btn').style.display = '';
+  setTimeout(() => { const el = document.getElementById('trans-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
+}
+
+/* ── [채점 기능 비활성화 - 복구 시 주석 해제] ──────────────────────────
+// 필수단어 포함 여부 (공백 무시)
+function transCheckKeywords(input, keywords) {
+  const normalized = input.replace(/\s/g, '');
+  return keywords.map(kw => normalized.includes(kw.replace(/\s/g, '')));
+}
+────────────────────────────────────────────────────────────────────── */
+
+function submitTrans() {
+  if (transAnswered) { nextTransQuestion(); return; }
+  if (!transCurrent) return;
+  const input = document.getElementById('trans-answer').value.trim();
+  transAnswered = true;
+
+  // 답안 예시 표시
+  const modelRaw = transCurrent[1];
+  document.getElementById('trans-model-answer').innerHTML =
+    `<div class="trans-ma-label">답안 예시</div><div class="trans-ma-body">${modelRaw}</div>`;
+  document.getElementById('trans-keywords-row').innerHTML = '';
+  document.getElementById('trans-answer-area').style.display = '';
+  document.getElementById('trans-result').textContent = '';
+
+  document.getElementById('trans-next-btn').style.display = 'inline-block';
+  document.getElementById('trans-submit-btn').style.display = 'none';
+
+  /* ── [채점 기능 비활성화 - 복구 시 주석 해제] ──────────────────
+  const keywords = transCurrent[2];
+  const results = transCheckKeywords(input, keywords);
+  const allCorrect = results.every(Boolean);
+  const resultEl = document.getElementById('trans-result');
+  resultEl.textContent = allCorrect ? '✅ 정답입니다!' : '❌ 일부 핵심 단어가 빠졌습니다.';
+  resultEl.className = 'result ' + (allCorrect ? 'correct' : 'wrong');
+  let modelHL = modelRaw;
+  keywords.forEach(kw => {
+    modelHL = modelHL.replace(kw, `<span class="trans-keyword">${kw}</span>`);
+  });
+  document.getElementById('trans-model-answer').innerHTML = '답안 예시: ' + modelHL;
+  const kwRow = document.getElementById('trans-keywords-row');
+  kwRow.innerHTML = keywords.map((kw, i) =>
+    `<span class="trans-kw-tag ${results[i] ? 'hit' : 'miss'}">${kw}</span>`
+  ).join('');
+  showSaveBtn('trans', !allCorrect);
+  ────────────────────────────────────────────────────────────────── */
+
+  // 한바퀴 처리
+  const tourSt = getTourState('trans');
+  if (tourSt && tourSt.active) {
+    tourSt.wrongs.push({ item: transCurrent, myAnswer: input, correctAnswer: modelRaw });
+    tourSt.idx++;
+    setTimeout(() => tourNextQuestion('trans'), 900);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   외래어 퀴즈 (loanword)
+═══════════════════════════════════════════════ */
+let lwMode = 'reading'; // 'reading' | 'meaning'
+let lwCurrent = null;
+let lwAnswered = false;
+let lwTourDeck = [];
+let lwTourIdx = 0;
+let lwTourMode = null; // 'all' | 'n'
+let lwTourActive = false;
+
+function switchLWMode(mode) {
+  lwMode = mode;
+  document.getElementById('lw-btn-reading').classList.toggle('active', mode === 'reading');
+  document.getElementById('lw-btn-meaning').classList.toggle('active', mode === 'meaning');
+  document.getElementById('lw-question-label').textContent =
+    mode === 'reading' ? '다음 단어의 뜻을 입력하세요' : '다음 뜻의 단어(가타카나)를 입력하세요';
+  nextLWQuestion();
+}
+
+function getLWPool() {
+  return typeof loanworddataset !== 'undefined' ? [...loanworddataset] : [];
+}
+
+function nextLWQuestion() {
+  const pool = getLWPool();
+  if (!pool.length) {
+    document.getElementById('lw-question').textContent = 'data_loanword.js 파일을 추가하면 문제가 출제됩니다.';
+    document.getElementById('lw-result').textContent = '';
+    document.getElementById('lw-desc').style.display = 'none';
+    document.getElementById('lw-next-btn').style.display = 'none';
+    showSaveBtn('lw', false);
+    return;
+  }
+  if (!getTourState('lw').active) {
+    lwCurrent = pool[Math.floor(Math.random() * pool.length)];
+  }
+  lwAnswered = false;
+  const q = lwMode === 'reading' ? lwCurrent[1] : lwCurrent[0];
+  document.getElementById('lw-question').textContent = q;
+  document.getElementById('lw-answer').value = '';
+  document.getElementById('lw-result').textContent = '';
+  document.getElementById('lw-desc').style.display = 'none';
+  document.getElementById('lw-next-btn').style.display = 'none';
+  showSaveBtn('lw', false);
+  setTimeout(() => { const el = document.getElementById('lw-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
+}
+
+function submitLW() {
+  if (lwAnswered) { nextLWQuestion(); return; }
+  if (!lwCurrent) return;
+  lwAnswered = true;
+  const input = document.getElementById('lw-answer').value.trim();
+  const correct = lwMode === 'reading' ? lwCurrent[0] : lwCurrent[1];
+  const isCorrect = input === correct || (lwMode === 'meaning' && input.length > 0 && lwCurrent[1].includes(input));
+
+  const st = getTourState('lw');
+  if (st.active) {
+    // 한바퀴 모드: tourSubmit에 위임 (결과 표시 없이 바로 다음 문제)
+    tourSubmit('lw', isCorrect, input, correct, lwCurrent);
+    return;
+  }
+
+  // 일반 모드: 결과 표시
+  const resEl = document.getElementById('lw-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
+  resEl.className = 'result ' + (isCorrect ? 'correct' : 'wrong');
+
+  // 원어 표시 (있을 경우만)
+  const descEl = document.getElementById('lw-desc');
+  if (lwCurrent[2]) {
+    descEl.innerHTML = `원어: <span style="color:#4f8ef7;font-weight:700;">${lwCurrent[2]}</span>`;
+    descEl.style.display = '';
+  } else {
+    descEl.style.display = 'none';
+  }
+
+  document.getElementById('lw-next-btn').style.display = 'inline-block';
+  showSaveBtn('lw', !isCorrect);
+}
+
+/* ── 외래어 한바퀴 ── */
+function lwTourStart() {
+  const pool = getLWPool();
+  if (!pool.length) return;
+  document.getElementById('lw-tour-popup').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  const nInput = document.getElementById('lw-tour-n-input');
+  const pool2 = getLWPool();
+  if (parseInt(nInput.value) > pool2.length) nInput.value = pool2.length;
+}
+
+function lwTourPopupClose() {
+  document.getElementById('lw-tour-popup').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lwTourConfirm(mode) {
+  lwTourPopupClose();
+  const pool = getLWPool();
+  if (!pool.length) return;
+  let deck = shuffle([...pool]);
+  if (mode === 'n') {
+    const n = Math.min(Math.max(1, parseInt(document.getElementById('lw-tour-n-input').value) || 20), pool.length);
+    deck = deck.slice(0, n);
+  }
+  const st = getTourState('lw');
+  st.active = true;
+  st.deck = deck;
+  st.idx = 0;
+  st.correct = 0;
+  st.wrongs = [];
+  document.getElementById('lw-tour-btn').classList.add('active');
+  updateTourProgress('lw');
+  tourNextQuestion('lw');
+}
+
+/* ═══════════════════════════════════════════════
+   단어 보기 정렬 (기능 2)
+═══════════════════════════════════════════════ */
+// 각 탭별 독립 정렬 상태 ('level' | 'word')
+const wlSortModes = { noun: 'level', verb: 'level', kanji: 'level', loanword: 'level' };
+
+// 가나 50음도 순서 정렬용 (히라가나/가타카나 통일)
+function kanaToHira(str) {
+  return str.replace(/[\u30A1-\u30F6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+}
+
+function wlSortByWord(items, cat) {
+  return [...items].sort((a, b) => {
+    let ka, kb;
+    if (cat === 'kanji') {
+      // 한자는 '음'(index 1) 가나다순
+      ka = kanaToHira(a[1]); kb = kanaToHira(b[1]);
+    } else if (cat === 'loanword') {
+      // 외래어는 가타카나(index 0) 50음도순 → 히라가나로 변환해서 비교
+      ka = kanaToHira(a[0]); kb = kanaToHira(b[0]);
+    } else {
+      // 명사/동사는 발음(index 1) 히라가나순
+      ka = a[1]; kb = b[1];
+    }
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
+}
+
+function wlToggleSort() {
+  const current = wlSortModes[wlCat] || 'level';
+  wlSortModes[wlCat] = current === 'level' ? 'word' : 'level';
+  const btn = document.getElementById('wl-sort-btn');
+  const isWord = wlSortModes[wlCat] === 'word';
+  btn.textContent = isWord ? '단어순' : '단계순';
+  btn.classList.toggle('active', isWord);
+  renderWordList();
+}
+
+// 탭 전환 시 정렬 버튼 상태 동기화 (selectWLCat 호출 시)
+const _origSelectWLCat = selectWLCat;
+selectWLCat = function(cat) {
+  _origSelectWLCat(cat);
+  const btn = document.getElementById('wl-sort-btn');
+  if (btn) {
+    const isWord = (wlSortModes[cat] || 'level') === 'word';
+    btn.textContent = isWord ? '단어순' : '단계순';
+    btn.classList.toggle('active', isWord);
+  }
+};
+
+/* ═══════════════════════════════════════════════
+   동사 변형 주관식 그룹 표시 (기능 3)
+═══════════════════════════════════════════════ */
+let csShowGroup = false;
+
+function toggleCSGroupDisplay() {
+  csShowGroup = !csShowGroup;
+  const btn = document.getElementById('cs-group-toggle-btn');
+  btn.classList.toggle('active', csShowGroup);
+  // 현재 출제 중인 동사가 있으면 즉시 반영
+  // 단, 제출 후 상태(csAnswered)에서는 그룹 표시가 항상 유지되어야 함
+  if (csCurrent) {
+    const showBadge = csShowGroup || csAnswered;
+    document.getElementById('cs-verb').innerHTML = conjVerbHTML(csCurrent.verb, showBadge);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   외래어 오답 시스템 연동
+═══════════════════════════════════════════════ */
+
 /* ═══ INIT ═══ */
 buildKanjiLevelGrid();
 buildNounLevelGrid();
 buildVerbLevelGrid();
 buildWLLevelGrid();
-// 받아쓰기 레벨 그리드는 페이지 첫 진입 시 initDictPage()에서 빌드
+// 받아쓰기/번역 레벨 그리드는 페이지 첫 진입 시 init 함수에서 빌드
 </script>
 </body>
 </html>

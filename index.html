@@ -430,17 +430,14 @@
     #wl-download-mode-btn:hover { background: #4f8ef7; color: #fff; }
     #wl-download-mode-btn.active { background: #4f8ef7; color: #fff; }
 
-    /* ── WORDLIST 선택/인쇄 툴바 (다운로드 모드에서만 표시) ── */
-    #wl-toolbar {
-      display: none;
+    /* ── WORDLIST 상단 액션 버튼 (단어선택 / 발음문제 / 뜻문제) ── */
+    .wl-mode-btn {
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-    #wl-toolbar.wl-mode-active { display: flex; }
-    #wl-toolbar button {
-      padding: 6px 14px;
+      gap: 5px;
+      padding: 7px 14px;
+      height: 34px;
+      box-sizing: border-box;
       border-radius: 8px;
       border: 1.5px solid #4f8ef7;
       background: #fff;
@@ -449,14 +446,79 @@
       font-weight: 600;
       cursor: pointer;
       transition: background .15s, color .15s;
+      white-space: nowrap;
     }
-    #wl-toolbar button:hover { background: #4f8ef7; color: #fff; }
-    #wl-toolbar button.wl-action-btn { background: #4f8ef7; color: #fff; }
-    #wl-toolbar button.wl-action-btn:hover { background: #2d6fd4; }
-    #wl-toolbar button:disabled { opacity: .4; cursor: default; pointer-events: none; }
-    #wl-select-count { font-size: 13px; color: #888; margin-left: 4px; }
+    .wl-mode-btn:hover { background: #4f8ef7; color: #fff; }
+    .wl-mode-btn.active { background: #4f8ef7; color: #fff; }
 
-    /* ── 카드: 기본 / 다운로드 모드 ── */
+    /* ── 하단 고정 선택 바 ── */
+    #wl-select-bar {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-top: 1.5px solid #e0e4ef;
+      box-shadow: 0 -2px 12px rgba(0,0,0,.10);
+      z-index: 900;
+      padding: 10px 16px 12px;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+    }
+    #wl-select-bar.open { display: flex; }
+    #wl-select-bar .wl-bar-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #4f8ef7;
+      background: #fff;
+      color: #4f8ef7;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      white-space: nowrap;
+    }
+    #wl-select-bar .wl-bar-btn:hover { background: #4f8ef7; color: #fff; }
+    #wl-select-bar .wl-bar-count {
+      font-size: 13px; color: #888; margin-left: 4px; flex: 1;
+    }
+
+    /* ── 드롭업 메뉴 ── */
+    .wl-dropup-wrap { position: relative; }
+    .wl-dropup {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1.5px solid #e0e4ef;
+      border-radius: 10px;
+      box-shadow: 0 -4px 18px rgba(0,0,0,.13);
+      padding: 6px;
+      gap: 6px;
+      flex-direction: column;
+      min-width: 120px;
+      z-index: 910;
+      white-space: nowrap;
+    }
+    .wl-dropup.open { display: flex; }
+    .wl-dropup button {
+      padding: 8px 16px;
+      border-radius: 7px;
+      border: none;
+      background: #f5f6fa;
+      color: #333;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: background .13s;
+    }
+    .wl-dropup button:hover { background: #4f8ef7; color: #fff; }
+
+    /* ── 카드: 기본 / 선택 모드 ── */
     .wl-card {
       position: relative;
       transition: box-shadow .15s, border .15s;
@@ -486,6 +548,415 @@
     .wl-card.wl-selected .wl-card-check {
       background: #4f8ef7; border-color: #4f8ef7; color: #fff;
     }
+
+    /* ── 단어목록 퀴즈 팝업 (무한모드 / 유한모드 공용) ── */
+    #wl-quiz-popup {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.48);
+      z-index: 1500;
+      align-items: center;
+      justify-content: center;
+    }
+    #wl-quiz-popup.open { display: flex; }
+    #wl-quiz-popup-inner {
+      background: #fff;
+      border-radius: 18px;
+      width: min(96vw, 560px);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.22);
+    }
+    #wl-quiz-popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid #f0f2f5;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    #wl-quiz-popup-mode-switch {
+      display: flex;
+      gap: 6px;
+    }
+    #wl-quiz-popup-mode-switch button {
+      padding: 5px 13px;
+      border-radius: 999px;
+      border: 1.5px solid #ccd3df;
+      background: #f5f6fa;
+      color: #666;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    #wl-quiz-popup-mode-switch button.active {
+      background: #4f8ef7; border-color: #4f8ef7; color: #fff;
+    }
+    #wl-quiz-popup-close {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: none;
+      background: #f0f2f5;
+      color: #555;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #wl-quiz-popup-close:hover { background: #e0e4ef; }
+    /* 진행률 바 (유한모드에서만 표시) */
+    #wl-quiz-popup-progress {
+      padding: 8px 18px 0;
+      flex-shrink: 0;
+    }
+    #wl-quiz-popup-progress-label {
+      font-size: 12px; color: #888; margin-bottom: 4px;
+    }
+    #wl-quiz-popup-bar-bg {
+      height: 5px; background: #e8eaf0; border-radius: 999px; overflow: hidden;
+    }
+    #wl-quiz-popup-bar-fill {
+      height: 100%; background: #4f8ef7; border-radius: 999px;
+      transition: width .3s;
+    }
+    /* 문제 영역 */
+    #wl-quiz-popup-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #wl-quiz-popup-label {
+      font-size: 13px; color: #999; font-weight: 600;
+    }
+    #wl-quiz-popup-question {
+      font-size: 34px; font-weight: 700; color: #1a1a2e;
+      text-align: center; letter-spacing: .04em; line-height: 1.4;
+    }
+    /* 객관식 보기 (한자용) */
+    #wl-quiz-popup-mc-opts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    #wl-quiz-popup-mc-opts button {
+      padding: 10px 6px;
+      border-radius: 10px;
+      border: 1.5px solid #e0e4ef;
+      background: #f8f9fc;
+      color: #333;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .13s;
+    }
+    #wl-quiz-popup-mc-opts button:hover { background: #e8f0fe; border-color: #4f8ef7; }
+    #wl-quiz-popup-mc-opts button.correct { background: #e8f8f0; border-color: #34c47c; color: #1d7a4a; }
+    #wl-quiz-popup-mc-opts button.wrong   { background: #fdecea; border-color: #e05c5c; color: #b03030; }
+    /* 주관식 입력 */
+    #wl-quiz-popup-sa-row {
+      display: flex; gap: 8px;
+    }
+    #wl-quiz-popup-sa-row input {
+      flex: 1;
+      padding: 9px 13px;
+      border-radius: 10px;
+      border: 1.5px solid #ccd3df;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+    }
+    #wl-quiz-popup-sa-row input:focus { border-color: #4f8ef7; }
+    #wl-quiz-popup-sa-row button {
+      padding: 9px 16px;
+      border-radius: 10px;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #wl-quiz-popup-result {
+      font-size: 14px; font-weight: 700; min-height: 20px;
+    }
+    #wl-quiz-popup-result.correct { color: #2db870; }
+    #wl-quiz-popup-result.wrong   { color: #e05c5c; }
+    #wl-quiz-popup-desc {
+      font-size: 13px; color: #666; display: none;
+    }
+    /* 오답저장 + 다음 버튼 행 */
+    #wl-quiz-popup-btn-row {
+      display: flex; gap: 8px; justify-content: flex-end;
+    }
+    #wl-quiz-popup-save-btn {
+      display: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1.5px solid #e05c5c;
+      background: #fff;
+      color: #e05c5c;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #wl-quiz-popup-save-btn.saved {
+      background: #aaa; border-color: #aaa; color: #fff; cursor: default;
+    }
+    #wl-quiz-popup-next-btn {
+      display: none;
+      padding: 7px 18px;
+      border-radius: 999px;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── 단어목록 퀴즈 결과 팝업 (유한모드 종료 후) ── */
+    #wl-result-popup {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.48);
+      z-index: 1600;
+      align-items: center;
+      justify-content: center;
+    }
+    #wl-result-popup.open { display: flex; }
+    #wl-result-popup-inner {
+      background: #fff;
+      border-radius: 18px;
+      width: min(96vw, 560px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.22);
+    }
+    #wl-result-popup-score {
+      padding: 22px 24px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      border-bottom: 1px solid #f0f2f5;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    #wl-result-popup-score .score-num { color: #4f8ef7; font-size: 22px; }
+    /* 정답/오답 토글 탭 */
+    #wl-result-tab-row {
+      display: flex;
+      gap: 6px;
+      padding: 10px 18px 0;
+      flex-shrink: 0;
+    }
+    .wl-result-tab {
+      flex: 1;
+      padding: 7px;
+      border-radius: 999px;
+      border: 1.5px solid #ccd3df;
+      background: #f5f6fa;
+      color: #888;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .wl-result-tab.active { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
+    /* 선택 모드 바 */
+    #wl-result-select-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    #wl-result-select-bar.visible { display: flex; }
+    #wl-result-select-bar button {
+      padding: 5px 13px;
+      border-radius: 999px;
+      border: 1.5px solid #4f8ef7;
+      background: #fff;
+      color: #4f8ef7;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #wl-result-select-bar button:hover { background: #4f8ef7; color: #fff; }
+    .wl-result-tag-dropup-wrap { position: relative; }
+    .wl-result-tag-dropup {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 4px);
+      left: 0;
+      background: #fff;
+      border: 1.5px solid #e0e4ef;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+      z-index: 100;
+      min-width: 100px;
+      overflow: hidden;
+    }
+    .wl-result-tag-dropup.open { display: block; }
+    .wl-result-tag-dropup button {
+      display: block; width: 100%;
+      padding: 9px 14px;
+      border: none; background: #fff;
+      color: #333; font-size: 13px; font-weight: 600;
+      cursor: pointer; text-align: left;
+    }
+    .wl-result-tag-dropup button:hover { background: #f0f2f5; }
+    #wl-result-select-count { font-size: 12px; color: #888; }
+    #wl-result-popup-list {
+      flex: 1; overflow-y: auto;
+      padding: 10px 18px;
+    }
+    /* 오답 블록 간격 */
+    #wl-result-popup-list .tour-wrong-item {
+      margin-bottom: 8px;
+    }
+    /* 결과 리스트 아이템 선택 스타일 */
+    .wl-result-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background: #f8f9fc;
+      margin-bottom: 8px;
+      cursor: default;
+      transition: border .13s;
+    }
+    .wl-result-item.selectable { cursor: pointer; }
+    .wl-result-item.wl-result-selected { border-color: #4f8ef7; background: #eef4ff; }
+    .wl-result-item-check {
+      display: none;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      background: #fff;
+      align-items: center; justify-content: center;
+      font-size: 11px; color: transparent;
+      flex-shrink: 0;
+      transition: all .13s;
+    }
+    .wl-result-select-mode .wl-result-item-check { display: flex; }
+    .wl-result-item.wl-result-selected .wl-result-item-check {
+      background: #4f8ef7; border-color: #4f8ef7; color: #fff;
+    }
+    .wl-result-item-word { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+    .wl-result-item-detail { font-size: 12px; color: #888; margin-top: 2px; }
+    .wl-result-item-correct { color: #2db870; }
+    .wl-result-item-wrong { color: #e05c5c; }
+    #wl-result-popup-btns {
+      padding: 12px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid #f0f2f5;
+      flex-shrink: 0;
+    }
+    #wl-result-popup-retry-btn {
+      padding: 11px;
+      border-radius: 10px;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #wl-result-popup-select-btn {
+      padding: 11px;
+      border-radius: 10px;
+      border: 1.5px solid #ccd3df;
+      background: #fff;
+      color: #555;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #wl-result-popup-close-btn {
+      padding: 11px;
+      border-radius: 10px;
+      border: 1.5px solid #ccd3df;
+      background: #fff;
+      color: #555;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── 태그 배지 ── */
+    .wl-tag-badge {
+      display: none;
+      position: absolute;
+      bottom: 5px; left: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+    .wl-tag-visible .wl-tag-badge { display: inline-block; }
+    .wl-tag-badge.tag-1 { background: #e8f4fd; color: #2980b9; }
+    .wl-tag-badge.tag-2 { background: #fef9e7; color: #d68910; }
+    .wl-tag-badge.tag-3 { background: #eafaf1; color: #1e8449; }
+
+    /* ── 태그표시 버튼 ── */
+    #wl-tag-show-btn {
+      position: absolute;
+      right: 100px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-block;
+      padding: 0 14px;
+      height: 34px;
+      line-height: 30px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 700;
+      border: 2px solid #ccd3df;
+      border-radius: 999px;
+      background: #f0f2f5;
+      color: #666;
+      cursor: pointer;
+      transition: all .18s;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+    #wl-tag-show-btn.active { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
+
+    /* ── 태그 필터 바 ── */
+    #wl-tag-filter-bar {
+      display: none;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    #wl-tag-filter-bar.visible { display: flex; }
+    .wl-tag-filter-btn {
+      padding: 4px 13px;
+      border-radius: 999px;
+      border: 1.5px solid #ccd3df;
+      background: #f0f2f5;
+      color: #666;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .wl-tag-filter-btn.active { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
 
     /* ── PNG 확인 팝업 ── */
     #wl-png-popup {
@@ -1152,7 +1623,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      padding: 16px 24px;
+      padding: 16px 24px 8px;
     }
     .tour-wrong-item {
       background: #f8f9fc;
@@ -1217,14 +1688,14 @@
       font-size: 15px;
       font-family: inherit;
       font-weight: 700;
-      border: none;
-      background: #1a1a2e;
-      color: #fff;
-      border-radius: 0 0 20px 20px;
+      border: 1.5px solid #ccd3df;
+      background: #fff;
+      color: #555;
+      border-radius: 10px;
       cursor: pointer;
       transition: background .15s;
     }
-    .tour-popup-close:hover { background: #2d2d50; }
+    .tour-popup-close:hover { background: #f0f2f5; }
 
     /* ══════════════════════════════════
        오답 저장 버튼
@@ -1524,7 +1995,6 @@
 <nav id="main-nav">
   <button onclick="showTop('main')">메인</button>
   <button onclick="showTop('wordlist')">단어 보기</button>
-  <button onclick="showTop('word')">단어 문제</button>
   <button onclick="showTop('conj')">동사 변형</button>
   <button onclick="showTop('trans')">문장 번역</button>
   <button onclick="showTop('dictation')">받아쓰기</button>
@@ -1534,13 +2004,8 @@
   <span class="subnav-group" id="subnav-main">
     <button class="subnav-active" onclick="showSub('main','home')">Main</button>
     <button onclick="showSub('main','howto')">How to</button>
+    <button onclick="showSub('main','note1')">Note</button>
     <button onclick="showSub('main','about')">About</button>
-  </span>
-  <span class="subnav-group" id="subnav-word" style="display:none;">
-    <button onclick="showSub('word','noun')">명사</button>
-    <button onclick="showSub('word','verb')">동사</button>
-    <button onclick="showSub('word','quiz')">한자</button>
-    <button onclick="showSub('word','loanword')">외래어</button>
   </span>
   <span class="subnav-group" id="subnav-wordlist" style="display:none;">
     <button onclick="showSub('wordlist','noun')">명사</button>
@@ -1573,13 +2038,27 @@
   <div class="card" style="text-align:left;">
 
     <div class="howto-section">
-      <div class="howto-title">단어 문제</div>
+      <div class="howto-title">단어 보기</div>
       <div class="howto-body">
-        <strong>명사 · 동사</strong> 탭에서 단어의 <strong>발음</strong> 또는 <strong>뜻</strong>을 맞히는 주관식 문제예요.<br>
-        상단의 <strong>발음 / 뜻</strong> 버튼으로 출제 방향을 전환할 수 있고, 단계 선택으로 원하는 범위만 골라 풀 수 있어요.<br><br>
-        <strong>한자</strong> 탭에서는 한자의 음(읽기)을 맞히는 문제예요. <strong>객관식</strong>과 <strong>주관식</strong> 중 선택 가능해요.<br>
-        주관식에서는 <strong>두음법칙 적용 여부에 관계없이</strong> 어떤 발음을 입력해도 정답 처리돼요.<br>
-        객관식에서는 혼동되는 오답 선택지가 의도적으로 포함되어 있지 않아요.
+        단계를 선택하면 해당 단계의 단어 카드가 표시돼요. 복수 선택도 가능해요.<br><br>
+        상단의 <strong>[발음 문제]</strong> / <strong>[뜻 문제]</strong> 버튼을 누르면 현재 선택된 단계의 단어들로 <strong>무한 랜덤 문제</strong>가 팝업으로 시작돼요.<br>
+        한자 탭에서는 <strong>[객관식]</strong> / <strong>[주관식]</strong>으로 표시돼요.<br><br>
+        팝업 안에서 모드 전환(발음 ↔ 뜻)이 가능하고, 틀린 문제는 <strong>[오답 저장]</strong>으로 즉시 저장할 수 있어요.<br><br>
+        <strong>[단어선택]</strong> 버튼으로 선택 모드를 켜면 카드를 직접 골라 문제 세트를 만들 수 있어요.<br>
+        첫 카드 클릭 후 <span class="howto-key">Shift</span> + 클릭으로 범위 선택도 가능해요.<br>
+        선택 후 하단 바의 <strong>[문제풀기 ▲]</strong>를 누르면 선택된 단어들로 <strong>유한 모드</strong>(한 번씩 전부 출제, 진행률 바 포함)가 시작돼요.<br>
+        유한 모드 완료 후 결과 팝업에서 <strong>오답/정답 탭 전환</strong>, <strong>단어 선택 후 태그 변경</strong>, <strong>오답 다시 풀기</strong>가 가능해요.
+      </div>
+    </div>
+
+    <div class="howto-section">
+      <div class="howto-title">단어 태그</div>
+      <div class="howto-body">
+        각 단어에 <strong>미분류 · 학습중 · 복습중 · 완료</strong> 태그를 붙여 학습 상태를 관리할 수 있어요.<br><br>
+        <strong>태그 붙이기</strong> — <strong>[단어선택]</strong> 모드에서 단어를 선택한 뒤 하단 바의 <strong>[태그변경 ▲]</strong>에서 원하는 태그를 선택해요.<br>
+        문제 결과 팝업 안에서도 단어를 선택해 태그를 바꿀 수 있어요.<br><br>
+        <strong>태그 표시</strong> — 상단의 <strong>[태그 표시]</strong> 버튼을 켜면 카드에 태그 배지가 나타나고, 태그별 필터 버튼이 표시돼요.<br>
+        태그 데이터는 브라우저에 저장되어 창을 닫아도 유지돼요.
       </div>
     </div>
 
@@ -1607,9 +2086,9 @@
     <div class="howto-section">
       <div class="howto-title">한바퀴 돌기</div>
       <div class="howto-body">
-        각 문제 카드 우상단의 <strong>[한바퀴 돌기]</strong> 버튼을 누르면 현재 선택된 범위의 문제를 <strong>셔플 후 한 번씩 전부</strong> 출제해요.<br>
+        동사 변형·받아쓰기 문제 카드 우상단의 <strong>[한바퀴 돌기]</strong> 버튼을 누르면 현재 선택된 범위의 문제를 <strong>셔플 후 한 번씩 전부</strong> 출제해요.<br>
         한바퀴 중에는 정답 여부가 즉시 표시되지 않고 빠르게 넘어가요.<br>
-        완료되면 결과 팝업에서 점수와 오답 목록을 확인할 수 있어요.<br>
+        완료되면 결과 팝업에서 점수와 오답 목록을 확인하고, 오답이 있으면 <strong>[오답 다시 풀기]</strong>로 바로 재도전할 수 있어요.<br>
         레벨·그룹 변경, 탭 이동, 버튼 재클릭 시 취소돼요.
       </div>
     </div>
@@ -1627,22 +2106,11 @@
     </div>
 
     <div class="howto-section">
-      <div class="howto-title">단어 다운로드 · 인쇄</div>
+      <div class="howto-title">PNG 저장 · 인쇄</div>
       <div class="howto-body">
-        <strong>단어 보기</strong> 탭(명사 · 동사 · 한자)에서 단어를 이미지나 인쇄물로 저장할 수 있어요.<br><br>
-        단계를 선택해 단어를 불러온 뒤, 상단의 <strong>[⬇ 다운로드]</strong> 버튼을 누르면 다운로드 모드가 활성화돼요.<br><br>
-        <strong>단어 선택</strong><br>
-        · 카드를 클릭하면 선택 / 재클릭하면 해제돼요.<br>
-        · 첫 카드 클릭 후 <span class="howto-key">Shift</span> + 클릭으로 범위 선택이 가능해요.<br>
-        · <strong>[전체 선택]</strong> / <strong>[선택 해제]</strong> 버튼으로 한번에 조작할 수 있어요.<br><br>
-        <strong>PNG 저장</strong><br>
-        · <strong>[PNG 저장]</strong> 버튼을 누르면 선택한 단어를 A4 4×8 격자 이미지로 저장해요.<br>
-        · 32개 이하: 바로 PNG 1장 다운로드<br>
-        · 32개 초과: <strong>[1장만 다운로드]</strong> 또는 <strong>[압축파일 다운로드]</strong> 중 선택할 수 있어요.<br>
-        · 압축파일은 페이지별 PNG가 .zip으로 묶여서 저장돼요.<br><br>
-        <strong>인쇄 · PDF 저장</strong><br>
-        · <strong>[인쇄/PDF 저장]</strong> 버튼을 누르면 브라우저 인쇄 화면이 열려요.<br>
-        · 프린터 대신 <strong>PDF로 저장</strong>을 선택하면 PDF 파일로 내보낼 수 있어요.
+        <strong>[단어선택]</strong> 모드에서 단어를 골라 <strong>[PNG 저장]</strong> 또는 <strong>[인쇄/PDF]</strong> 버튼으로 내보낼 수 있어요.<br><br>
+        <strong>PNG 저장</strong> — 선택한 단어를 A4 4×8 격자 이미지로 저장해요. 32개 초과 시 압축 파일(.zip)로 다운로드돼요.<br>
+        <strong>인쇄/PDF</strong> — 브라우저 인쇄 화면이 열려요. 프린터 대신 <strong>PDF로 저장</strong>을 선택하면 PDF로 내보낼 수 있어요.
       </div>
     </div>
 
@@ -1652,7 +2120,36 @@
         <strong>객관식</strong> — <span class="howto-key">1</span><span class="howto-key">2</span><span class="howto-key">3</span><span class="howto-key">4</span> 로 선택 &nbsp;·&nbsp; <span class="howto-key">→</span> 또는 <span class="howto-key">Enter</span> 로 다음 문제<br>
         <strong>주관식</strong> — <span class="howto-key">Enter</span> 로 제출 &nbsp;·&nbsp; <span class="howto-key">→</span> 또는 <span class="howto-key">Enter</span> 로 다음 문제<br>
         <strong>받아쓰기</strong> — <span class="howto-key">Enter</span> 로 제출 &nbsp;·&nbsp; <span class="howto-key">→</span> 로 다음 문제<br>
-        <strong>복습하기</strong> — 동일하게 키보드 조작 가능
+        <strong>복습하기</strong> — 동일하게 키보드 조작 가능<br>
+        <strong>팝업 퀴즈</strong> — 객관식 <span class="howto-key">1</span>~<span class="howto-key">4</span> 선택 &nbsp;·&nbsp; <span class="howto-key">Enter</span> / <span class="howto-key">→</span> 로 다음 문제<br>
+        <strong>팝업 닫기</strong> — <span class="howto-key">Esc</span> 로 열린 팝업 닫기
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════ Note 1 ════════════ -->
+<div id="note1" class="page">
+  <div class="card" style="text-align:left;">
+
+    <div class="howto-section">
+      <div class="howto-title">26-03-22</div>
+      <div class="howto-body" style="font-size:13px; color:#555; line-height:1.9;">
+        <strong style="font-size:13px;">버그 수정</strong><br>
+        · <strong>외래어 문제</strong> — 단어/뜻 모드 라벨이 반대로 표시되던 문제 수정. 오답 복습도 동일하게 수정.<br>
+        · <strong>한바퀴 돌기</strong> — 일반 모드에서 틀린 후 한바퀴 시작 시 오답 저장 버튼이 남아있던 문제 수정.<br>
+        · <strong>오답 복습</strong> — 주관식 정답 제출 후 엔터로 다음 문제 이동 안 되던 문제 수정.<br>
+        · <strong>모바일 입력</strong> — 소프트키보드 완료 버튼으로 주관식 제출 안 되던 문제 수정.<br><br>
+        <strong style="font-size:13px;">기능 추가 · 변경</strong><br>
+        · <strong>단어 보기 대개편</strong> — [단어선택] [발음문제] [뜻문제] 버튼 추가. 무한모드(완전 랜덤) 및 유한모드(선택 단어 한바퀴) 팝업 퀴즈 구현.<br>
+        · <strong>단어 태그</strong> — 미분류·학습중·복습중·완료 태그 시스템 추가. 카드 배지 표시, 태그별 필터, localStorage 저장.<br>
+        · <strong>결과 팝업</strong> — 오답/정답 탭 전환, 단어 선택 후 태그 변경, 오답 다시 풀기 기능 추가.<br>
+        · <strong>한바퀴 결과</strong> — 오답 다시 풀기 버튼 추가 (동사변형·받아쓰기 포함).<br>
+        · <strong>단어 문제 탭 제거</strong> — 단어 보기 탭의 문제풀기 기능으로 완전 대체.<br>
+        · <strong>팝업 키보드</strong> — 단어보기 퀴즈 팝업(객관식 숫자키·Enter·→) 키보드 지원 추가.<br>
+        · <strong>결과 팝업 Shift 선택</strong> — 선택 모드에서 Shift+클릭 범위 선택 지원.<br>
+        · <strong>ESC로 팝업 닫기</strong> — 전체 팝업(퀴즈, 결과, 한바퀴, 복습, PNG확인) ESC 키 지원.
       </div>
     </div>
 
@@ -1683,201 +2180,13 @@
     <div class="howto-section">
       <div class="howto-title">제작</div>
       <div class="howto-body">
-        치로 일본어
+        치로 일본어<br><br>
+        본 앱의 코드는 Claude의 도움을 받아 작성되었습니다.<br>
+        단어 데이터, 학습 구조, 커리큘럼 설계 등 콘텐츠 전반에 대한 저작권은 치로에게 있습니다.
       </div>
     </div>
 
   </div>
-</div>
-
-<!-- ════════════ 외래어 문제 ════════════ -->
-<div id="loanword" class="page">
-
-  <!-- 발음 / 뜻 -->
-  <div class="mode-switch">
-    <button id="lw-btn-reading" class="active" onclick="switchLWMode('reading')">단어</button>
-    <button id="lw-btn-meaning" onclick="switchLWMode('meaning')">뜻</button>
-  </div>
-
-  <!-- 문제 컨테이너 -->
-  <div id="lw-container" class="card">
-    <div class="card-header">
-      <div class="question-label" id="lw-question-label">다음 단어의 뜻을 입력하세요</div>
-      <button class="tour-btn" id="lw-tour-btn" onclick="lwTourStart()">한바퀴 돌기</button>
-    </div>
-    <div class="tour-progress-wrap" id="lw-tour-progress">
-      <div class="tour-progress-label" id="lw-tour-label"></div>
-      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="lw-tour-fill"></div></div>
-    </div>
-    <div class="question" id="lw-question"></div>
-    <div class="sa-input-row">
-      <input type="text" id="lw-answer" placeholder="정답 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();submitLW();}">
-      <button onclick="submitLW()">제출</button>
-    </div>
-    <div class="result" id="lw-result"></div>
-    <div class="noun-desc" id="lw-desc" style="display:none;"></div>
-    <div class="btn-row">
-      <button class="save-wrong-btn" id="lw-save-btn" onclick="saveWrong('lw')">오답 저장</button>
-      <button class="next-btn" id="lw-next-btn" onclick="nextLWQuestion()">다음 문제 ▶</button>
-    </div>
-  </div>
-
-</div>
-
-<!-- 외래어 한바퀴 선택 팝업 -->
-<div id="lw-tour-popup">
-  <div id="lw-tour-popup-inner">
-    <p>한바퀴 돌기 방식을 선택하세요</p>
-    <div class="popup-btns">
-      <button class="lw-popup-btn-all" onclick="lwTourConfirm('all')">전체 한바퀴</button>
-      <div id="lw-tour-n-row">
-        <label>한 세트 문제 수:</label>
-        <input type="text" inputmode="numeric" pattern="[0-9]*" id="lw-tour-n-input" value="20">
-      </div>
-      <button class="lw-popup-btn-n" onclick="lwTourConfirm('n')">한 세트 랜덤 출제</button>
-      <button class="lw-popup-btn-cancel" onclick="lwTourPopupClose()">취소</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════ 명사 문제 ════════════ -->
-<div id="noun" class="page">
-
-  <!-- 발음 / 뜻 -->
-  <div class="mode-switch">
-    <button id="noun-btn-reading" class="active" onclick="switchNounMode('reading')">발음</button>
-    <button id="noun-btn-meaning" onclick="switchNounMode('meaning')">뜻</button>
-  </div>
-
-  <!-- 단계 선택 -->
-  <div class="card level-section">
-    <h3>단계 선택 (복수 선택 가능)</h3>
-    <div class="level-grid" id="noun-level-grid"></div>
-  </div>
-
-  <!-- 문제 컨테이너 -->
-  <div id="noun-container" class="card">
-    <div class="card-header">
-      <div class="question-label" id="noun-question-label">다음 단어의 발음을 입력하세요</div>
-      <button class="tour-btn" id="noun-tour-btn" onclick="toggleTour('noun')">한바퀴 돌기</button>
-    </div>
-    <div class="tour-progress-wrap" id="noun-tour-progress">
-      <div class="tour-progress-label" id="noun-tour-label"></div>
-      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="noun-tour-fill"></div></div>
-    </div>
-    <div class="question" id="noun-question"></div>
-    <div class="sa-input-row">
-      <input type="text" id="noun-answer" placeholder="정답 입력">
-      <button onclick="submitNoun()">제출</button>
-    </div>
-    <div class="result" id="noun-result"></div>
-    <div class="noun-desc" id="noun-description" style="display:none;"></div>
-    <div class="btn-row">
-      <button class="save-wrong-btn" id="noun-save-btn" onclick="saveWrong('noun')">오답 저장</button>
-      <button class="next-btn" id="noun-next-btn" onclick="nextNounQuestion()">다음 문제 ▶</button>
-    </div>
-  </div>
-
-</div>
-
-<!-- ════════════ 동사 문제 ════════════ -->
-<div id="verb" class="page">
-
-  <!-- 발음 / 뜻 -->
-  <div class="mode-switch">
-    <button id="verb-btn-reading" class="active" onclick="switchVerbMode('reading')">발음</button>
-    <button id="verb-btn-meaning" onclick="switchVerbMode('meaning')">뜻</button>
-  </div>
-
-  <!-- 단계 선택 -->
-  <div class="card level-section">
-    <h3>단계 선택 (복수 선택 가능)</h3>
-    <div class="level-grid" id="verb-level-grid"></div>
-  </div>
-
-  <!-- 문제 컨테이너 -->
-  <div id="verb-container" class="card">
-    <div class="card-header">
-      <div class="question-label" id="verb-question-label">다음 단어의 발음을 입력하세요</div>
-      <button class="tour-btn" id="verb-tour-btn" onclick="toggleTour('verb')">한바퀴 돌기</button>
-    </div>
-    <div class="tour-progress-wrap" id="verb-tour-progress">
-      <div class="tour-progress-label" id="verb-tour-label"></div>
-      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="verb-tour-fill"></div></div>
-    </div>
-    <div class="question" id="verb-question"></div>
-    <div class="sa-input-row">
-      <input type="text" id="verb-answer" placeholder="정답 입력">
-      <button onclick="submitVerb()">제출</button>
-    </div>
-    <div class="result" id="verb-result"></div>
-    <div class="noun-desc" id="verb-description" style="display:none;"></div>
-    <div class="btn-row">
-      <button class="save-wrong-btn" id="verb-save-btn" onclick="saveWrong('verb')">오답 저장</button>
-      <button class="next-btn" id="verb-next-btn" onclick="nextVerbQuestion()">다음 문제 ▶</button>
-    </div>
-  </div>
-
-</div>
-
-<!-- ════════════ 한자 문제 ════════════ -->
-<div id="quiz" class="page">
-
-  <!-- 객관식 / 주관식 -->
-  <div class="mode-switch">
-    <button id="btn-mc" class="active" onclick="switchKanjiMode('mc')">객관식</button>
-    <button id="btn-sa" onclick="switchKanjiMode('sa')">주관식</button>
-  </div>
-
-  <!-- 단계 선택 -->
-  <div class="card level-section">
-    <h3>단계 선택 (복수 선택 가능)</h3>
-    <div class="level-grid" id="level-grid"></div>
-  </div>
-
-  <!-- 객관식 컨테이너 -->
-  <div id="mc-container" class="card">
-    <div class="card-header">
-      <div class="question-label">다음 한자의 음을 고르세요</div>
-      <button class="tour-btn" id="kanji-mc-tour-btn" onclick="toggleTour('kanji-mc')">한바퀴 돌기</button>
-    </div>
-    <div class="tour-progress-wrap" id="kanji-mc-tour-progress">
-      <div class="tour-progress-label" id="kanji-mc-tour-label"></div>
-      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="kanji-mc-tour-fill"></div></div>
-    </div>
-    <div class="question" id="mc-question"></div>
-    <div class="options" id="mc-options"></div>
-    <div class="result" id="mc-result"></div>
-    <div class="description" id="mc-description" style="display:none;"></div>
-    <div class="btn-row">
-      <button class="save-wrong-btn" id="mc-save-btn" onclick="saveWrong('kanji-mc')">오답 저장</button>
-      <button class="next-btn" id="mc-next-btn" onclick="nextMCQuestion()">다음 문제 ▶</button>
-    </div>
-  </div>
-
-  <!-- 주관식 컨테이너 -->
-  <div id="sa-container" class="card" style="display:none;">
-    <div class="card-header">
-      <div class="question-label">다음 한자의 음을 입력하세요</div>
-      <button class="tour-btn" id="kanji-sa-tour-btn" onclick="toggleTour('kanji-sa')">한바퀴 돌기</button>
-    </div>
-    <div class="tour-progress-wrap" id="kanji-sa-tour-progress">
-      <div class="tour-progress-label" id="kanji-sa-tour-label"></div>
-      <div class="tour-progress-bar-bg"><div class="tour-progress-bar-fill" id="kanji-sa-tour-fill"></div></div>
-    </div>
-    <div class="question" id="sa-question"></div>
-    <div class="sa-input-row">
-      <input type="text" id="sa-answer" placeholder="정답 입력">
-      <button onclick="submitSA()">제출</button>
-    </div>
-    <div class="result" id="sa-result"></div>
-    <div class="description" id="sa-description" style="display:none;"></div>
-    <div class="btn-row">
-      <button class="save-wrong-btn" id="sa-save-btn" onclick="saveWrong('kanji-sa')">오답 저장</button>
-      <button class="next-btn" id="sa-next-btn" onclick="nextSAQuestion()">다음 문제 ▶</button>
-    </div>
-  </div>
-
 </div>
 
 <!-- ════════════ 단어 보기 ════════════ -->
@@ -1889,19 +2198,54 @@
     <div class="level-grid" id="wl-level-grid"></div>
   </div>
 
-  <!-- 상단 바: 다운로드 + 정렬 -->
+  <!-- 상단 바: PNG/인쇄 + 단어선택/발음문제/뜻문제 + 정렬 -->
   <div class="wl-top-bar">
-    <button id="wl-download-mode-btn" onclick="wlToggleDownloadMode()">⬇ 다운로드</button>
+    <div style="display:flex;gap:6px;align-items:center;position:absolute;left:0;">
+      <button class="wl-mode-btn" id="wl-btn-png-top" onclick="wlDownloadPNG()">PNG 저장</button>
+      <button class="wl-mode-btn" id="wl-btn-print-top" onclick="wlPrint()">인쇄/PDF</button>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button class="wl-mode-btn" id="wl-select-mode-btn" onclick="wlToggleSelectMode()">✓ 단어선택</button>
+      <button class="wl-mode-btn" id="wl-quiz-reading-btn" onclick="wlStartInfiniteQuiz('reading')">발음 문제</button>
+      <button class="wl-mode-btn" id="wl-quiz-meaning-btn" onclick="wlStartInfiniteQuiz('meaning')">뜻 문제</button>
+    </div>
+    <button id="wl-tag-show-btn" onclick="wlToggleTagVisible()">태그 표시</button>
     <button id="wl-sort-btn" onclick="wlToggleSort()">단어순</button>
   </div>
 
-  <!-- 선택/다운로드 툴바 (다운로드 모드에서만 표시) -->
-  <div id="wl-toolbar">
-    <button id="wl-btn-all" onclick="wlSelectAll()">전체 선택</button>
-    <button id="wl-btn-none" onclick="wlSelectNone()">선택 해제</button>
-    <button id="wl-btn-png" class="wl-action-btn" onclick="wlDownloadPNG()" disabled>PNG 저장</button>
-    <button id="wl-btn-print" class="wl-action-btn" onclick="wlPrint()" disabled>인쇄/PDF 저장</button>
-    <span id="wl-select-count">0개 선택됨</span>
+  <!-- 선택/다운로드 툴바 (다운로드 모드에서만 표시: PNG/인쇄는 상단으로 이동) -->
+  <div id="wl-toolbar"></div>
+
+  <!-- 태그 필터 바 (태그표시 ON 시 표시) -->
+  <div id="wl-tag-filter-bar">
+    <button class="wl-tag-filter-btn active" data-tag="-1" onclick="wlSetTagFilter(-1)">전체</button>
+    <button class="wl-tag-filter-btn" data-tag="0" onclick="wlSetTagFilter(0)">미분류</button>
+    <button class="wl-tag-filter-btn" data-tag="1" onclick="wlSetTagFilter(1)">학습중</button>
+    <button class="wl-tag-filter-btn" data-tag="2" onclick="wlSetTagFilter(2)">복습중</button>
+    <button class="wl-tag-filter-btn" data-tag="3" onclick="wlSetTagFilter(3)">완료</button>
+  </div>
+
+  <!-- 하단 고정 선택 바 (단어선택 모드에서만 표시) -->
+  <div id="wl-select-bar">
+    <button class="wl-bar-btn" onclick="wlSelectAll()">전체선택</button>
+    <button class="wl-bar-btn" onclick="wlSelectNone()">선택해제</button>
+    <span class="wl-bar-count" id="wl-select-count">0개 선택됨</span>
+    <div class="wl-dropup-wrap">
+      <button class="wl-bar-btn" id="wl-quiz-dropup-btn" onclick="wlToggleDropup('quiz')">문제풀기 ▲</button>
+      <div class="wl-dropup" id="wl-quiz-dropup">
+        <button onclick="wlStartSelectedQuiz('reading')">발음</button>
+        <button onclick="wlStartSelectedQuiz('meaning')">뜻</button>
+      </div>
+    </div>
+    <div class="wl-dropup-wrap">
+      <button class="wl-bar-btn" id="wl-tag-dropup-btn" onclick="wlToggleDropup('tag')">태그변경 ▲</button>
+      <div class="wl-dropup" id="wl-tag-dropup">
+        <button onclick="wlSetTag(0)">미분류</button>
+        <button onclick="wlSetTag(1)">학습중</button>
+        <button onclick="wlSetTag(2)">복습중</button>
+        <button onclick="wlSetTag(3)">완료</button>
+      </div>
+    </div>
   </div>
 
   <!-- 단어 카드 목록 -->
@@ -1920,6 +2264,72 @@
       <button class="popup-btn-primary" id="wl-popup-btn1" onclick="wlPopupAction('one')">1장만 다운로드</button>
       <button class="popup-btn-secondary" id="wl-popup-btn2" onclick="wlPopupAction('zip')">압축파일 다운로드</button>
       <button class="popup-btn-cancel" onclick="wlPopupClose()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 단어목록 퀴즈 팝업 (무한/유한 공용) ════ -->
+<div id="wl-quiz-popup">
+  <div id="wl-quiz-popup-inner">
+    <div id="wl-quiz-popup-header">
+      <div id="wl-quiz-popup-mode-switch">
+        <button id="wl-qp-btn-reading" onclick="wlQPSwitchMode('reading')">발음</button>
+        <button id="wl-qp-btn-meaning" onclick="wlQPSwitchMode('meaning')">뜻</button>
+      </div>
+      <button id="wl-quiz-popup-close" onclick="wlQPClose()">✕ 닫기</button>
+    </div>
+    <div id="wl-quiz-popup-progress" style="display:none;">
+      <div id="wl-quiz-popup-progress-label"></div>
+      <div id="wl-quiz-popup-bar-bg"><div id="wl-quiz-popup-bar-fill" style="width:0%"></div></div>
+    </div>
+    <div id="wl-quiz-popup-body">
+      <div id="wl-quiz-popup-label"></div>
+      <div id="wl-quiz-popup-question"></div>
+      <div id="wl-quiz-popup-mc-opts" style="display:none;"></div>
+      <div id="wl-quiz-popup-sa-row" style="display:none;">
+        <input type="text" id="wl-quiz-popup-answer" placeholder="정답 입력" enterkeyhint="done"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();wlQPSubmit();}">
+        <button onclick="wlQPSubmit()">제출</button>
+      </div>
+      <div id="wl-quiz-popup-result"></div>
+      <div id="wl-quiz-popup-desc"></div>
+      <div id="wl-quiz-popup-btn-row">
+        <button id="wl-quiz-popup-save-btn" onclick="wlQPSaveWrong(this)">오답 저장</button>
+        <button id="wl-quiz-popup-next-btn" onclick="wlQPNext()">다음 문제 ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ 단어목록 유한모드 결과 팝업 ════ -->
+<div id="wl-result-popup">
+  <div id="wl-result-popup-inner">
+    <div id="wl-result-popup-score"></div>
+    <!-- 정답/오답 토글 탭 -->
+    <div id="wl-result-tab-row">
+      <button class="wl-result-tab active" id="wl-result-tab-wrong" onclick="wlResultShowTab('wrong')">오답</button>
+      <button class="wl-result-tab" id="wl-result-tab-correct" onclick="wlResultShowTab('correct')">정답</button>
+    </div>
+    <!-- 선택 모드 바 -->
+    <div id="wl-result-select-bar">
+      <button onclick="wlResultSelectAll()">전체선택</button>
+      <button onclick="wlResultSelectNone()">선택해제</button>
+      <div class="wl-result-tag-dropup-wrap">
+        <button onclick="wlResultToggleTagDropup()">태그변경 ▲</button>
+        <div class="wl-result-tag-dropup" id="wl-result-tag-dropup">
+          <button onclick="wlResultSetTag(0)">미분류</button>
+          <button onclick="wlResultSetTag(1)">학습중</button>
+          <button onclick="wlResultSetTag(2)">복습중</button>
+          <button onclick="wlResultSetTag(3)">완료</button>
+        </div>
+      </div>
+      <span id="wl-result-select-count">0개 선택됨</span>
+    </div>
+    <div id="wl-result-popup-list"></div>
+    <div id="wl-result-popup-btns">
+      <button id="wl-result-popup-select-btn" onclick="wlResultToggleSelectMode()">단어 선택</button>
+      <button id="wl-result-popup-retry-btn" onclick="wlResultRetry()" style="display:none;">오답 다시 풀기</button>
+      <button id="wl-result-popup-close-btn" onclick="wlResultClose()">닫기</button>
     </div>
   </div>
 </div>
@@ -1993,7 +2403,7 @@
     <div class="conj-verb-display" id="cs-verb"></div>
     <div class="conj-form-display" id="cs-form"></div>
     <div class="sa-input-row">
-      <input type="text" id="cs-answer" placeholder="정답 입력">
+      <input type="text" id="cs-answer" placeholder="정답 입력" enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();event.stopPropagation();submitConjSA();}">
       <button onclick="submitConjSA()">제출</button>
     </div>
     <div class="result" id="cs-result"></div>
@@ -2170,13 +2580,20 @@
       </button>
     </div>
     <div class="tour-wrong-list" id="tour-wrong-list"></div>
-    <button class="tour-popup-close" onclick="closeTourPopup()">확인</button>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:0 24px 16px;">
+      <button id="tour-popup-retry-btn" onclick="tourRetry()"
+        style="display:none;padding:11px;font-size:14px;font-family:inherit;font-weight:700;
+               border:none;background:#4f8ef7;color:#fff;border-radius:10px;cursor:pointer;">
+        오답 다시 풀기
+      </button>
+      <button class="tour-popup-close" onclick="closeTourPopup()" style="border-radius:10px;">확인</button>
+    </div>
   </div>
 </div>
 
 <footer>© 치로 일본어. All rights reserved.</footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="data.js"></script>
 <script src="data_conj.js"></script>
@@ -2210,17 +2627,17 @@ let currentTop = 'main'; // 'main' | 'word' | 'wordlist'
 function showTop(top) {
   // 탭 이동 시 모든 한바퀴 취소
   ['noun','verb','kanji-mc','kanji-sa','cg','cm','cs','dict','trans'].forEach(id => cancelTourIfActive(id));
-  const defaults = { main: 'home', word: 'noun', wordlist: 'noun', conj: 'conj-grammar', trans: 'trans', dictation: 'dictation-quiz', wrong: 'wrong' };
+  const defaults = { main: 'home', wordlist: 'noun', conj: 'conj-grammar', trans: 'trans', dictation: 'dictation-quiz', wrong: 'wrong' };
   if (top === 'wrong') { showWrongMain(); _setNavActive('wrong'); return; }
   showSub(top, defaults[top]);
 }
 
 function _setNavActive(top) {
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'wordlist', 'word', 'conj', 'trans', 'dictation', 'wrong'];
+    const tops = ['main', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
-  ['main', 'word', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'].forEach(g => {
+  ['main', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'].forEach(g => {
     const el = document.getElementById('subnav-' + g);
     if (el) el.style.display = g === top ? '' : 'none';
   });
@@ -2230,7 +2647,6 @@ function _setNavActive(top) {
 function showSub(top, sub) {
   // 하위탭 이동 시 해당 탑의 한바퀴 취소
   const topTourMap = {
-    word: ['noun','verb','kanji-mc','kanji-sa'],
     conj: ['cg','cm','cs'],
     dictation: ['dict'],
     trans: ['trans']
@@ -2240,12 +2656,12 @@ function showSub(top, sub) {
 
   // 상위탭 active
   document.querySelectorAll('#main-nav > button').forEach((b, i) => {
-    const tops = ['main', 'wordlist', 'word', 'conj', 'trans', 'dictation', 'wrong'];
+    const tops = ['main', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'];
     b.classList.toggle('nav-active', tops[i] === top);
   });
 
   // 하위탭 그룹 표시/숨김
-  ['main', 'word', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'].forEach(g => {
+  ['main', 'wordlist', 'conj', 'trans', 'dictation', 'wrong'].forEach(g => {
     const el = document.getElementById('subnav-' + g);
     if (el) el.style.display = g === top ? '' : 'none';
   });
@@ -2274,9 +2690,6 @@ function _activatePage(id) {
     const isMC = document.getElementById('btn-mc').classList.contains('active');
     isMC ? nextMCQuestion() : nextSAQuestion();
   }
-  if (pageId === 'noun' && currentTop === 'word') nextNounQuestion();
-  if (pageId === 'verb' && currentTop === 'word') nextVerbQuestion();
-  if (pageId === 'loanword' && currentTop === 'word') nextLWQuestion();
   if (currentTop === 'wordlist') selectWLCat(id);
 
   if (conjSubs.includes(id)) {
@@ -2708,6 +3121,36 @@ function submitSA() {
 
 /* ═══ KEYBOARD ═══ */
 document.addEventListener('keydown', (e) => {
+  // ── ESC: 열려있는 팝업 닫기 ──
+  if (e.key === 'Escape') {
+    if (document.getElementById('wl-result-popup').classList.contains('open')) { wlResultClose(); return; }
+    if (document.getElementById('wl-quiz-popup').classList.contains('open'))   { wlQPClose(); return; }
+    if (document.getElementById('tour-popup-overlay').classList.contains('open')) { closeTourPopup(); return; }
+    if (document.getElementById('review-overlay').classList.contains('open'))  { closeReview(); return; }
+    if (document.getElementById('wl-png-popup').classList.contains('open'))    { wlPopupClose(); return; }
+  }
+
+  // ── 단어보기 퀴즈 팝업 ──
+  if (document.getElementById('wl-quiz-popup').classList.contains('open')) {
+    const isMC = document.getElementById('wl-quiz-popup-mc-opts').style.display !== 'none';
+    const isSA = document.getElementById('wl-quiz-popup-sa-row').style.display !== 'none';
+    if (isMC) {
+      const numMap = { 'Digit1':0,'Digit2':1,'Digit3':2,'Digit4':3,'Numpad1':0,'Numpad2':1,'Numpad3':2,'Numpad4':3 };
+      const idx = numMap[e.code];
+      if (!wlQP.answered && idx !== undefined) {
+        const btns = document.querySelectorAll('#wl-quiz-popup-mc-opts button');
+        if (btns[idx] && !btns[idx].disabled) { e.preventDefault(); btns[idx].click(); }
+      }
+      if (wlQP.answered && (e.key === 'Enter' || e.key === 'ArrowRight')) {
+        e.preventDefault(); wlQPNext();
+      }
+    }
+    if (isSA && wlQP.answered && e.key === 'ArrowRight') {
+      e.preventDefault(); wlQPNext();
+    }
+    return;
+  }
+
   // ── 한자 문제 ──
   if (document.getElementById('quiz').classList.contains('active')) {
     const isMC = document.getElementById('mc-container').style.display !== 'none';
@@ -2722,7 +3165,6 @@ document.addEventListener('keydown', (e) => {
       if (kanjianswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextMCQuestion();
     }
     if (isSA) {
-      if (e.key === 'Enter') submitSA();
       if (kanjianswered && e.key === 'ArrowRight') nextSAQuestion();
     }
     return;
@@ -2730,20 +3172,17 @@ document.addEventListener('keydown', (e) => {
 
   // ── 명사 문제 ──
   if (document.getElementById('noun').classList.contains('active')) {
-    if (e.key === 'Enter') submitNoun();
     if (nounAnswered && e.key === 'ArrowRight') nextNounQuestion();
   }
 
   // ── 동사 문제 ──
   if (document.getElementById('verb').classList.contains('active')) {
-    if (e.key === 'Enter') submitVerb();
     if (verbAnswered && e.key === 'ArrowRight') nextVerbQuestion();
   }
 
   // ── 동사변형 주관식 ──
   if (document.getElementById('conj') && document.getElementById('conj').classList.contains('active')) {
     if (conjCurrentSub === 'conj-sa') {
-      if (e.key === 'Enter') submitConjSA();
       if (csAnswered && e.key === 'ArrowRight') nextConjSA();
     }
     if (conjCurrentSub === 'conj-grammar') {
@@ -3096,6 +3535,15 @@ function renderWordList() {
 
   if (!items.length) return;
 
+  // 태그 필터 적용
+  if (wlTagFilter !== -1) {
+    const data = wlLoadTagData();
+    items = items.filter(item => {
+      const tagVal = data[wlTagKey(wlCat, item)] || 0;
+      return tagVal === wlTagFilter;
+    });
+  }
+
   items.forEach((item, idx) => {
     const card = document.createElement('div');
     card.className = 'wl-card';
@@ -3105,6 +3553,16 @@ function renderWordList() {
     checkEl.className = 'wl-card-check';
     checkEl.textContent = '✓';
     card.appendChild(checkEl);
+
+    // 태그 배지
+    const tagData = wlTagVisible ? wlLoadTagData() : null;
+    if (tagData !== null) {
+      const tagVal = tagData[wlTagKey(wlCat, item)] || 0;
+      const badge = document.createElement('div');
+      badge.className = 'wl-tag-badge' + (tagVal > 0 ? ' ' + TAG_CLASSES[tagVal] : '');
+      badge.textContent = tagVal > 0 ? TAG_LABELS[tagVal] : '';
+      card.appendChild(badge);
+    }
 
     if (wlCat === 'kanji') {
       card.innerHTML += `
@@ -3140,23 +3598,542 @@ function renderWordList() {
 /* ═══ 단어 보기 선택/다운로드/인쇄 ═══ */
 let wlSelected = new Set();
 let wlRenderedItems = [];
-let wlDownloadMode = false;
+let wlSelectMode = false;
 let wlLastClickedIdx = null;  // shift+클릭용
 
-function wlToggleDownloadMode() {
-  wlDownloadMode = !wlDownloadMode;
-  const btn = document.getElementById('wl-download-mode-btn');
-  const toolbar = document.getElementById('wl-toolbar');
+function wlToggleSelectMode() {
+  wlSelectMode = !wlSelectMode;
+  const btn = document.getElementById('wl-select-mode-btn');
+  const bar = document.getElementById('wl-select-bar');
   const grid = document.getElementById('wl-card-grid');
-  btn.classList.toggle('active', wlDownloadMode);
-  btn.textContent = wlDownloadMode ? '✕ 다운로드' : '⬇ 다운로드';
-  toolbar.classList.toggle('wl-mode-active', wlDownloadMode);
-  grid.classList.toggle('wl-mode-active', wlDownloadMode);
-  if (!wlDownloadMode) { wlSelectNone(); wlLastClickedIdx = null; }
+  btn.classList.toggle('active', wlSelectMode);
+  bar.classList.toggle('open', wlSelectMode);
+  grid.classList.toggle('wl-mode-active', wlSelectMode);
+  // 하단 바 여백 확보
+  document.getElementById('wordlist').style.paddingBottom = wlSelectMode ? '70px' : '';
+  if (!wlSelectMode) { wlSelectNone(); wlLastClickedIdx = null; wlCloseAllDropups(); }
+}
+
+function wlToggleDropup(which) {
+  const quizEl = document.getElementById('wl-quiz-dropup');
+  const tagEl  = document.getElementById('wl-tag-dropup');
+  if (which === 'quiz') {
+    const isOpen = quizEl.classList.contains('open');
+    tagEl.classList.remove('open');
+    quizEl.classList.toggle('open', !isOpen);
+  } else {
+    const isOpen = tagEl.classList.contains('open');
+    quizEl.classList.remove('open');
+    tagEl.classList.toggle('open', !isOpen);
+  }
+}
+
+function wlCloseAllDropups() {
+  document.getElementById('wl-quiz-dropup').classList.remove('open');
+  document.getElementById('wl-tag-dropup').classList.remove('open');
+}
+
+// 한자 탭에서 버튼 라벨 전환
+function wlUpdateQuizBtnLabels() {
+  const isKanji = wlCat === 'kanji';
+  document.getElementById('wl-quiz-reading-btn').textContent = isKanji ? '객관식' : '발음 문제';
+  document.getElementById('wl-quiz-meaning-btn').textContent = isKanji ? '주관식' : '뜻 문제';
+  // 드롭업 내 버튼도 교체
+  const dropBtns = document.querySelectorAll('#wl-quiz-dropup button');
+  if (dropBtns[0]) dropBtns[0].textContent = isKanji ? '객관식' : '발음';
+  if (dropBtns[1]) dropBtns[1].textContent = isKanji ? '주관식' : '뜻';
+}
+
+function wlUpdateToolbar() {
+  const n = wlSelected.size;
+  document.getElementById('wl-select-count').textContent = `${n}개 선택됨`;
+  const hasSelection = n > 0;
+  const pngBtn = document.getElementById('wl-btn-png-top');
+  const printBtn = document.getElementById('wl-btn-print-top');
+  if (pngBtn) pngBtn.style.opacity = hasSelection ? '1' : '0.4';
+  if (printBtn) printBtn.style.opacity = hasSelection ? '1' : '0.4';
+}
+
+// 외부 클릭 시 드롭업 닫기
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.wl-dropup-wrap')) wlCloseAllDropups();
+});
+
+/* ── 단어목록 퀴즈 팝업 STATE ── */
+let wlQP = {
+  mode: 'reading',    // 'reading' | 'meaning' | 'mc' | 'sa'
+  isInfinite: true,   // true=무한모드 / false=유한모드
+  pool: [],           // 전체 풀 (무한모드)
+  deck: [],           // 덱 (유한모드: 선택 단어, 무한모드: 셔플 풀 슬라이스)
+  idx: 0,
+  correct: 0,
+  wrongs: [],         // [{item, myAnswer, correct}]
+  corrects: [],       // [{item, myAnswer, correct}]
+  current: null,
+  answered: false,
+  cat: '',            // 현재 wlCat 스냅샷
+};
+
+/* 무한모드 진입 */
+function wlStartInfiniteQuiz(mode) {
+  const items = wlGetCurrentLevelItems();
+  if (!items.length) return;
+  wlQP.isInfinite = true;
+  wlQP.pool = items;
+  wlQP.cat = wlCat;
+  wlQP.wrongs = [];
+  wlQP.corrects = [];
+  wlQP.correct = 0;
+  wlQPOpenPopup(mode);
+}
+
+/* 유한모드 진입 */
+function wlStartSelectedQuiz(mode) {
+  wlCloseAllDropups();
+  const items = wlGetSelectedItems();
+  if (!items.length) return;
+  wlQP.isInfinite = false;
+  wlQP.pool = items;
+  wlQP.deck = shuffle([...items]);
+  wlQP.idx = 0;
+  wlQP.correct = 0;
+  wlQP.wrongs = [];
+  wlQP.corrects = [];
+  wlQP.cat = wlCat;
+  wlQPOpenPopup(mode);
+}
+
+/* 팝업 열기 공통 */
+function wlQPOpenPopup(mode) {
+  // 모드 버튼 라벨 (한자는 mc/sa)
+  const isKanji = wlQP.cat === 'kanji';
+  const readingLabel = isKanji ? '객관식' : '발음';
+  const meaningLabel = isKanji ? '주관식' : '뜻';
+  document.getElementById('wl-qp-btn-reading').textContent = readingLabel;
+  document.getElementById('wl-qp-btn-meaning').textContent = meaningLabel;
+
+  // 진행률 바: 유한모드만 표시 / 모드스위치: 무한모드만 표시
+  document.getElementById('wl-quiz-popup-progress').style.display = wlQP.isInfinite ? 'none' : '';
+  document.getElementById('wl-quiz-popup-mode-switch').style.display = wlQP.isInfinite ? '' : 'none';
+
+  document.getElementById('wl-quiz-popup').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  wlQPSwitchMode(mode);
+}
+
+/* 모드 전환 */
+function wlQPSwitchMode(mode) {
+  const isKanji = wlQP.cat === 'kanji';
+  // 한자: reading→mc, meaning→sa / 나머지: reading/meaning 그대로
+  wlQP.mode = isKanji ? (mode === 'reading' ? 'mc' : 'sa') : mode;
+
+  document.getElementById('wl-qp-btn-reading').classList.toggle('active', mode === 'reading');
+  document.getElementById('wl-qp-btn-meaning').classList.toggle('active', mode === 'meaning');
+  wlQPNext(true);
+}
+
+/* 다음 문제 */
+function wlQPNext(reset) {
+  wlQP.answered = false;
+  document.getElementById('wl-quiz-popup-result').textContent = '';
+  document.getElementById('wl-quiz-popup-result').className = '';
+  document.getElementById('wl-quiz-popup-desc').style.display = 'none';
+  document.getElementById('wl-quiz-popup-desc').textContent = '';
+  document.getElementById('wl-quiz-popup-save-btn').style.display = 'none';
+  document.getElementById('wl-quiz-popup-save-btn').className = '';
+  document.getElementById('wl-quiz-popup-save-btn').textContent = '오답 저장';
+  document.getElementById('wl-quiz-popup-next-btn').style.display = 'none';
+  document.getElementById('wl-quiz-popup-mc-opts').style.display = 'none';
+  document.getElementById('wl-quiz-popup-sa-row').style.display = 'none';
+
+  let item;
+  if (wlQP.isInfinite) {
+    // 무한모드: 완전 랜덤
+    item = wlQP.pool[Math.floor(Math.random() * wlQP.pool.length)];
+  } else {
+    // 유한모드: 덱에서 순서대로
+    if (!reset && wlQP.idx >= wlQP.deck.length) {
+      wlQPFinish();
+      return;
+    }
+    if (reset) { /* 모드 전환 시 현재 위치 유지 */ }
+    item = wlQP.deck[wlQP.idx];
+  }
+  wlQP.current = item;
+  wlQPRenderQuestion(item);
+
+  // 진행률 업데이트
+  if (!wlQP.isInfinite) {
+    const total = wlQP.deck.length;
+    const done = wlQP.idx;
+    document.getElementById('wl-quiz-popup-progress-label').textContent = `${done} / ${total}`;
+    document.getElementById('wl-quiz-popup-bar-fill').style.width = `${total ? (done/total*100) : 0}%`;
+  }
+}
+
+/* 문제 렌더 */
+function wlQPRenderQuestion(item) {
+  const mode = wlQP.mode;
+  const cat = wlQP.cat;
+  let questionText = '', labelText = '';
+
+  if (cat === 'kanji') {
+    questionText = item[0]; // 한자
+    labelText = mode === 'mc' ? '다음 한자의 음을 고르세요' : '다음 한자의 음을 입력하세요';
+  } else if (cat === 'loanword') {
+    questionText = mode === 'reading' ? item[1] : item[0];
+    labelText = mode === 'reading' ? '다음 뜻의 단어(가타카나)를 입력하세요' : '다음 단어의 뜻을 입력하세요';
+  } else {
+    // noun / verb
+    questionText = item[0];
+    labelText = mode === 'reading' ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요';
+  }
+
+  document.getElementById('wl-quiz-popup-label').textContent = labelText;
+  document.getElementById('wl-quiz-popup-question').textContent = questionText;
+
+  if (mode === 'mc') {
+    // 한자 객관식
+    const correct = item[1];
+    const pool = typeof kanjidataset !== 'undefined' ? kanjidataset : [];
+    const wrongPool = pool.filter(d => d[1] !== correct && d[7] === item[7]);
+    const wrongs = shuffle(wrongPool).slice(0, 3).map(d => d[1]);
+    const choices = shuffle([correct, ...wrongs]);
+    const opts = document.getElementById('wl-quiz-popup-mc-opts');
+    opts.innerHTML = '';
+    opts.style.display = 'grid';
+    choices.forEach(ch => {
+      const b = document.createElement('button');
+      b.textContent = ch;
+      b.onclick = () => wlQPSubmitMC(b, ch, correct);
+      opts.appendChild(b);
+    });
+  } else {
+    // 주관식
+    const saRow = document.getElementById('wl-quiz-popup-sa-row');
+    saRow.style.display = 'flex';
+    const inp = document.getElementById('wl-quiz-popup-answer');
+    inp.value = '';
+    inp.style.color = '';
+    setTimeout(() => inp.focus({ preventScroll: true }), 50);
+  }
+}
+
+/* 주관식 제출 */
+function wlQPSubmit() {
+  if (wlQP.answered) { wlQPAdvance(); return; }
+  const item = wlQP.current;
+  const mode = wlQP.mode;
+  const cat = wlQP.cat;
+  const inp = document.getElementById('wl-quiz-popup-answer');
+  const input = inp.value.trim();
+
+  let correct, isCorrect;
+  if (cat === 'kanji') {
+    correct = item[1];
+    isCorrect = input === correct || input === correct.replace(/^ん/, 'ん');
+    // 두음법칙 허용
+    if (!isCorrect && typeof checkDuEum === 'function') isCorrect = checkDuEum(input, correct);
+  } else if (cat === 'loanword') {
+    correct = mode === 'reading' ? item[0] : item[1];
+    isCorrect = input === correct || (mode === 'meaning' && item[1].includes(input) && input.length > 0);
+  } else {
+    correct = mode === 'reading' ? item[1] : item[2];
+    isCorrect = input === correct;
+    if (!isCorrect && mode === 'reading' && typeof checkDuEum === 'function') isCorrect = checkDuEum(input, correct);
+  }
+
+  wlQPShowResult(isCorrect, input, correct, item);
+  inp.style.color = '#aaa';
+}
+
+/* 객관식 제출 */
+function wlQPSubmitMC(btn, chosen, correct) {
+  if (wlQP.answered) return;
+  const isCorrect = chosen === correct;
+  document.querySelectorAll('#wl-quiz-popup-mc-opts button').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  if (!isCorrect) btn.classList.add('wrong');
+  wlQPShowResult(isCorrect, chosen, correct, wlQP.current);
+}
+
+/* 결과 표시 공통 */
+function wlQPShowResult(isCorrect, myAnswer, correct, item) {
+  wlQP.answered = true;
+  const resEl = document.getElementById('wl-quiz-popup-result');
+  resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
+  resEl.className = isCorrect ? 'correct' : 'wrong';
+
+  // 부가 설명
+  const descEl = document.getElementById('wl-quiz-popup-desc');
+  const cat = wlQP.cat;
+  let descText = '';
+  if (cat === 'noun' || cat === 'verb') {
+    descText = `${item[1]} / ${item[2]}`;
+  } else if (cat === 'loanword') {
+    descText = `${item[0]} / ${item[1]}${item[2] ? ` / ${item[2]}` : ''}`;
+  } else if (cat === 'kanji') {
+    descText = `${item[1]} — ${item[6] ? item[6].replace(/\n/g, ', ') : ''}`;
+  }
+  if (descText) { descEl.textContent = descText; descEl.style.display = ''; }
+
+  if (!isCorrect) {
+    wlQP.wrongs.push({ item, myAnswer, correct });
+    document.getElementById('wl-quiz-popup-save-btn').style.display = 'inline-block';
+  }
+
+  if (!wlQP.isInfinite) {
+    if (isCorrect) wlQP.correct++;
+    wlQP.idx++;
+    // 진행률 업데이트
+    const total = wlQP.deck.length;
+    document.getElementById('wl-quiz-popup-progress-label').textContent = `${wlQP.idx} / ${total}`;
+    document.getElementById('wl-quiz-popup-bar-fill').style.width = `${total ? (wlQP.idx/total*100) : 0}%`;
+  }
+
+  document.getElementById('wl-quiz-popup-next-btn').style.display = 'inline-block';
+}
+
+/* 다음 문제로 진행 (결과 표시 후 Next 버튼) */
+function wlQPAdvance() {
+  if (!wlQP.isInfinite && wlQP.idx >= wlQP.deck.length) {
+    wlQPFinish();
+    return;
+  }
+  wlQPNext();
+}
+
+/* 오답 저장 */
+function wlQPSaveWrong(btn) {
+  if (btn.classList.contains('saved')) return;
+  const item = wlQP.current;
+  const cat = wlQP.cat;
+  const mode = wlQP.mode;
+  // catId 매핑
+  let catId;
+  if (cat === 'noun') catId = mode === 'reading' ? 'noun_reading' : 'noun_meaning';
+  else if (cat === 'verb') catId = mode === 'reading' ? 'verb_reading' : 'verb_meaning';
+  else if (cat === 'kanji') catId = mode === 'mc' ? 'kanji_mc' : 'kanji_sa';
+  else if (cat === 'loanword') catId = mode === 'reading' ? 'lw_reading' : 'lw_meaning';
+  if (catId) {
+    const itemKey = item[0];
+    incWrongCount(catId, itemKey);
+    refreshWrongBadges();
+  }
+  btn.classList.add('saved');
+  btn.textContent = '저장됨';
+}
+
+/* 팝업 닫기 */
+function wlQPClose() {
+  document.getElementById('wl-quiz-popup').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* 유한모드 완료 */
+function wlQPFinish() {
+  wlQPClose();
+  const total = wlQP.deck.length;
+  const correct = wlQP.correct;
+  document.getElementById('wl-result-popup-score').innerHTML =
+    `결과: <span class="score-num">${correct} / ${total}</span>`;
+
+  // 정답/오답 분리 저장
+  const wrongSet = new Set(wlQP.wrongs.map(w => w.item));
+  wlQP.corrects = wlQP.deck
+    .filter(item => !wrongSet.has(item))
+    .map(item => {
+      const mode = wlQP.mode;
+      const cat = wlQP.cat;
+      let correctAns = '';
+      if (cat === 'kanji') correctAns = item[1];
+      else if (cat === 'loanword') correctAns = mode === 'reading' ? item[0] : item[1];
+      else correctAns = mode === 'reading' ? item[1] : item[2];
+      return { item, myAnswer: correctAns, correct: correctAns };
+    });
+
+  // 탭 초기화 - 오답 탭부터 표시
+  wlResultCurrentTab = 'wrong';
+  wlResultSelectModeOn = false;
+  wlResultSelected = new Set();
+  wlResultLastClickedIdx = null;
+  document.getElementById('wl-result-tab-wrong').classList.add('active');
+  document.getElementById('wl-result-tab-correct').classList.remove('active');
+  document.getElementById('wl-result-select-bar').classList.remove('visible');
+  document.getElementById('wl-result-popup-list').classList.remove('wl-result-select-mode');
+  document.getElementById('wl-result-popup-select-btn').textContent = '단어 선택';
+
+  const retryBtn = document.getElementById('wl-result-popup-retry-btn');
+  retryBtn.style.display = wlQP.wrongs.length > 0 ? '' : 'none';
+
+  wlResultRenderList();
+  document.getElementById('wl-result-popup').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+/* 결과 팝업 상태 */
+let wlResultCurrentTab = 'wrong'; // 'wrong' | 'correct'
+let wlResultSelectModeOn = false;
+let wlResultSelected = new Set();
+let wlResultLastClickedIdx = null; // Shift 범위 선택용
+
+/* 탭 전환 */
+function wlResultShowTab(tab) {
+  wlResultCurrentTab = tab;
+  document.getElementById('wl-result-tab-wrong').classList.toggle('active', tab === 'wrong');
+  document.getElementById('wl-result-tab-correct').classList.toggle('active', tab === 'correct');
+  wlResultSelected = new Set();
+  wlResultLastClickedIdx = null;
+  wlResultUpdateSelectCount();
+  wlResultRenderList();
+}
+
+/* 리스트 렌더링 */
+function wlResultRenderList() {
+  const listEl = document.getElementById('wl-result-popup-list');
+  listEl.innerHTML = '';
+  const items = wlResultCurrentTab === 'wrong' ? wlQP.wrongs : (wlQP.corrects || []);
+  if (!items.length) {
+    listEl.innerHTML = `<div style="color:#aaa;font-size:13px;padding:12px 0;text-align:center;">${wlResultCurrentTab === 'wrong' ? '오답 없음 🎉' : '정답 없음'}</div>`;
+    return;
+  }
+  items.forEach((w, idx) => {
+    const div = document.createElement('div');
+    div.className = 'wl-result-item' + (wlResultSelectModeOn ? ' selectable' : '');
+    if (wlResultSelected.has(idx)) div.classList.add('wl-result-selected');
+
+    const check = document.createElement('div');
+    check.className = 'wl-result-item-check';
+    check.textContent = '✓';
+    div.appendChild(check);
+
+    const body = document.createElement('div');
+    body.style.cssText = 'flex:1;';
+    const isWrong = wlResultCurrentTab === 'wrong';
+    body.innerHTML = `
+      <div class="wl-result-item-word">${w.item[0]}</div>
+      <div class="wl-result-item-detail ${isWrong ? 'wl-result-item-wrong' : 'wl-result-item-correct'}">
+        ${isWrong ? `내 답: ${w.myAnswer || '(없음)'} → ` : ''}정답: ${w.correct}
+      </div>`;
+    div.appendChild(body);
+
+    if (wlResultSelectModeOn) {
+      div.onclick = (e) => {
+        const items = wlResultCurrentTab === 'wrong' ? wlQP.wrongs : (wlQP.corrects || []);
+        if (e.shiftKey && wlResultLastClickedIdx !== null) {
+          // Shift 범위 선택
+          const from = Math.min(wlResultLastClickedIdx, idx);
+          const to   = Math.max(wlResultLastClickedIdx, idx);
+          const doSelect = !wlResultSelected.has(idx);
+          for (let i = from; i <= to; i++) {
+            if (doSelect) wlResultSelected.add(i);
+            else wlResultSelected.delete(i);
+          }
+          wlResultRenderList();
+        } else {
+          if (wlResultSelected.has(idx)) wlResultSelected.delete(idx);
+          else wlResultSelected.add(idx);
+          div.classList.toggle('wl-result-selected', wlResultSelected.has(idx));
+          check.style.background = wlResultSelected.has(idx) ? '#4f8ef7' : '';
+          check.style.borderColor = wlResultSelected.has(idx) ? '#4f8ef7' : '';
+          check.style.color = wlResultSelected.has(idx) ? '#fff' : 'transparent';
+          wlResultLastClickedIdx = idx;
+        }
+        wlResultUpdateSelectCount();
+      };
+    }
+    listEl.appendChild(div);
+  });
+}
+
+/* 선택 모드 토글 */
+function wlResultToggleSelectMode() {
+  wlResultSelectModeOn = !wlResultSelectModeOn;
+  wlResultSelected = new Set();
+  wlResultLastClickedIdx = null;
+  const bar = document.getElementById('wl-result-select-bar');
+  const list = document.getElementById('wl-result-popup-list');
+  const btn = document.getElementById('wl-result-popup-select-btn');
+  bar.classList.toggle('visible', wlResultSelectModeOn);
+  list.classList.toggle('wl-result-select-mode', wlResultSelectModeOn);
+  btn.textContent = wlResultSelectModeOn ? '선택 취소' : '단어 선택';
+  wlResultUpdateSelectCount();
+  wlResultRenderList();
+}
+
+function wlResultSelectAll() {
+  const items = wlResultCurrentTab === 'wrong' ? wlQP.wrongs : (wlQP.corrects || []);
+  wlResultSelected = new Set(items.map((_, i) => i));
+  wlResultUpdateSelectCount();
+  wlResultRenderList();
+}
+function wlResultSelectNone() {
+  wlResultSelected = new Set();
+  wlResultUpdateSelectCount();
+  wlResultRenderList();
+}
+function wlResultUpdateSelectCount() {
+  document.getElementById('wl-result-select-count').textContent = `${wlResultSelected.size}개 선택됨`;
+}
+
+/* 태그 드롭업 */
+function wlResultToggleTagDropup() {
+  document.getElementById('wl-result-tag-dropup').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.wl-result-tag-dropup-wrap')) {
+    const d = document.getElementById('wl-result-tag-dropup');
+    if (d) d.classList.remove('open');
+  }
+});
+
+/* 선택된 항목에 태그 적용 */
+function wlResultSetTag(tagVal) {
+  document.getElementById('wl-result-tag-dropup').classList.remove('open');
+  const items = wlResultCurrentTab === 'wrong' ? wlQP.wrongs : (wlQP.corrects || []);
+  const selectedItems = [...wlResultSelected].map(i => items[i]?.item).filter(Boolean);
+  if (!selectedItems.length) return;
+  const data = wlLoadTagData();
+  selectedItems.forEach(item => {
+    const key = wlTagKey(wlQP.cat, item);
+    if (tagVal === 0) delete data[key];
+    else data[key] = tagVal;
+  });
+  wlSaveTagData(data);
+  // 단어목록 배지 갱신 (열려있을 경우)
+  if (typeof wlRefreshTagBadges === 'function') wlRefreshTagBadges();
+}
+
+/* 오답 재도전 */
+function wlResultRetry() {
+  document.getElementById('wl-result-popup').classList.remove('open');
+  const retryItems = wlQP.wrongs.map(w => w.item);
+  wlQP.isInfinite = false;
+  wlQP.deck = shuffle([...retryItems]);
+  wlQP.idx = 0;
+  wlQP.correct = 0;
+  wlQP.wrongs = [];
+  wlQP.corrects = [];
+  const mode = (wlQP.mode === 'mc' || wlQP.mode === 'reading') ? 'reading' : 'meaning';
+  wlQPOpenPopup(mode);
+}
+
+/* 결과 팝업 닫기 */
+function wlResultClose() {
+  document.getElementById('wl-result-popup').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* 현재 단계 기준 단어 목록 반환 (무한모드용) */
+function wlGetCurrentLevelItems() {
+  if (!wlRenderedItems || !wlRenderedItems.length) return [];
+  return [...wlRenderedItems];
 }
 
 function wlToggleCard(card, idx, e) {
-  if (!wlDownloadMode) return;
+  if (!wlSelectMode) return;
   // Shift+클릭: 범위 선택
   if (e && e.shiftKey && wlLastClickedIdx !== null) {
     const from = Math.min(wlLastClickedIdx, idx);
@@ -3186,13 +4163,6 @@ function wlSelectNone() {
   document.querySelectorAll('#wl-card-grid .wl-card').forEach(card => card.classList.remove('wl-selected'));
   wlSelected.clear();
   wlUpdateToolbar();
-}
-
-function wlUpdateToolbar() {
-  const n = wlSelected.size;
-  document.getElementById('wl-select-count').textContent = `${n}개 선택됨`;
-  document.getElementById('wl-btn-png').disabled   = n === 0;
-  document.getElementById('wl-btn-print').disabled = n === 0;
 }
 
 function wlGetSelectedItems() {
@@ -4139,6 +5109,11 @@ function showTourPopup(id, st) {
     });
   }
 
+  // 오답 다시 풀기 버튼
+  const retryBtn = document.getElementById('tour-popup-retry-btn');
+  retryBtn.style.display = (id !== 'trans' && st.wrongs.length > 0) ? '' : 'none';
+  retryBtn.dataset.tourid = id;
+
   document.getElementById('tour-popup-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -4222,6 +5197,23 @@ function closeTourPopup() {
   document.body.style.overflow = '';
 }
 
+function tourRetry() {
+  const id = document.getElementById('tour-popup-retry-btn').dataset.tourid;
+  closeTourPopup();
+  const st = getTourState(id);
+  const retryDeck = st.wrongs.map(w => w.item);
+  if (!retryDeck.length) return;
+  st.active = true;
+  st.deck = shuffle([...retryDeck]);
+  st.idx = 0;
+  st.correct = 0;
+  st.wrongs = [];
+  const btn = document.getElementById(tourBtnId(id));
+  if (btn) btn.classList.add('active');
+  updateTourProgress(id);
+  tourNextQuestion(id);
+}
+
 /* ── 각 퀴즈별 한바퀴 문제 세팅 함수 ── */
 
 function setNounTourQ(item) {
@@ -4234,6 +5226,7 @@ function setNounTourQ(item) {
   document.getElementById('noun-result').className = 'result';
   document.getElementById('noun-description').style.display = 'none';
   document.getElementById('noun-next-btn').style.display = 'none';
+  showSaveBtn('noun', false);
   inp.focus({ preventScroll: true });
 }
 
@@ -4247,6 +5240,7 @@ function setVerbTourQ(item) {
   document.getElementById('verb-result').className = 'result';
   document.getElementById('verb-description').style.display = 'none';
   document.getElementById('verb-next-btn').style.display = 'none';
+  showSaveBtn('verb', false);
   inp.focus({ preventScroll: true });
 }
 
@@ -4274,6 +5268,7 @@ function setKanjiSATourQ(item) {
   document.getElementById('sa-result').className = 'result';
   document.getElementById('sa-description').style.display = 'none';
   document.getElementById('sa-next-btn').style.display = 'none';
+  showSaveBtn('kanji-sa', false);
   inp.focus({ preventScroll: true });
 }
 
@@ -4296,6 +5291,7 @@ function setCGTourQ(item) {
   });
   document.getElementById('cg-result').textContent = '';
   document.getElementById('cg-next-btn').style.display = 'none';
+  showSaveBtn('cg', false);
 }
 
 function setCMTourQ(item) {
@@ -4317,6 +5313,7 @@ function setCMTourQ(item) {
   });
   document.getElementById('cm-result').textContent = '';
   document.getElementById('cm-next-btn').style.display = 'none';
+  showSaveBtn('cm', false);
 }
 
 function setCSTourQ(item) {
@@ -4331,6 +5328,7 @@ function setCSTourQ(item) {
   document.getElementById('cs-result').className = 'result';
   document.getElementById('cs-desc').style.display = 'none';
   document.getElementById('cs-next-btn').style.display = 'none';
+  showSaveBtn('cs', false);
   inp.focus({ preventScroll: true });
 }
 
@@ -4342,6 +5340,7 @@ function setDictTourQ(item) {
   document.getElementById('dict-result').textContent = '';
   document.getElementById('dict-result').className = 'result';
   document.getElementById('dict-next-btn').style.display = 'none';
+  showSaveBtn('dict', false);
   dictPlayAudio();
   inp.focus({ preventScroll: true });
 }
@@ -4826,7 +5825,7 @@ function renderReviewQuestion() {
         <div class="question-label">${isReading ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
         <div class="question" id="rv-question">${d[0]}</div>
         <div class="sa-input-row">
-          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off" enterkeyhint="done">
           <button onclick="submitReview()">제출</button>
         </div>
         <div class="result" id="rv-result"></div>
@@ -4835,7 +5834,7 @@ function renderReviewQuestion() {
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
         e.stopPropagation();
-        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (reviewAnswered) { reviewNextQuestion(); } else { submitReview(); } }
       });
       setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       // checkFn 등록
@@ -4854,7 +5853,7 @@ function renderReviewQuestion() {
         <div class="question-label">${isReading ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
         <div class="question" id="rv-question">${d[0]}</div>
         <div class="sa-input-row">
-          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off" enterkeyhint="done">
           <button onclick="submitReview()">제출</button>
         </div>
         <div class="result" id="rv-result"></div>
@@ -4863,7 +5862,7 @@ function renderReviewQuestion() {
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
         e.stopPropagation();
-        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (reviewAnswered) { reviewNextQuestion(); } else { submitReview(); } }
       });
       setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       reviewCheckFn = () => {
@@ -4897,7 +5896,7 @@ function renderReviewQuestion() {
         <div class="question-label">다음 한자의 음을 입력하세요</div>
         <div class="question" id="rv-question">${d[0]}</div>
         <div class="sa-input-row">
-          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off" enterkeyhint="done">
           <button onclick="submitReview()">제출</button>
         </div>
         <div class="result" id="rv-result"></div>
@@ -4906,7 +5905,7 @@ function renderReviewQuestion() {
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
         e.stopPropagation();
-        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (reviewAnswered) { reviewNextQuestion(); } else { submitReview(); } }
       });
       setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       reviewCheckFn = () => {
@@ -4977,7 +5976,7 @@ function renderReviewQuestion() {
         <div class="conj-verb-display">${conjVerbHTML(v)}</div>
         <div class="conj-form-display"><span class="conj-type-badge">${t.label}</span><span class="conj-type-meaning">${t.meaning}</span></div>
         <div class="sa-input-row">
-          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off">
+          <input type="text" id="rv-answer" placeholder="정답 입력" autocomplete="off" enterkeyhint="done">
           <button onclick="submitReview()">제출</button>
         </div>
         <div class="result" id="rv-result"></div>
@@ -4985,7 +5984,7 @@ function renderReviewQuestion() {
       area.appendChild(card);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
         e.stopPropagation();
-        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (reviewAnswered) { reviewNextQuestion(); } else { submitReview(); } }
       });
       setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       reviewCheckFn = () => {
@@ -5037,10 +6036,10 @@ function renderReviewQuestion() {
       const qText = isReading ? d[1] : d[0];
       const correctAns = isReading ? d[0] : d[1];
       card.innerHTML = `
-        <div class="question-label">${isReading ? '다음 단어의 발음을 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
+        <div class="question-label">${isReading ? '다음 뜻의 단어(가타카나)를 입력하세요' : '다음 단어의 뜻을 입력하세요'}</div>
         <div class="question">${qText}</div>
         <div class="sa-input-row">
-          <input type="text" id="rv-answer" placeholder="정답 입력">
+          <input type="text" id="rv-answer" placeholder="정답 입력" enterkeyhint="done">
           <button onclick="submitReview()">제출</button>
         </div>
         <div class="result" id="rv-result"></div>
@@ -5048,7 +6047,7 @@ function renderReviewQuestion() {
       area.appendChild(card);
       setTimeout(() => { const el = document.getElementById('rv-answer'); if (el) el.focus({ preventScroll: true }); }, 50);
       document.getElementById('rv-answer').addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); submitReview(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (reviewAnswered) { reviewNextQuestion(); } else { submitReview(); } }
       });
       reviewCheckFn = () => {
         const input = document.getElementById('rv-answer').value.trim();
@@ -5375,7 +6374,7 @@ function switchLWMode(mode) {
   document.getElementById('lw-btn-reading').classList.toggle('active', mode === 'reading');
   document.getElementById('lw-btn-meaning').classList.toggle('active', mode === 'meaning');
   document.getElementById('lw-question-label').textContent =
-    mode === 'reading' ? '다음 단어의 뜻을 입력하세요' : '다음 뜻의 단어(가타카나)를 입력하세요';
+    mode === 'reading' ? '다음 뜻의 단어(가타카나)를 입력하세요' : '다음 단어의 뜻을 입력하세요';
   nextLWQuestion();
 }
 
@@ -5514,6 +6513,96 @@ function wlToggleSort() {
   renderWordList();
 }
 
+/* ═══════════════════════════════════════════════
+   단어목록 태그 시스템
+═══════════════════════════════════════════════ */
+
+const TAG_LABELS = ['미분류', '학습중', '복습중', '완료'];
+const TAG_CLASSES = ['', 'tag-1', 'tag-2', 'tag-3'];
+
+let wlTagVisible = false;   // 태그 배지 표시 여부
+let wlTagFilter = -1;       // -1=전체, 0~3=태그값
+
+/* localStorage에서 태그 데이터 로드/저장 */
+function wlLoadTagData() {
+  try {
+    const raw = localStorage.getItem('chiro_tags');
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) { return {}; }
+}
+function wlSaveTagData(data) {
+  try { localStorage.setItem('chiro_tags', JSON.stringify(data)); } catch(e) {}
+}
+
+/* 단어 태그 키 생성 */
+function wlTagKey(cat, item) {
+  const prefix = { noun: 'n', verb: 'v', loanword: 'l', kanji: 'k' }[cat] || 'n';
+  return `${prefix}:${item[0]}`;
+}
+
+/* 태그 읽기 */
+function wlGetTag(cat, item) {
+  const data = wlLoadTagData();
+  return data[wlTagKey(cat, item)] || 0;
+}
+
+/* 태그 쓰기 (선택된 단어들에 일괄 적용) */
+function wlSetTag(tagVal) {
+  wlCloseAllDropups();
+  const items = wlGetSelectedItems();
+  if (!items.length) return;
+  const data = wlLoadTagData();
+  items.forEach(item => {
+    const key = wlTagKey(wlCat, item);
+    if (tagVal === 0) delete data[key]; // 미분류는 저장 안 함
+    else data[key] = tagVal;
+  });
+  wlSaveTagData(data);
+  // 카드 배지 업데이트
+  wlRefreshTagBadges();
+}
+
+/* 카드 전체 배지 갱신 */
+function wlRefreshTagBadges() {
+  const data = wlLoadTagData();
+  const cards = document.querySelectorAll('#wl-card-grid .wl-card');
+  cards.forEach((card, idx) => {
+    const item = wlRenderedItems[idx];
+    if (!item) return;
+    let badge = card.querySelector('.wl-tag-badge');
+    const tagVal = data[wlTagKey(wlCat, item)] || 0;
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.className = 'wl-tag-badge';
+      card.appendChild(badge);
+    }
+    badge.className = 'wl-tag-badge' + (tagVal > 0 ? ' ' + TAG_CLASSES[tagVal] : '');
+    badge.textContent = tagVal > 0 ? TAG_LABELS[tagVal] : '';
+  });
+}
+
+/* 태그 표시 토글 */
+function wlToggleTagVisible() {
+  wlTagVisible = !wlTagVisible;
+  const btn = document.getElementById('wl-tag-show-btn');
+  const grid = document.getElementById('wl-card-grid');
+  const filterBar = document.getElementById('wl-tag-filter-bar');
+  btn.classList.toggle('active', wlTagVisible);
+  grid.classList.toggle('wl-tag-visible', wlTagVisible);
+  filterBar.classList.toggle('visible', wlTagVisible);
+  if (wlTagVisible) wlRefreshTagBadges();
+}
+
+/* 태그 필터 적용 */
+function wlSetTagFilter(tagVal) {
+  wlTagFilter = tagVal;
+  // 버튼 active 상태
+  document.querySelectorAll('.wl-tag-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.tag) === tagVal);
+  });
+  renderWordList();
+}
+
 // 탭 전환 시 정렬 버튼 상태 동기화 (selectWLCat 호출 시)
 const _origSelectWLCat = selectWLCat;
 selectWLCat = function(cat) {
@@ -5524,6 +6613,14 @@ selectWLCat = function(cat) {
     btn.textContent = isWord ? '단어순' : '단계순';
     btn.classList.toggle('active', isWord);
   }
+  wlUpdateQuizBtnLabels();
+  // 탭 전환 시 선택모드 해제
+  if (wlSelectMode) wlToggleSelectMode();
+  // 태그 필터 초기화
+  wlTagFilter = -1;
+  document.querySelectorAll('.wl-tag-filter-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.tag) === -1);
+  });
 };
 
 /* ═══════════════════════════════════════════════
@@ -5549,8 +6646,6 @@ function toggleCSGroupDisplay() {
 
 /* ═══ INIT ═══ */
 buildKanjiLevelGrid();
-buildNounLevelGrid();
-buildVerbLevelGrid();
 buildWLLevelGrid();
 // 받아쓰기/번역 레벨 그리드는 페이지 첫 진입 시 init 함수에서 빌드
 </script>

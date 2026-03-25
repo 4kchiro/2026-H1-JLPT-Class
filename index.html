@@ -3833,15 +3833,10 @@ function wlQPRenderQuestion(item) {
   document.getElementById('wl-quiz-popup-label').textContent = labelText;
   document.getElementById('wl-quiz-popup-question').textContent = questionText;
 
-  // 한자: 예시단어를 문제 아래에 미리 표시
+  // desc는 제출 후에만 표시 (wlQPShowResult에서 처리)
   const descEl = document.getElementById('wl-quiz-popup-desc');
-  if (cat === 'kanji' && item[6]) {
-    descEl.textContent = item[6].replace(/\n/g, '  ·  ');
-    descEl.style.display = 'block';
-  } else {
-    descEl.textContent = '';
-    descEl.style.display = 'none';
-  }
+  descEl.textContent = '';
+  descEl.style.display = 'none';
 
   if (mode === 'mc') {
     // 한자 객관식

@@ -791,6 +791,11 @@
       font-weight: 700;
       cursor: pointer;
     }
+    #wl-result-bulk-save-btn {
+      border-color: #e05c5c !important;
+      color: #e05c5c !important;
+    }
+    #wl-result-bulk-save-btn:hover { background: #e05c5c !important; color: #fff !important; }
     #wl-result-select-bar button:hover { background: #4f8ef7; color: #fff; }
     .wl-result-tag-dropup-wrap { position: relative; }
     .wl-result-tag-dropup {
@@ -854,10 +859,24 @@
     .wl-result-item.wl-result-selected .wl-result-item-check {
       background: #4f8ef7; border-color: #4f8ef7; color: #fff;
     }
-    .wl-result-item-word { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+    .wl-result-item-word { font-size: 18px; font-weight: 700; color: #1a1a2e; word-break: break-all; }
     .wl-result-item-detail { font-size: 12px; color: #888; margin-top: 2px; }
     .wl-result-item-correct { color: #2db870; }
     .wl-result-item-wrong { color: #e05c5c; }
+    .wl-result-save-btn {
+      flex-shrink: 0;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1.5px solid #e05c5c;
+      background: #fff;
+      color: #e05c5c;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .13s;
+    }
+    .wl-result-save-btn.saved { background: #aaa; border-color: #aaa; color: #fff; cursor: default; }
     #wl-result-popup-btns {
       padding: 12px 18px 16px;
       display: flex;
@@ -915,10 +934,6 @@
 
     /* ── 태그표시 버튼 ── */
     #wl-tag-show-btn {
-      position: absolute;
-      right: 100px;
-      top: 50%;
-      transform: translateY(-50%);
       display: inline-block;
       padding: 0 14px;
       height: 34px;
@@ -993,6 +1008,44 @@
 
     /* ── 인쇄용 격자 (화면에서 숨김) ── */
     #wl-print-area { display: none; }
+    /* ── 모바일 반응형 ── */
+    @media (max-width: 480px) {
+      /* 단어보기 상단 버튼 축소 */
+      .wl-mode-btn { font-size: 12px; padding: 6px 10px; height: 30px; }
+      #wl-tag-show-btn, #wl-sort-btn { font-size: 12px; padding: 0 10px; height: 30px; line-height: 26px; }
+
+      /* 퀴즈 팝업 */
+      #wl-quiz-popup-inner { border-radius: 14px; max-height: 95vh; }
+      #wl-quiz-popup-question { font-size: 26px; }
+      #wl-quiz-popup-body { padding: 14px 14px 14px; gap: 10px; }
+      #wl-quiz-popup-header { padding: 10px 14px 8px; }
+      #wl-quiz-popup-mc-opts button { font-size: 13px; padding: 8px 4px; }
+      #wl-quiz-popup-sa-row input { font-size: 14px; padding: 8px 10px; }
+
+      /* 결과 팝업 */
+      #wl-result-popup-inner { border-radius: 14px; max-height: 95vh; }
+      #wl-result-popup-score { padding: 14px 16px 10px; font-size: 14px; }
+      #wl-result-tab-row { padding: 8px 12px 0; gap: 4px; }
+      #wl-result-select-bar { padding: 6px 12px; gap: 6px; }
+      #wl-result-popup-list { padding: 8px 12px; }
+      #wl-result-popup-btns { padding: 8px 12px 12px; gap: 6px; }
+      .wl-result-item { padding: 7px 10px; }
+      .wl-result-item-word { font-size: 16px; }
+
+      /* 한바퀴 결과 팝업 */
+      .tour-popup { border-radius: 14px; }
+      .tour-popup-score { padding: 14px 18px; font-size: 18px; }
+      .tour-wrong-list { padding: 10px 16px 6px; gap: 8px; }
+
+      /* 하단 선택 바 */
+      #wl-select-bar { padding: 8px 12px 10px; gap: 6px; }
+      #wl-select-bar .wl-bar-btn { font-size: 12px; padding: 6px 10px; }
+
+      /* 태그 필터 바 */
+      #wl-tag-filter-bar { gap: 4px; }
+      .wl-tag-filter-btn { font-size: 11px; padding: 3px 10px; }
+    }
+
     @media print {
       body > *:not(#wl-print-area) { display: none !important; }
       #wl-print-area {
@@ -1042,10 +1095,6 @@
 
     /* ── 단어보기 정렬 버튼 ── */
     #wl-sort-btn {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
       display: inline-block;
       padding: 0 14px;
       height: 34px;
@@ -1060,15 +1109,27 @@
       cursor: pointer;
       transition: all .18s;
       box-sizing: border-box;
+      white-space: nowrap;
     }
     #wl-sort-btn.active { background: #4f8ef7; border-color: #4f8ef7; color: #fff; }
     .wl-top-bar {
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .wl-top-bar-row {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      min-height: 34px;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .wl-top-bar-row-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      flex-shrink: 0;
     }
 
     /* ── 한바퀴 n개 선택 팝업 ── */
@@ -2198,19 +2259,21 @@
     <div class="level-grid" id="wl-level-grid"></div>
   </div>
 
-  <!-- 상단 바: PNG/인쇄 + 단어선택/발음문제/뜻문제 + 정렬 -->
+  <!-- 상단 바: 1행(PNG/인쇄 + 태그/정렬), 2행(단어선택/문제버튼) -->
   <div class="wl-top-bar">
-    <div style="display:flex;gap:6px;align-items:center;position:absolute;left:0;">
+    <div class="wl-top-bar-row">
       <button class="wl-mode-btn" id="wl-btn-png-top" onclick="wlDownloadPNG()">PNG 저장</button>
       <button class="wl-mode-btn" id="wl-btn-print-top" onclick="wlPrint()">인쇄/PDF</button>
+      <div class="wl-top-bar-row-right">
+        <button id="wl-tag-show-btn" onclick="wlToggleTagVisible()">태그 표시</button>
+        <button id="wl-sort-btn" onclick="wlToggleSort()">단어순</button>
+      </div>
     </div>
-    <div style="display:flex;gap:6px;align-items:center;">
+    <div class="wl-top-bar-row">
       <button class="wl-mode-btn" id="wl-select-mode-btn" onclick="wlToggleSelectMode()">✓ 단어선택</button>
       <button class="wl-mode-btn" id="wl-quiz-reading-btn" onclick="wlStartInfiniteQuiz('reading')">발음 문제</button>
       <button class="wl-mode-btn" id="wl-quiz-meaning-btn" onclick="wlStartInfiniteQuiz('meaning')">뜻 문제</button>
     </div>
-    <button id="wl-tag-show-btn" onclick="wlToggleTagVisible()">태그 표시</button>
-    <button id="wl-sort-btn" onclick="wlToggleSort()">단어순</button>
   </div>
 
   <!-- 선택/다운로드 툴바 (다운로드 모드에서만 표시: PNG/인쇄는 상단으로 이동) -->
@@ -2314,6 +2377,7 @@
     <div id="wl-result-select-bar">
       <button onclick="wlResultSelectAll()">전체선택</button>
       <button onclick="wlResultSelectNone()">선택해제</button>
+      <button id="wl-result-bulk-save-btn" onclick="wlResultBulkSave()" style="display:none;">오답저장</button>
       <div class="wl-result-tag-dropup-wrap">
         <button onclick="wlResultToggleTagDropup()">태그변경 ▲</button>
         <div class="wl-result-tag-dropup" id="wl-result-tag-dropup">
@@ -2686,10 +2750,6 @@ function _activatePage(id) {
     : id;
   document.getElementById(pageId).classList.add('active');
 
-  if (pageId === 'quiz') {
-    const isMC = document.getElementById('btn-mc').classList.contains('active');
-    isMC ? nextMCQuestion() : nextSAQuestion();
-  }
   if (currentTop === 'wordlist') selectWLCat(id);
 
   if (conjSubs.includes(id)) {
@@ -3151,32 +3211,13 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // ── 한자 문제 ──
-  if (document.getElementById('quiz').classList.contains('active')) {
-    const isMC = document.getElementById('mc-container').style.display !== 'none';
-    const isSA = document.getElementById('sa-container').style.display !== 'none';
-    if (isMC) {
-      const numMap = { 'Digit1':'1','Digit2':'2','Digit3':'3','Digit4':'4','Numpad1':'1','Numpad2':'2','Numpad3':'3','Numpad4':'4' };
-      const num = numMap[e.code];
-      if (!kanjianswered && num) {
-        const buttons = document.querySelectorAll('#mc-options button');
-        if (buttons[+num - 1]) buttons[+num - 1].click();
-      }
-      if (kanjianswered && (e.key === 'ArrowRight' || e.key === 'Enter')) nextMCQuestion();
-    }
-    if (isSA) {
-      if (kanjianswered && e.key === 'ArrowRight') nextSAQuestion();
-    }
-    return;
-  }
-
   // ── 명사 문제 ──
-  if (document.getElementById('noun').classList.contains('active')) {
+  if (document.getElementById('noun')?.classList.contains('active')) {
     if (nounAnswered && e.key === 'ArrowRight') nextNounQuestion();
   }
 
   // ── 동사 문제 ──
-  if (document.getElementById('verb').classList.contains('active')) {
+  if (document.getElementById('verb')?.classList.contains('active')) {
     if (verbAnswered && e.key === 'ArrowRight') nextVerbQuestion();
   }
 
@@ -3792,6 +3833,16 @@ function wlQPRenderQuestion(item) {
   document.getElementById('wl-quiz-popup-label').textContent = labelText;
   document.getElementById('wl-quiz-popup-question').textContent = questionText;
 
+  // 한자: 예시단어를 문제 아래에 미리 표시
+  const descEl = document.getElementById('wl-quiz-popup-desc');
+  if (cat === 'kanji' && item[6]) {
+    descEl.textContent = item[6].replace(/\n/g, '  ·  ');
+    descEl.style.display = 'block';
+  } else {
+    descEl.textContent = '';
+    descEl.style.display = 'none';
+  }
+
   if (mode === 'mc') {
     // 한자 객관식
     const correct = item[1];
@@ -3851,17 +3902,48 @@ function wlQPSubmit() {
 function wlQPSubmitMC(btn, chosen, correct) {
   if (wlQP.answered) return;
   const isCorrect = chosen === correct;
-  document.querySelectorAll('#wl-quiz-popup-mc-opts button').forEach(b => {
-    b.disabled = true;
-    if (b.textContent === correct) b.classList.add('correct');
-  });
-  if (!isCorrect) btn.classList.add('wrong');
-  wlQPShowResult(isCorrect, chosen, correct, wlQP.current);
+  if (!wlQP.isInfinite) {
+    // 유한모드: 결과 색상만 잠깐 보여주고 자동 이동 (wlQPShowResult 내 setTimeout 처리)
+    document.querySelectorAll('#wl-quiz-popup-mc-opts button').forEach(b => { b.disabled = true; });
+    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) {
+      document.querySelectorAll('#wl-quiz-popup-mc-opts button').forEach(b => {
+        if (b.textContent === correct) b.classList.add('correct');
+      });
+    }
+    wlQPShowResult(isCorrect, chosen, correct, wlQP.current);
+  } else {
+    // 무한모드: 기존 방식
+    document.querySelectorAll('#wl-quiz-popup-mc-opts button').forEach(b => {
+      b.disabled = true;
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+    if (!isCorrect) btn.classList.add('wrong');
+    wlQPShowResult(isCorrect, chosen, correct, wlQP.current);
+  }
 }
 
 /* 결과 표시 공통 */
 function wlQPShowResult(isCorrect, myAnswer, correct, item) {
   wlQP.answered = true;
+
+  if (!wlQP.isInfinite) {
+    // 유한모드: 한바퀴 방식 — 결과 표시 없이 딜레이 후 자동 다음 문제
+    if (isCorrect) wlQP.correct++;
+    else wlQP.wrongs.push({ item, myAnswer, correct });
+    wlQP.idx++;
+    const total = wlQP.deck.length;
+    document.getElementById('wl-quiz-popup-progress-label').textContent = `${wlQP.idx} / ${total}`;
+    document.getElementById('wl-quiz-popup-bar-fill').style.width = `${total ? (wlQP.idx/total*100) : 0}%`;
+    // 따닥 방지 딜레이 후 자동 이동
+    setTimeout(() => {
+      if (wlQP.idx >= wlQP.deck.length) { wlQPFinish(); }
+      else { wlQPNext(); }
+    }, 400);
+    return;
+  }
+
+  // 무한모드: 결과 표시
   const resEl = document.getElementById('wl-quiz-popup-result');
   resEl.textContent = isCorrect ? '✅ 정답입니다!' : `❌ 오답입니다. 정답: ${correct}`;
   resEl.className = isCorrect ? 'correct' : 'wrong';
@@ -3877,20 +3959,11 @@ function wlQPShowResult(isCorrect, myAnswer, correct, item) {
   } else if (cat === 'kanji') {
     descText = `${item[1]} — ${item[6] ? item[6].replace(/\n/g, ', ') : ''}`;
   }
-  if (descText) { descEl.textContent = descText; descEl.style.display = ''; }
+  if (descText) { descEl.textContent = descText; descEl.style.display = 'block'; }
 
   if (!isCorrect) {
     wlQP.wrongs.push({ item, myAnswer, correct });
     document.getElementById('wl-quiz-popup-save-btn').style.display = 'inline-block';
-  }
-
-  if (!wlQP.isInfinite) {
-    if (isCorrect) wlQP.correct++;
-    wlQP.idx++;
-    // 진행률 업데이트
-    const total = wlQP.deck.length;
-    document.getElementById('wl-quiz-popup-progress-label').textContent = `${wlQP.idx} / ${total}`;
-    document.getElementById('wl-quiz-popup-bar-fill').style.width = `${total ? (wlQP.idx/total*100) : 0}%`;
   }
 
   document.getElementById('wl-quiz-popup-next-btn').style.display = 'inline-block';
@@ -3986,6 +4059,9 @@ function wlResultShowTab(tab) {
   document.getElementById('wl-result-tab-correct').classList.toggle('active', tab === 'correct');
   wlResultSelected = new Set();
   wlResultLastClickedIdx = null;
+  // 오답탭에서만 일괄 오답저장 버튼 표시
+  const bulkSaveBtn = document.getElementById('wl-result-bulk-save-btn');
+  if (bulkSaveBtn) bulkSaveBtn.style.display = (wlResultSelectModeOn && tab === 'wrong') ? '' : 'none';
   wlResultUpdateSelectCount();
   wlResultRenderList();
 }
@@ -4010,7 +4086,7 @@ function wlResultRenderList() {
     div.appendChild(check);
 
     const body = document.createElement('div');
-    body.style.cssText = 'flex:1;';
+    body.style.cssText = 'flex:1;min-width:0;';
     const isWrong = wlResultCurrentTab === 'wrong';
     body.innerHTML = `
       <div class="wl-result-item-word">${w.item[0]}</div>
@@ -4018,6 +4094,21 @@ function wlResultRenderList() {
         ${isWrong ? `내 답: ${w.myAnswer || '(없음)'} → ` : ''}정답: ${w.correct}
       </div>`;
     div.appendChild(body);
+
+    // 오답탭에서만 [오답저장] 버튼 표시
+    if (isWrong) {
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'wl-result-save-btn';
+      saveBtn.textContent = '오답저장';
+      saveBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (saveBtn.classList.contains('saved')) return;
+        wlResultSaveOneWrong(w);
+        saveBtn.classList.add('saved');
+        saveBtn.textContent = '저장됨';
+      };
+      div.appendChild(saveBtn);
+    }
 
     if (wlResultSelectModeOn) {
       div.onclick = (e) => {
@@ -4056,11 +4147,60 @@ function wlResultToggleSelectMode() {
   const bar = document.getElementById('wl-result-select-bar');
   const list = document.getElementById('wl-result-popup-list');
   const btn = document.getElementById('wl-result-popup-select-btn');
+  const bulkSaveBtn = document.getElementById('wl-result-bulk-save-btn');
   bar.classList.toggle('visible', wlResultSelectModeOn);
   list.classList.toggle('wl-result-select-mode', wlResultSelectModeOn);
   btn.textContent = wlResultSelectModeOn ? '선택 취소' : '단어 선택';
+  // 오답탭에서만 일괄 오답저장 버튼 표시
+  if (bulkSaveBtn) bulkSaveBtn.style.display = (wlResultSelectModeOn && wlResultCurrentTab === 'wrong') ? '' : 'none';
   wlResultUpdateSelectCount();
   wlResultRenderList();
+}
+
+/* 결과 팝업 개별 오답저장 */
+function wlResultSaveOneWrong(w) {
+  const cat = wlQP.cat;
+  const mode = wlQP.mode;
+  let catId;
+  if (cat === 'noun') catId = mode === 'reading' ? 'noun_reading' : 'noun_meaning';
+  else if (cat === 'verb') catId = mode === 'reading' ? 'verb_reading' : 'verb_meaning';
+  else if (cat === 'kanji') catId = mode === 'mc' ? 'kanji_mc' : 'kanji_sa';
+  else if (cat === 'loanword') catId = mode === 'reading' ? 'lw_reading' : 'lw_meaning';
+  if (catId) {
+    incWrongCount(catId, w.item[0]);
+    refreshWrongBadges();
+  }
+}
+
+/* 결과 팝업 선택 항목 일괄 오답저장 */
+function wlResultBulkSave() {
+  if (!wlResultSelected.size) return;
+  const wrongs = wlQP.wrongs;
+  const cat = wlQP.cat;
+  const mode = wlQP.mode;
+  let catId;
+  if (cat === 'noun') catId = mode === 'reading' ? 'noun_reading' : 'noun_meaning';
+  else if (cat === 'verb') catId = mode === 'reading' ? 'verb_reading' : 'verb_meaning';
+  else if (cat === 'kanji') catId = mode === 'mc' ? 'kanji_mc' : 'kanji_sa';
+  else if (cat === 'loanword') catId = mode === 'reading' ? 'lw_reading' : 'lw_meaning';
+  if (!catId) return;
+  [...wlResultSelected].forEach(idx => {
+    const w = wrongs[idx];
+    if (w) incWrongCount(catId, w.item[0]);
+  });
+  refreshWrongBadges();
+  // 저장된 아이템의 개별 버튼도 saved 처리
+  const listEl = document.getElementById('wl-result-popup-list');
+  [...wlResultSelected].forEach(idx => {
+    const item = listEl.children[idx];
+    if (item) {
+      const saveBtn = item.querySelector('.wl-result-save-btn');
+      if (saveBtn && !saveBtn.classList.contains('saved')) {
+        saveBtn.classList.add('saved');
+        saveBtn.textContent = '저장됨';
+      }
+    }
+  });
 }
 
 function wlResultSelectAll() {

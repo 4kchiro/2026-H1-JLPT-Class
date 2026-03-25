@@ -861,6 +861,7 @@
     }
     .wl-result-item-word { font-size: 18px; font-weight: 700; color: #1a1a2e; word-break: break-all; }
     .wl-result-item-detail { font-size: 12px; color: #888; margin-top: 2px; }
+    .wl-result-item-examples { font-size: 11px; color: #aaa; margin-top: 3px; word-break: keep-all; }
     .wl-result-item-correct { color: #2db870; }
     .wl-result-item-wrong { color: #e05c5c; }
     .wl-result-save-btn {
@@ -2355,7 +2356,7 @@
         <button onclick="wlQPSubmit()">제출</button>
       </div>
       <div id="wl-quiz-popup-result"></div>
-      <div id="wl-quiz-popup-desc"></div>
+      <div id="wl-quiz-popup-desc" style="display:none;"></div>
       <div id="wl-quiz-popup-btn-row">
         <button id="wl-quiz-popup-save-btn" onclick="wlQPSaveWrong(this)">오답 저장</button>
         <button id="wl-quiz-popup-next-btn" onclick="wlQPNext()">다음 문제 ▶</button>
@@ -3757,6 +3758,11 @@ function wlQPOpenPopup(mode) {
   document.getElementById('wl-quiz-popup-progress').style.display = wlQP.isInfinite ? 'none' : '';
   document.getElementById('wl-quiz-popup-mode-switch').style.display = wlQP.isInfinite ? '' : 'none';
 
+  // 팝업 열 때 desc 완전 초기화 (이전 세션 인라인 스타일 제거)
+  const descEl = document.getElementById('wl-quiz-popup-desc');
+  descEl.textContent = '';
+  descEl.style.display = 'none';
+
   document.getElementById('wl-quiz-popup').classList.add('open');
   document.body.style.overflow = 'hidden';
   wlQPSwitchMode(mode);
@@ -4083,11 +4089,15 @@ function wlResultRenderList() {
     const body = document.createElement('div');
     body.style.cssText = 'flex:1;min-width:0;';
     const isWrong = wlResultCurrentTab === 'wrong';
+    const isKanjiCat = wlQP.cat === 'kanji';
+    const examplesHTML = (isKanjiCat && w.item[6])
+      ? `<div class="wl-result-item-examples">${w.item[6].replace(/\n/g, '  ·  ')}</div>`
+      : '';
     body.innerHTML = `
       <div class="wl-result-item-word">${w.item[0]}</div>
       <div class="wl-result-item-detail ${isWrong ? 'wl-result-item-wrong' : 'wl-result-item-correct'}">
         ${isWrong ? `내 답: ${w.myAnswer || '(없음)'} → ` : ''}정답: ${w.correct}
-      </div>`;
+      </div>${examplesHTML}`;
     div.appendChild(body);
 
     // 오답탭에서만 [오답저장] 버튼 표시
